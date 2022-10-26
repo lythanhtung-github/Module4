@@ -12,13 +12,19 @@ public class SandwichController {
     public String loadIndex() {
         return "index";
     }
-    
+
     @GetMapping(path = "/save")
     public String save(
-            @RequestParam("condiment") String[] condiment,
+            @RequestParam(required = false, name = "condiment") String[] condiment,
             ModelMap modelMap
     ) {
-        modelMap.addAttribute("condiment", condiment);
-        return "save";
+        if (condiment == null) {
+            modelMap.addAttribute("message", "Bạn chưa chọn gia vị");
+            return "index";
+        }else{
+            modelMap.addAttribute("condiment", condiment);
+            return "save";
+        }
+
     }
 }
