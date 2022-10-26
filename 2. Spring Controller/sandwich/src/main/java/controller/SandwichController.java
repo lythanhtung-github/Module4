@@ -19,12 +19,11 @@ public class SandwichController {
             ModelMap modelMap
     ) {
         if (condiment == null) {
-            modelMap.addAttribute("message", "Bạn chưa chọn gia vị");
+            modelMap.addAttribute("message", "Bạn chưa chọn gia vị nào");
             return "index";
         }else{
             modelMap.addAttribute("condiment", condiment);
             return "save";
         }
-
     }
 }
