@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table border="1">
+    <tr>
+        <th>4>5?</th>
+        <th>5>4?</th>
+        <th>Loc có phải óc chó hay không?</th>
+    </tr>
+    <tr>
+        <td th:text="4>5? 'yes' : 'No' "></td>
+        <td th:text="5>4? 'yes' : 'No' "></td>
+        <td style="font-weight: bold" th:text="true? 'yes' : 'No'"></td>
+    </tr>
+</table>
+<table border="1">
+    <tr>
+        <th>Index</th>
+        <th>Count</th>
+        <th>Current</th>
+        <th>size</th>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Role</th>
+        <th>???</th>
+    </tr>
+    <tr th:each="user, aaa : ${userList}">
+        <td th:text="${aaa.index}"></td>
+        <td th:text="${aaa.count}"></td>
+        <td th:text="${aaa.current}"></td>
+        <td th:text="${aaa.size}"></td>
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.getAddress()}"></td>
+        <td th:switch="${user.getRole()}">
+            <span th:case="1">Admin</span>
+            <span th:case="2">User</span>
+            <span th:case="3">Bala</span>
+        </td>
+        <td th:if="${user.getRole()== 1 }">This is Admin</td>
+        <td th:unless="${user.getRole()== 1 }">This is User</td>
+    </tr>
+</table>
+</body>
+</html>
