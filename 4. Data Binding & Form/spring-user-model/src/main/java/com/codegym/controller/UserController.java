@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class UserController {
-    
+
     @GetMapping("/home")
     public ModelAndView home(){
         return new ModelAndView("home", "login", new Login());
