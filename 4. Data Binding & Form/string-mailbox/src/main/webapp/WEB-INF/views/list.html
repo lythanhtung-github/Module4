@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="/layout :: head">
+    <title>Mail</title>
+</head>
+<body>
+<h3>Mail</h3>
+
+<table id="mailList">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Language</th>
+        <th>Page Size</th>
+        <th>Spam</th>
+        <th>Signature</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="row : ${mailList}">
+        <td th:text="${row.getId()}"></td>
+        <td th:text="${row.getLanguage()}"></td>
+        <td th:text="${row.getPageSize()}"></td>
+        <td th:text="${row.isSpam()}?'Yes':'No'"></td>
+        <td th:text="${row.getSignature()}"></td>
+        <td><a th:href="@{/mail/{id}/edit(id=${row.getId()})}">Edit</a></td>
+    </tr>
+    </tbody>
+</table>
+<footer th:replace="/layout :: footer"></footer>
+</body>
+</html>

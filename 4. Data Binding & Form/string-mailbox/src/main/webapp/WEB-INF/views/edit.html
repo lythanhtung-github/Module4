@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="/layout :: head">
+    <title>Mail</title>
+</head>
+<body>
+<h3>Setting</h3>
+<form th:action="@{/mail/update}" th:object="${mail}" method="post">
+    <input th:field="*{id}" th:value="${mail.getId()}" type="hidden"/>
+    <table>
+        <tr>
+            <td>Language:</td>
+            <td>
+                <select th:field="*{language}">
+                    <option th:each="language: ${languages}"
+                            th:value="${language}"
+                            th:text="${language}"
+                            th:selected="${language == mail.getLanguage()}">
+                    </option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Page size:</td>
+            <td>Show
+                <select th:field="*{pageSize}">
+                    <option th:each="page: ${pages}"
+                            th:value="${page}"
+                            th:text="${page}"
+                            th:selected="${page == mail.getPageSize()}">
+                    </option>
+                </select>
+                emails per page
+            </td>
+        </tr>
+        <tr>
+            <td>Spams fillter:</td>
+            <td>
+                <input th:field="*{spam}" type="checkbox" th:checked="${mail.isSpam()}"> Enable spam filter
+            </td>
+        </tr>
+        <tr>
+            <td>Signature:</td>
+            <td>
+                <textarea th:field="*{signature}" cols="20" rows="5" th:text="${mail.getSignature()}">
+                </textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            </td>
+            <td>
+                <input type="submit" value="Update">
+                <input type="reset" value="Cancel">
+            </td>
+        </tr>
+    </table>
+</form>
+
+<footer th:replace="/layout :: footer"></footer>
+</body>
+</html>
