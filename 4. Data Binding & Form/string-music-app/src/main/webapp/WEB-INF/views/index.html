@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:fragment="head">
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Music</title>
+</head>
+<body>
+<h1>Music</h1>
+<p>
+    <a th:href="@{/create}">
+        Add new song
+    </a>
+</p>
+<p th:text="${message}"></p>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Singer</th>
+        <th>Type</th>
+        <th>Song</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="music : ${musicList}">
+        <td th:text="${music.getId()}"></td>
+        <td th:text="${music.getName()}"></td>
+        <td th:text="${music.getSinger()}"></td>
+        <td th:text="${music.getType()}"></td>
+        <td>
+            <audio controls>
+                <source th:src="@{'/folder_music/'+${music.getPath()}}">
+            </audio>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

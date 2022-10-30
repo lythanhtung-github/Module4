@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:fragment="head">
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Music</title>
+</head>
+<body>
+<h1>Add music</h1>
+<p>
+    <a th:href="@{/}">
+        Back
+    </a>
+</p>
+    <label style="color: red" th:text="${message}"></label>
+<form th:action="@{/save}" th:object="${musicForm}"  method="POST" novalidate="novalidate" enctype="multipart/form-data">
+    <table>
+        <tr>
+            <input type="hidden" th:field="*{id}"/>
+        </tr>
+        <tr>
+            <td>Name:</td>
+            <td>
+                <input type="text" th:field="*{name}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>Singer:</td>
+            <td>
+                <input type="text" th:field="*{singer}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>Type: </td>
+            <td>
+                <select th:field="*{type}">
+                    <option th:each="item : ${listType}"
+                            th:value="${item}"
+                            th:text="${item}">
+                    </option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Song path: </td>
+            <td>
+                <input type="file" th:field="*{path}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" value="Save"/>
+            </td>
+            <td>
+                <input type="reset" value="Cancel"/>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
