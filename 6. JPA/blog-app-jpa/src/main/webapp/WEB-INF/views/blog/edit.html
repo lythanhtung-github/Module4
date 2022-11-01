@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Edit blog</title>
+</head>
+<body>
+<h1>Edit blog</h1>
+<p>
+  <a href="/blogs">Blog list</a>
+</p>
+<th:block th:if="${message}">
+  <p style="color:green" th:text="${message}"></p>
+</th:block>
+<form th:action="@{/blog/edit}" th:object="${blog}" method="post">
+  <input th:type="hidden" name="id" th:field="*{id}">
+  <table>
+    <tr>
+      <td>Blog name:</td>
+      <td><input type="text" th:field="*{name}"/></td>
+    </tr>
+    <tr>
+      <td>Author:</td>
+      <td><input type="text" th:field="*{person}"/></td>
+    </tr>
+    <tr>
+      <td>Date:</td>
+      <td><input type="date" th:field="*{postDate}"/></td>
+    </tr>
+    <tr>
+      <td>Content:</td>
+      <td>
+        <textarea th:field="*{content}" rows="6" cols="30"></textarea>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" value="Update">
+      </td>
+    </tr>
+  </table>
+</form>
+</body>
+</html>
