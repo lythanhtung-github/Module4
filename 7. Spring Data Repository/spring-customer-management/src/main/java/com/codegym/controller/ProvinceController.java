@@ -57,8 +57,7 @@ public class ProvinceController {
             return modelAndView;
 
         } else {
-            ModelAndView modelAndView = new ModelAndView("/error.404");
-            return modelAndView;
+            return new ModelAndView("/error.404");
         }
     }
 
@@ -80,8 +79,7 @@ public class ProvinceController {
             return modelAndView;
 
         } else {
-            ModelAndView modelAndView = new ModelAndView("/error.404");
-            return modelAndView;
+            return new ModelAndView("/error.404");
         }
     }
 
