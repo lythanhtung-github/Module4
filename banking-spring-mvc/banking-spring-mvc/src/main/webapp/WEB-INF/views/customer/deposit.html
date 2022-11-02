@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <th:block th:replace="layout/head :: head"/>
+  <title>Deposit</title>
+</head>
+
+<body>
+<div class="container">
+  <div class="head">
+    <div class="row">
+      <div class="col-sm-9">
+        <h1>Deposit money into customer's account</h1>
+      </div>
+      <div class="col-sm-3 btn-a">
+        <a class="btn btn-outline-light" href="/customers" title="Hello" id="id1"><i
+                class="fa fa-list"></i> List of customers
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <form method="post" th:object="${deposit}">
+      <fieldset class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Customer ID</label>
+          <input type="text" class="form-control" th:field="${customer.id}" readonly>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Full name</label>
+          <input type="text" class="form-control" th:field="${customer.fullName}" readonly>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Current balance ($)</label>
+          <input type="number" class="form-control" th:field="${customer.balance}" readonly>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Transaction Amount ($)</label>
+          <input type="number" class="form-control" th:field="*{transactionAmount}" min="100000" step="50000">
+        </div>
+        <div class="col-md-12">
+          <button type="submit" id="btnCreateCustomer" class="btn btn-outline-success">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            Deposit
+          </button>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+  <div class="footer">
+    <div id="message-alert">
+      <th:block th:if="${success} ">
+        <div class="alert-success">
+          <h5 th:text="${success}"></h5>
+        </div>
+      </th:block>
+      <th:block th:if="${error}">
+        <div class="alert-danger">
+          <h5 th:text="${error}"></h5>
+        </div>
+      </th:block>
+    </div>
+  </div>
+</div>
+</body>
+</html>

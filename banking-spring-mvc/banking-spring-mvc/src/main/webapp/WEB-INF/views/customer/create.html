@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="layout/head :: head"/>
+    <title>Create Customer</title>
+</head>
+
+<body>
+<div class="container">
+    <div class="head">
+        <div class="row">
+            <div class="col-sm-5">
+                <h1>Create Customer</h1>
+            </div>
+            <div class="col-sm-7">
+                <a class="btn btn-outline-light" href="/customers"><i
+                        class="fa fa-list"></i> List of customers
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <form method="post" th:object="${customer}">
+            <fieldset class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Full name</label>
+                    <input type="text" class="form-control" th:field="*{fullName}">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" th:field="*{email}">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Phone</label>
+                    <input type="tel" class="form-control" th:field="*{phone}">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Address</label>
+                    <input type="text" class="form-control" th:field="*{address}">
+                </div>
+                <div class="col-md-12">
+                    <button type="submit" id="btnCreateCustomer" class="btn btn-outline-primary">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        Create customer
+                    </button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="footer">
+        <div id="message-alert">
+            <th:block th:if="${success} == true">
+                <div class="alert-success">
+                    <h5><span>Thêm mới khách hàng thành công</span></h5>
+                </div>
+            </th:block>
+            <th:block th:if="${error} == true">
+                <div class="alert-danger">
+                    <h5>Vui lòng sửa lỗi bên dưới:</h5>
+                    <ul>
+                        <li th:each="err : ${#fields.errors('customer.*')}" th:text="${err}"></li>
+                    </ul>
+                </div>
+            </th:block>
+        </div>
+    </div>
+</div>
+</body>
+</html>

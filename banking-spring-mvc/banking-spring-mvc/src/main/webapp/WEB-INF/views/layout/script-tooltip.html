@@ -1,0 +1,9 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="script-tooltip">
+  <script>
+    let icons = document.querySelectorAll('[data-toggle="tooltip"]');
+    icons.forEach((icon) => {
+      new bootstrap.Tooltip(icon);
+    })
+  </script>
+</th:block>

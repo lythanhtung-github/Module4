@@ -19,6 +19,8 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -40,9 +42,7 @@ import java.util.Properties;
 @ComponentScan("com.codegym")
 @EnableSpringDataWebSupport
 public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
-
     private ApplicationContext applicationContext;
-
 
     @Override
     public void setApplicationContext(@NotNull ApplicationContext applicationContext) throws BeansException {
@@ -134,4 +134,18 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }
+
+//        @Bean(name = "validator")
+//    public LocalValidatorFactoryBean validator()
+//    {
+//        LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
+//        bean.setValidationMessageSource(messageSource());
+//        return bean;
+//    }
+//
+//    @Override
+//    public Validator getValidator()
+//    {
+//        return validator();
+//    }
 }

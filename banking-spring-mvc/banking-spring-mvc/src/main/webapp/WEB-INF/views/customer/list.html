@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="layout/head :: head"/>
+    <title>Customer manager</title>
+</head>
+
+<body>
+<div class="container">
+    <div class="head">
+        <div class="row">
+            <div class="col-sm-5">
+                <h1>List of customers</h1>
+            </div>
+            <div class="col-sm-7">
+                <a class="btn btn-outline-light" href="/customers/create" title="Hello">
+                    <i class="fa-solid fa-square-plus"></i> Add New Customer</a>
+                <a class="btn btn-outline-light" href="#">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    Transfer money Information</a>
+
+            </div>
+        </div>
+    </div>
+    <table class="table table-hover" id = "tb-customer">
+        <thead>
+        <tr>
+            <th class="text-center">#</th>
+            <th class="text-center">FullName</th>
+            <th class="text-center">Email</th>
+            <th class="text-center">Phone</th>
+            <th class="text-center">Address</th>
+            <th class="text-center">Balance</th>
+            <th colspan="5" class="text-center">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="item : ${customers}">
+            <tr>
+                <td th:text="${item.id}" class="text-start"></td>
+                <td th:text="${item.fullName}" class="text-start"></td>
+                <td th:text="${item.email}" class="text-start"></td>
+                <td th:text="${item.phone}" class="text-start"></td>
+                <td th:text="${item.address}" class="text-start"></td>
+                <td th:text="${#numbers.formatCurrency(item.balance)}" class="text-end"></td>
+                <td>
+                    <a class="btn btn btn-outline-dark" title="Edit" data-toggle="tooltip"
+                       th:href="${'/customers/edit/' + item.id}"
+                       data-bs-original-title="Edit">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </a>
+                </td>
+                <td>
+                    <a class="btn btn-outline-success" title="Deposit" data-toggle="tooltip"
+                       th:href="${'/customers/deposit/' + item.id}"
+                       data-bs-original-title="Edit">
+                        <i class="fa-regular fa-square-plus"></i>
+                    </a>
+                </td>
+                <td>
+                    <a class="btn btn-outline-warning" title="Withdraw" data-toggle="tooltip"
+                       th:href="${'/customers/withdraw/' + item.id}"
+                       data-bs-original-title="Edit">
+                        <i class="fa-regular fa-square-minus"></i>
+                    </a>
+                </td>
+                <td>
+                    <a class="btn btn-outline-info" title="Transfer" data-toggle="tooltip"
+                       href="/transfer"
+                       data-bs-original-title="Edit">
+                        <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                    </a>
+                </td>
+                <td>
+                    <a class="btn btn-outline-danger" title="Suspended" data-toggle="tooltip" href="#"
+                       data-bs-original-title="Edit">
+                        <i class="fa-solid fa-ban"></i>
+                    </a>
+                </td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+</div>
+</body>
+<th:block th:replace="layout/script-tooltip :: script-tooltip"/>
+</html>
