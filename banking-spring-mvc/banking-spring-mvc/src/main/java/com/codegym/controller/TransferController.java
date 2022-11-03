@@ -1,12 +1,9 @@
 package com.codegym.controller;
 
 import com.codegym.model.Customer;
-import com.codegym.model.Deposit;
 import com.codegym.model.Transfer;
 import com.codegym.service.customer.ICustomerService;
-import com.codegym.service.deposit.IDepositService;
 import com.codegym.service.transfer.ITransferService;
-import com.codegym.service.withdraw.IWithdrawService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -76,8 +73,13 @@ public class TransferController {
             return modelAndView;
         }
 
-        Optional<Customer> recipientOptional = customerService.findById(transfer.getRecipient().getId());
-        if(!recipientOptional.isPresent()){
+        try{
+            Optional<Customer> recipientOptional = customerService.findById(transfer.getRecipient().getId());
+            if(!recipientOptional.isPresent()){
+                modelAndView.addObject("errorAction", "Người nhận không hợp lệ");
+                return modelAndView;
+            }
+        }catch (Exception e){
             modelAndView.addObject("errorAction", "Người nhận không hợp lệ");
             return modelAndView;
         }

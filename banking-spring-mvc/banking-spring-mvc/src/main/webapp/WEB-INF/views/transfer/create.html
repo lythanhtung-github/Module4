@@ -74,9 +74,9 @@
                     <h5><span>Chuyển tiền thành công</span></h5>
                 </div>
             </th:block>
-            <th:block th:if="${errorAction} == true">
+            <th:block th:if="${errorAction}">
                 <div class="alert-danger">
-                    <h5><span>Chuyển tiền thành công</span></h5>
+                    <h5 th:text="${errorAction}"></h5>
                 </div>
             </th:block>
             <th:block th:if="${error} == true">
