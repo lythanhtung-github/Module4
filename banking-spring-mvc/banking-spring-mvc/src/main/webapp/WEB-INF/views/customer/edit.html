@@ -61,7 +61,12 @@
                 <h5><span>Chỉnh sửa thông tin khách hàng thành công</span></h5>
             </div>
         </th:block>
-        <th:block th:if="${error} == true">
+        <th:block th:if="${errorAction}">
+            <div class="alert-danger">
+                <h5 th:text="${errorAction}"></h5>
+            </div>
+        </th:block>
+        <th:block th:if="${error}">
             <div class="alert-danger">
                 <h5>Vui lòng sửa lỗi bên dưới:</h5>
                 <ul>

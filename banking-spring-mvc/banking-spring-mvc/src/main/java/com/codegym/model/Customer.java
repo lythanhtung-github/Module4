@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -34,6 +35,7 @@ public class Customer extends BaseEntity{
     private String email;
 
     @Column(unique = true, nullable = false)
+    @NotEmpty(message = "Số điện thoại không được để trống")
     @Pattern(regexp = "^0[0-9]{9}$", message = "Vui lòng nhập đúng định dạng số điện thoại")
     private String phone;
 

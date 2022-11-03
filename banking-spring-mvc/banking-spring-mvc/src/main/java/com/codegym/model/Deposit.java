@@ -6,9 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
-
 
 @Entity
 @NoArgsConstructor
@@ -22,7 +21,8 @@ public class Deposit extends BaseEntity{
     private long id;
 
     @Column(name = "transaction_amount", precision = 12, scale = 0, nullable = false)
-    @Min(value = 100000, message = "Số tiền gửi")
+    @DecimalMin(value="100000", message = "Số tiền muốn nạp vào tài khoản phải lớn hơn 100.000 VNĐ")
+    @DecimalMax(value="1000000000", message = "Số tiền muốn nạp vào tài khoản không vượt quá 1.000.000.000 VNĐ")
     private BigDecimal transactionAmount;
 
     @ManyToOne(targetEntity = Customer.class)

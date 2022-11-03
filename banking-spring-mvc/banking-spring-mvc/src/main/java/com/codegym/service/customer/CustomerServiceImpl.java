@@ -23,6 +23,7 @@ public class CustomerServiceImpl implements ICustomerService {
     private DepositRepository depositRepository;
     @Autowired
     private WithdrawRepository withdrawRepository;
+
     @Override
     public List<Customer> findAll() {
         return customerRepository.findAll();
@@ -42,6 +43,7 @@ public class CustomerServiceImpl implements ICustomerService {
     public Optional<Customer> findById(Long id) {
         return customerRepository.findById(id);
     }
+
     @Override
     public List<Customer> findAllByDeletedIsFalse() {
         return customerRepository.findAllByDeletedIsFalse();
@@ -65,10 +67,10 @@ public class CustomerServiceImpl implements ICustomerService {
         BigDecimal transactionAmount = withdraw.getTransactionAmount();
         BigDecimal newBalance = currentBalance.subtract(transactionAmount);
         BigDecimal big0 = new BigDecimal(0);
-        if(newBalance.compareTo(big0)<0){
+        if (newBalance.compareTo(big0) < 0) {
             return false;
         }
-        customerRepository.setBalance(customer.getId(),newBalance);
+        customerRepository.setBalance(customer.getId(), newBalance);
 
         withdraw.setId(0L);
         withdraw.setCustomer(customer);
@@ -80,6 +82,7 @@ public class CustomerServiceImpl implements ICustomerService {
     public Boolean existsByIdEquals(long id) {
         return customerRepository.existsById(id);
     }
+
     @Override
     public Customer save(Customer customer) {
         return customerRepository.save(customer);

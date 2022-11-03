@@ -37,7 +37,7 @@
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Transaction Amount ($)</label>
-                    <input type="number" class="form-control" th:field="*{transactionAmount}" min="100000" step="50000">
+                    <input type="number" class="form-control" th:field="*{transactionAmount}" min="0" step="100000" required>
                 </div>
                 <div class="col-md-12">
                     <button type="submit" id="btnCreateCustomer" class="btn btn-outline-warning">
@@ -55,9 +55,17 @@
                     <h5 th:text="${success}"></h5>
                 </div>
             </th:block>
+            <th:block th:if="${errorAction}">
+                <div class="alert-danger">
+                    <h5 th:text="${errorAction}"></h5>
+                </div>
+            </th:block>
             <th:block th:if="${error}">
                 <div class="alert-danger">
-                    <h5 th:text="${error}"></h5>
+                    <h5>Vui lòng sửa lỗi bên dưới:</h5>
+                    <ul>
+                        <li th:each="err : ${#fields.errors('deposit.*')}" th:text="${err}"></li>
+                    </ul>
                 </div>
             </th:block>
         </div>
