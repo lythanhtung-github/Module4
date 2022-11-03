@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="layout/head :: head"/>
+    <title>Transfer money Information</title>
+</head>
+
+<body>
+<div class="container">
+    <div class="head">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1>Transfer money Information</h1>
+            </div>
+            <div class="col-sm-4">
+                <a class="btn btn-outline-light" href="/customers">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    Customer list</a>
+            </div>
+        </div>
+    </div>
+    <table class="table table-hover" id="tb-customer">
+        <thead>
+        <tr>
+            <th class="text-center">#</th>
+            <th class="text-center">Sender ID</th>
+            <th class="text-center">Sender Name</th>
+            <th class="text-center">Recipient ID</th>
+            <th class="text-center">Recipient Name</th>
+            <th class="text-center">Transaction Amount ($)</th>
+            <th class="text-center">Fees (%)</th>
+            <th class="text-center">Transfer Amount ($)</th>
+            <th class="text-center">Fees Amount ($)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="item : ${transfers}">
+            <tr>
+                <td th:text="${item.id}" class="text-start"></td>
+                <td th:text="${item.sender.id}"></td>
+                <td th:if="${item.sender}" th:text="${item.sender.fullName}"></td>
+                <td th:text="${item.recipient.id}"></td>
+                <td th:if="${item.recipient}" th:text="${item.recipient.fullName}"></td>
+                <td th:text="${#numbers.formatCurrency(item.transactionAmount)}" class="text-end"></td>
+                <td th:text="${#numbers.formatCurrency(item.fees)}" class="text-end"></td>
+                <td th:text="${#numbers.formatCurrency(item.transferAmount)}" class="text-end"></td>
+                <td th:text="${#numbers.formatCurrency(item.feesAmount)}" class="text-end"></td>
+            </tr>
+        </th:block>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="5"></td>
+            <td colspan="2" class="text-center fw-bold">Total Fees Amount:</td>
+            <td colspan="2" class="text-end fw-bold num-comma pr-20" style="font-size: 24px"
+                th:text="${#numbers.formatCurrency(allFeesAmount)}"></td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+</body>
+<th:block th:replace="layout/script-tooltip :: script-tooltip"/>
+</html>

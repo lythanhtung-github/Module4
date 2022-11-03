@@ -16,10 +16,9 @@
             <div class="col-sm-7">
                 <a class="btn btn-outline-light" href="/customers/create" title="Hello">
                     <i class="fa-solid fa-square-plus"></i> Add New Customer</a>
-                <a class="btn btn-outline-light" href="#">
+                <a class="btn btn-outline-light" href="/transfers">
                     <i class="fa-solid fa-clock-rotate-left"></i>
                     Transfer money Information</a>
-
             </div>
         </div>
     </div>
@@ -67,7 +66,7 @@
                 </td>
                 <td>
                     <a class="btn btn-outline-info" title="Transfer" data-toggle="tooltip"
-                       href="/transfer"
+                       th:href="${'/transfers/create/' + item.id}"
                        data-bs-original-title="Edit">
                         <i class="fa-solid fa-arrow-right-arrow-left"></i>
                     </a>

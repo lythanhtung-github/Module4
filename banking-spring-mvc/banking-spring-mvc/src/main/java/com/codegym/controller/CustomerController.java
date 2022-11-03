@@ -29,7 +29,7 @@ public class CustomerController {
     public ModelAndView showListPage() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("customer/list");
-        List<Customer> customers = customerService.findAll();
+        List<Customer> customers = customerService.findAllByDeletedIsFalse();
         modelAndView.addObject("customers", customers);
 
         return modelAndView;
@@ -86,9 +86,9 @@ public class CustomerController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("customer/edit");
 
-        Boolean existsCustomer = customerService.existsByIdEquals(customerId);
+        Optional<Customer> customerOptional = customerService.findById(customerId);
 
-        if (!existsCustomer){
+        if (!customerOptional.isPresent()){
             modelAndView.addObject("error", true);
         }
 

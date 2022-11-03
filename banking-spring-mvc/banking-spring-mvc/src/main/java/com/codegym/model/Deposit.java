@@ -16,13 +16,13 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Table(name = "deposits")
-public class Deposit {
+public class Deposit extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "transaction_amount", precision = 12, scale = 0, nullable = false)
-    @Min(0)
+    @Min(value = 100000, message = "Số tiền gửi")
     private BigDecimal transactionAmount;
 
     @ManyToOne(targetEntity = Customer.class)

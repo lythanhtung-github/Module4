@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="layout/head :: head"/>
+    <title>Transfer</title>
+</head>
+
+<body>
+<div class="container">
+    <div class="head">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1>Transfer money Information</h1>
+            </div>
+            <div class="col-sm-4">
+                <a class="btn btn-outline-light" href="/transfers"><i
+                        class="fa fa-list"></i> List of transfer
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <form method="post" th:object="${transfer}">
+            <fieldset class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Sender ID</label>
+                    <input type="text" class="form-control" th:value="${customer.id}" readonly>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Sender Name</label>
+                    <input type="email" class="form-control" th:value="${customer.fullName}" readonly>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Email</label>
+                    <input type="text" class="form-control" th:value="${customer.email}" readonly>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Sender balance</label>
+                    <input type="number" class="form-control" th:value="${customer.balance}" readonly>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Recipient Name</label>
+                    <select th:field="*{recipient}" class="form-select">
+                        <option th:each="recipient : ${recipients}" th:value="${recipient.id}"
+                                th:text="${'(' + recipient.id + ') ' + '- ' + recipient.fullName}"></option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Transfer Amount ($)</label>
+                    <input type="number" class="form-control" th:field="*{transactionAmount}">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Fees (%)</label>
+                    <input type="number" class="form-control" value="10" id="fees" readonly>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Total amount of transaction ($)</label>
+                    <input type="number" class="form-control" readonly>
+                </div>
+                <div class="col-md-12">
+                    <button type="submit" id="btnCreateCustomer" class="btn btn-outline-primary">
+                        <i class="fa fa-arrow-right-arrow-left"></i>
+                        Transfer
+                    </button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="footer">
+        <div id="message-alert">
+            <th:block th:if="${success} == true">
+                <div class="alert-success">
+                    <h5><span>Chuyển tiền thành công</span></h5>
+                </div>
+            </th:block>
+            <th:block th:if="${error} == true">
+                <div class="alert-danger">
+                    <h5>Vui lòng sửa lỗi bên dưới:</h5>
+                    <ul>
+                        <li th:each="err : ${#fields.errors('customer.*')}" th:text="${err}"></li>
+                    </ul>
+                </div>
+            </th:block>
+        </div>
+    </div>
+</div>
+<script>
+
+</script>
+</body>
+</html>

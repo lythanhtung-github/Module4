@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import net.bytebuddy.implementation.bind.MethodDelegationBinder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -19,14 +18,14 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "customers")
-public class Customer {
+public class Customer extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "full_name", nullable = false)
-    @NotEmpty(message = "Vui lòng nhập họ tên đầy đủ")
+    @NotEmpty(message = "Họ tên không được để trống")
     @Size(min = 5, max = 100, message = "Họ tên có độ dài nằm trong khoảng 5-100 ký tự")
     private String fullName;
 
@@ -40,7 +39,7 @@ public class Customer {
 
     private String address;
 
-    @Column(precision = 12, scale = 0, nullable = false)
+    @Column(precision = 12, scale = 0, nullable = false, updatable = false)
     private BigDecimal balance;
 
     @OneToMany
@@ -48,4 +47,7 @@ public class Customer {
 
     @OneToMany
     private List<Withdraw> withdraws;
+
+    @OneToMany
+    private List<Transfer> transfers;
 }
