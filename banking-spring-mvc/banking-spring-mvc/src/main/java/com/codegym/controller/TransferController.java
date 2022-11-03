@@ -9,10 +9,9 @@ import com.codegym.service.transfer.ITransferService;
 import com.codegym.service.withdraw.IWithdrawService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
@@ -24,12 +23,6 @@ import java.util.Optional;
 public class TransferController {
     @Autowired
     private ICustomerService customerService;
-
-    @Autowired
-    private IDepositService depositService;
-
-    @Autowired
-    private IWithdrawService withdrawService;
 
     @Autowired
     private ITransferService transferService;
@@ -61,11 +54,82 @@ public class TransferController {
             modelAndView.addObject("error", "Id khách hàng không hợp lệ");
         }
         else {
-            Iterable<Customer> recipients = customerService.findAllByIdNot(senderId);
+            List    <Customer> recipients = customerService.findAllByIdNot(senderId);
             modelAndView.addObject("transfer", new Transfer());
-            modelAndView.addObject("customer", senderOptional.get());
+            modelAndView.addObject("sender", senderOptional.get());
             modelAndView.addObject ( "recipients", recipients );
         }
+        return modelAndView;
+    }
+
+    @PostMapping("/create/{senderId}")
+    public ModelAndView transfer(@PathVariable long senderId,
+                                 @Validated @ModelAttribute Transfer transfer,
+                                 BindingResult bindingResult) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("transfer/create");
+
+        Optional<Customer> senderOptional = customerService.findById(senderId);
+
+        if (!senderOptional.isPresent()) {
+            modelAndView.addObject("errorAction", "ID người gửi không hợp lệ");
+            return modelAndView;
+        }
+
+        Optional<Customer> recipientOptional = customerService.findById(transfer.getRecipient().getId());
+        if(!recipientOptional.isPresent()){
+            modelAndView.addObject("errorAction", "Người nhận không hợp lệ");
+            return modelAndView;
+        }
+
+        Customer sender = senderOptional.get();
+
+        List<Customer> recipients = customerService.findAllByIdNot(senderId);
+
+        if (bindingResult.hasFieldErrors()) {
+            modelAndView.addObject("sender", sender);
+            modelAndView.addObject("recipients", recipients);
+            modelAndView.addObject("transfer", transfer);
+            modelAndView.addObject("error", true);
+            return modelAndView;
+        }
+
+        BigDecimal currentBalanceSender = sender.getBalance();
+
+        BigDecimal transferAmount = transfer.getTransferAmount();
+        int fees = 10;
+        BigDecimal feesAmount = transferAmount.multiply(new BigDecimal(fees)).divide(new BigDecimal(100L));
+        BigDecimal transactionAmount = transferAmount.add(feesAmount);
+
+        if (currentBalanceSender.compareTo(transactionAmount) < 0) {
+            modelAndView.addObject("transfer", new Transfer());
+            modelAndView.addObject("sender", sender);
+            modelAndView.addObject("recipients", recipients);
+            modelAndView.addObject("error", true);
+            modelAndView.addObject("errorAction", "SỐ dư người gửi không đủ thực hiện giao dịch");
+            return modelAndView;
+        }
+
+        try {
+            transfer.setId(0L);
+            transfer.setSender(sender);
+            transfer.setFees(fees);
+            transfer.setFeesAmount(feesAmount);
+            transfer.setTransactionAmount(transactionAmount);
+
+            Customer newSender = customerService.transfer(transfer);
+
+            modelAndView.addObject("deposit", new Transfer());
+            modelAndView.addObject("sender", newSender);
+            modelAndView.addObject("recipients", recipients);
+            modelAndView.addObject("success", true);
+        } catch (Exception e) {
+            modelAndView.addObject("deposit", new Transfer());
+            modelAndView.addObject("sender", sender);
+            modelAndView.addObject("recipients", recipients);
+            modelAndView.addObject("error", true);
+        }
+
         return modelAndView;
     }
 }

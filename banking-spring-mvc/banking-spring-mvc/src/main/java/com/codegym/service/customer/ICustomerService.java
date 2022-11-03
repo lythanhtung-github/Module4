@@ -2,6 +2,7 @@ package com.codegym.service.customer;
 
 import com.codegym.model.Customer;
 import com.codegym.model.Deposit;
+import com.codegym.model.Transfer;
 import com.codegym.model.Withdraw;
 import com.codegym.service.IGeneralService;
 
@@ -16,7 +17,9 @@ public interface ICustomerService extends IGeneralService<Customer> {
 
     boolean withdraw(Withdraw withdraw, Customer customer);
 
+    Customer transfer(Transfer transfer);
+
     Boolean existsByIdEquals(long id);
 
-    Iterable<Customer> findAllByIdNot(Long id);
+    List<Customer> findAllByIdNot(Long id);
 }

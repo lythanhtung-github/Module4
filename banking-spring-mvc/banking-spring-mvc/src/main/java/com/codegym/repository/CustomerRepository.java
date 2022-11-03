@@ -12,15 +12,24 @@ import java.util.List;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     List<Customer> findAllByFullNameLikeOrEmailOrPhoneOrAddressLike(String fullName, String email,String phone, String address);
-    Iterable<Customer> findAllByIdIsNot(Long id);
+    List<Customer> findAllByIdIsNot(Long id);
 
     List<Customer> findAllByDeletedIsFalse();
 
     @Modifying
     @Query("UPDATE Customer AS c " +
-            "SET c.balance = c.balance + :balance " +
-            "WHERE c.id = :customerId")
-    void incrementBalance(@Param("customerId") Long customerId, @Param("balance") BigDecimal balance);
+            "SET c.balance = c.balance + :transactionAmount " +
+            "WHERE c.id = :customerId"
+    )
+    void incrementBalance(@Param("transactionAmount") BigDecimal transactionAmount, @Param("customerId") long customerId);
+
+
+    @Modifying
+    @Query("UPDATE Customer AS c " +
+            "SET c.balance = c.balance - :transactionAmount " +
+            "WHERE c.id = :customerId"
+    )
+    void reduceBalance(@Param("transactionAmount") BigDecimal transactionAmount, @Param("customerId") long customerId);
 
     @Modifying
     @Query("UPDATE Customer AS c " +

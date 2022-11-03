@@ -2,9 +2,11 @@ package com.codegym.service.customer;
 
 import com.codegym.model.Customer;
 import com.codegym.model.Deposit;
+import com.codegym.model.Transfer;
 import com.codegym.model.Withdraw;
 import com.codegym.repository.CustomerRepository;
 import com.codegym.repository.DepositRepository;
+import com.codegym.repository.TransferRepository;
 import com.codegym.repository.WithdrawRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,9 @@ public class CustomerServiceImpl implements ICustomerService {
     private DepositRepository depositRepository;
     @Autowired
     private WithdrawRepository withdrawRepository;
+
+    @Autowired
+    private TransferRepository transferRepository;
 
     @Override
     public List<Customer> findAll() {
@@ -79,6 +84,21 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
+    public Customer transfer(Transfer transfer) {
+
+        customerRepository.reduceBalance(transfer.getTransactionAmount(), transfer.getSender().getId());
+
+        customerRepository.incrementBalance(transfer.getTransferAmount(), transfer.getRecipient().getId());
+
+        transferRepository.save(transfer);
+
+        Optional<Customer> sender = customerRepository.findById(transfer.getSender().getId());
+
+        return sender.get();
+    }
+
+
+    @Override
     public Boolean existsByIdEquals(long id) {
         return customerRepository.existsById(id);
     }
@@ -89,7 +109,7 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public Iterable<Customer> findAllByIdNot(Long id) {
+    public List<Customer> findAllByIdNot(Long id) {
         return customerRepository.findAllByIdIsNot(id);
     }
 

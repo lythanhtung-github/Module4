@@ -6,7 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 import java.math.BigDecimal;
 
 @NoArgsConstructor
@@ -24,18 +25,16 @@ public class Transfer extends BaseEntity{
     @JoinColumn(name = "sender_id", referencedColumnName = "id", nullable = false)
     private Customer sender;
 
-    @Min(0)
     @Column(name = "transaction_amount", precision = 12, scale = 0, nullable = false)
     private BigDecimal transactionAmount;
 
-    @Min(0)
     private int fees;
 
-    @Min(value = 100000, message = "Số tiền muốn chuyển phải lớn hơn 100.000 VNĐ")
     @Column(name = "fees_amount", precision = 12, scale = 0, nullable = false)
     private BigDecimal feesAmount;
 
-    @Min(0)
+    @DecimalMin(value="100000", message = "Số tiền muốn chuyển phải lớn hơn 100.000 VNĐ")
+    @DecimalMax(value="1000000000", message = "Số tiền muốn nạp chuyển không vượt quá 1.000.000.000 VNĐ")
     @Column(name = "transfer_amount", precision = 12, scale = 0, nullable = false)
     private BigDecimal transferAmount;
 

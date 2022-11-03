@@ -22,7 +22,7 @@
             </div>
         </div>
     </div>
-    <table class="table table-hover" id = "tb-customer">
+    <table class="table table-hover" id="tb-customer">
         <thead>
         <tr>
             <th class="text-center">#</th>
@@ -72,16 +72,44 @@
                     </a>
                 </td>
                 <td>
-                    <a class="btn btn-outline-danger" title="Suspended" data-toggle="tooltip" href="#"
-                       data-bs-original-title="Edit">
-                        <i class="fa-solid fa-ban"></i>
-                    </a>
+                    <span th:onclick="'alert(\'' + ${item.id} + '\');'"
+                          title="Suspended" data-toggle="tooltip"
+                          data-bs-original-title="Edit">
+                            <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <i class="fa-solid fa-ban"></i>
+                            </button>
+                     </span>
                 </td>
             </tr>
         </th:block>
         </tbody>
     </table>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center" id="questionDelete">
+                Bạn có thực sự muốn xóa?
+            </div>
+            <div class="modal-footer">
+                <a type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</a>
+                <a type="button" class="btn btn-danger">Đồng ý</a>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
+<script>
+   function alert(a){
+       let b = document.getElementById("#questionDelete");
+       b.innerHTML = " Bạn có thực sự muốn xóa"+ a +"?"
+   }
+</script>
 <th:block th:replace="layout/script-tooltip :: script-tooltip"/>
 </html>

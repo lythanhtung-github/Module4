@@ -25,19 +25,19 @@
             <fieldset class="row g-3">
                 <div class="col-md-3">
                     <label class="form-label">Sender ID</label>
-                    <input type="text" class="form-control" th:value="${customer.id}" readonly>
+                    <input type="text" class="form-control" th:field="${sender.id}"  readonly>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Sender Name</label>
-                    <input type="email" class="form-control" th:value="${customer.fullName}" readonly>
+                    <input type="email" class="form-control" th:field="${sender.fullName}" readonly>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Email</label>
-                    <input type="text" class="form-control" th:value="${customer.email}" readonly>
+                    <input type="text" class="form-control" th:field="${sender.email}" readonly>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Sender balance</label>
-                    <input type="number" class="form-control" th:value="${customer.balance}" readonly>
+                    <input type="number" class="form-control" th:field="${sender.balance}" readonly>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Recipient Name</label>
@@ -47,16 +47,16 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Transfer Amount ($)</label>
-                    <input type="number" class="form-control" th:field="*{transactionAmount}">
+                    <label class="form-label">Transfer Amount (VNĐ)</label>
+                    <input type="number" class="form-control" th:field="*{transferAmount}" required>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Fees (%)</label>
                     <input type="number" class="form-control" value="10" id="fees" readonly>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Total amount of transaction ($)</label>
-                    <input type="number" class="form-control" readonly>
+                    <label class="form-label">Total amount of transaction (VNĐ)</label>
+                    <input type="number" class="form-control" th:field="*{transactionAmount}" readonly>
                 </div>
                 <div class="col-md-12">
                     <button type="submit" id="btnCreateCustomer" class="btn btn-outline-primary">
@@ -74,11 +74,16 @@
                     <h5><span>Chuyển tiền thành công</span></h5>
                 </div>
             </th:block>
+            <th:block th:if="${errorAction} == true">
+                <div class="alert-danger">
+                    <h5><span>Chuyển tiền thành công</span></h5>
+                </div>
+            </th:block>
             <th:block th:if="${error} == true">
                 <div class="alert-danger">
                     <h5>Vui lòng sửa lỗi bên dưới:</h5>
                     <ul>
-                        <li th:each="err : ${#fields.errors('customer.*')}" th:text="${err}"></li>
+                        <li th:each="err : ${#fields.errors('transfer.*')}" th:text="${err}"></li>
                     </ul>
                 </div>
             </th:block>
@@ -86,7 +91,14 @@
     </div>
 </div>
 <script>
+    let elemTransferAmount = document.getElementById("transferAmount");
 
+    elemTransferAmount.addEventListener("input", function () {
+        let transferAmount = parseInt(document.getElementById("transferAmount").value);
+        let fees = 10;
+        let feesAmount = (transferAmount * fees) / 100;
+        document.getElementById("transactionAmount").value = transferAmount + feesAmount;
+    })
 </script>
 </body>
 </html>

@@ -44,7 +44,8 @@ public class CustomerController {
     }
 
     @PostMapping("/create")
-    public ModelAndView doCreate(@Validated @ModelAttribute Customer customer, BindingResult bindingResult) {
+    public ModelAndView doCreate(@Validated @ModelAttribute Customer customer,
+                                 BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("customer/create");
 
