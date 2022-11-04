@@ -72,11 +72,14 @@
                     </a>
                 </td>
                 <td>
-                    <span th:onclick="'alert(\'' + ${item.id} + '\');'"
+                    <span th:data-id="${item.id}"
+                          th:data-name="${item.fullName}"
+                          onclick="showModal(this.getAttribute('data-id'), this.getAttribute('data-name'));"
                           title="Suspended" data-toggle="tooltip"
                           data-bs-original-title="Edit">
-                            <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                <i class="fa-solid fa-ban"></i>
+                            <button class="btn btn-outline-danger" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal">
+                               <i class="fa-solid fa-trash"></i>
                             </button>
                      </span>
                 </td>
@@ -99,17 +102,32 @@
             </div>
             <div class="modal-footer">
                 <a type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</a>
-                <a type="button" class="btn btn-danger">Đồng ý</a>
+                <a id = "yesAnswer" href="#" type="button" class="btn btn-danger">Đồng ý</a>
             </div>
         </div>
     </div>
 </div>
+<div class="footer">
+    <div id="message-alert">
+        <th:block th:if="${success} == true">
+            <div class="alert-success">
+                <h5><span>Xóa khách hàng thành công</span></h5>
+            </div>
+        </th:block>
+        <th:block th:if="${error}">
+            <div class="alert-danger">
+                <h5 th:text="${error}"></h5>
+            </div>
+        </th:block>
+    </div>
+</div>
 </body>
 <script>
-   function alert(a){
-       let b = document.getElementById("#questionDelete");
-       b.innerHTML = " Bạn có thực sự muốn xóa"+ a +"?"
-   }
+    function showModal(id, fullName) {
+        let question = document.querySelector("#questionDelete");
+        question.innerHTML = " Bạn có thực sự muốn xóa khách hàng '" + fullName +"'?";
+        document.querySelector("#yesAnswer").href = "/customers/delete/"+id;
+    }
 </script>
 <th:block th:replace="layout/script-tooltip :: script-tooltip"/>
 </html>

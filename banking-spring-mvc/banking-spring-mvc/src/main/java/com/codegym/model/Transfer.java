@@ -6,8 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
 @NoArgsConstructor
@@ -33,8 +32,9 @@ public class Transfer extends BaseEntity{
     @Column(name = "fees_amount", precision = 12, scale = 0, nullable = false)
     private BigDecimal feesAmount;
 
+    @NotNull(message = "Số tiền muốn chuyển không được để trống ")
     @DecimalMin(value="100000", message = "Số tiền muốn chuyển phải lớn hơn 100.000 VNĐ")
-    @DecimalMax(value="1000000000", message = "Số tiền muốn nạp chuyển không vượt quá 1.000.000.000 VNĐ")
+    @DecimalMax(value="1000000000", message = "Số tiền muốn chuyển chuyển không vượt quá 1.000.000.000 VNĐ")
     @Column(name = "transfer_amount", precision = 12, scale = 0, nullable = false)
     private BigDecimal transferAmount;
 

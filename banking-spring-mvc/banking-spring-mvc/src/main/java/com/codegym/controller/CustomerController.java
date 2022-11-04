@@ -4,7 +4,6 @@ import com.codegym.model.Customer;
 import com.codegym.model.Deposit;
 import com.codegym.model.Withdraw;
 import com.codegym.service.customer.ICustomerService;
-import com.codegym.service.deposit.IDepositService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -17,13 +16,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/customers")
+@RequestMapping({"/customers",""})
 public class CustomerController {
     @Autowired
     private ICustomerService customerService;
-
-    @Autowired
-    private IDepositService depositService;
 
     @GetMapping
     public ModelAndView showListPage() {
@@ -82,7 +78,7 @@ public class CustomerController {
         return modelAndView;
     }
 
-    @PostMapping("/edit/{customerId}")
+    @PutMapping("/edit/{customerId}")
     public ModelAndView doUpdate(@PathVariable long customerId, @Validated @ModelAttribute Customer customer, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("customer/edit");
@@ -106,6 +102,25 @@ public class CustomerController {
             modelAndView.addObject("errorAction", "Thao tác không thành công");
         }
         modelAndView.addObject("customer", customer);
+        return modelAndView;
+    }
+
+    @DeleteMapping("/delete/{customerId}")
+    public ModelAndView delete(@PathVariable long customerId) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("customer/list");
+        Optional<Customer> customerOptional = customerService.findById(customerId);
+
+        if (!customerOptional.isPresent()) {
+            modelAndView.addObject("error", "Thao tác không thành công");
+        }
+        Customer customer = customerOptional.get();
+        customer.setDeleted(true);
+        customerService.save(customer);
+        List<Customer> customers = customerService.findAllByDeletedIsFalse();
+        modelAndView.addObject("customers", customers);
+        modelAndView.addObject("success", true);
+
         return modelAndView;
     }
 

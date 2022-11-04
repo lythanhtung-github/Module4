@@ -38,10 +38,10 @@
         <th:block th:each="item : ${transfers}">
             <tr>
                 <td th:text="${item.id}" class="text-start"></td>
-                <td th:text="${item.sender.id}"></td>
-                <td th:if="${item.sender}" th:text="${item.sender.fullName}"></td>
-                <td th:text="${item.recipient.id}"></td>
-                <td th:if="${item.recipient}" th:text="${item.recipient.fullName}"></td>
+                <td th:text="${item.sender.id}" class="text-center"></td>
+                <td th:if="${item.sender}" th:text="${item.sender.fullName}" class="text-center"></td>
+                <td th:text="${item.recipient.id}" class="text-center"></td>
+                <td th:if="${item.recipient}" th:text="${item.recipient.fullName}" class="text-center"></td>
                 <td th:text="${#numbers.formatCurrency(item.transactionAmount)}" class="text-end"></td>
                 <td th:text="${#numbers.formatCurrency(item.fees)}" class="text-end"></td>
                 <td th:text="${#numbers.formatCurrency(item.transferAmount)}" class="text-end"></td>

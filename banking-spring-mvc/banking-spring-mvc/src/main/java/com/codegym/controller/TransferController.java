@@ -48,7 +48,8 @@ public class TransferController {
         Optional<Customer> senderOptional = customerService.findById(senderId);
 
         if (!senderOptional.isPresent()) {
-            modelAndView.addObject("error", "Id khách hàng không hợp lệ");
+                modelAndView.setViewName("error/404");
+                return modelAndView;
         }
         else {
             List    <Customer> recipients = customerService.findAllByIdNot(senderId);
@@ -64,23 +65,11 @@ public class TransferController {
                                  @Validated @ModelAttribute Transfer transfer,
                                  BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("transfer/create");
 
         Optional<Customer> senderOptional = customerService.findById(senderId);
 
         if (!senderOptional.isPresent()) {
-            modelAndView.addObject("errorAction", "ID người gửi không hợp lệ");
-            return modelAndView;
-        }
-
-        try{
-            Optional<Customer> recipientOptional = customerService.findById(transfer.getRecipient().getId());
-            if(!recipientOptional.isPresent()){
-                modelAndView.addObject("errorAction", "Người nhận không hợp lệ");
-                return modelAndView;
-            }
-        }catch (Exception e){
-            modelAndView.addObject("errorAction", "Người nhận không hợp lệ");
+            modelAndView.setViewName("error/404");
             return modelAndView;
         }
 
@@ -88,11 +77,29 @@ public class TransferController {
 
         List<Customer> recipients = customerService.findAllByIdNot(senderId);
 
+        try{
+            Optional<Customer> recipientOptional = customerService.findById(transfer.getRecipient().getId());
+            if(!recipientOptional.isPresent()){
+                modelAndView.setViewName("transfer/create");
+                modelAndView.addObject("errorAction", "Người nhận không hợp lệ");
+                return modelAndView;
+            }
+        }catch (Exception e){
+
+            modelAndView.addObject("transfer", new Transfer());
+            modelAndView.addObject("sender", sender);
+            modelAndView.addObject("recipients", recipients);
+            modelAndView.addObject("error", true);
+            modelAndView.addObject("errorAction", "Người nhận không hợp lệ");
+            return modelAndView;
+        }
+
         if (bindingResult.hasFieldErrors()) {
             modelAndView.addObject("sender", sender);
             modelAndView.addObject("recipients", recipients);
             modelAndView.addObject("transfer", transfer);
             modelAndView.addObject("error", true);
+            modelAndView.setViewName("transfer/create");
             return modelAndView;
         }
 
@@ -107,8 +114,8 @@ public class TransferController {
             modelAndView.addObject("transfer", new Transfer());
             modelAndView.addObject("sender", sender);
             modelAndView.addObject("recipients", recipients);
-            modelAndView.addObject("error", true);
-            modelAndView.addObject("errorAction", "SỐ dư người gửi không đủ thực hiện giao dịch");
+            modelAndView.addObject("errorAction", "Số dư người gửi không đủ để thực hiện giao dịch");
+            modelAndView.setViewName("transfer/create");
             return modelAndView;
         }
 
@@ -121,17 +128,17 @@ public class TransferController {
 
             Customer newSender = customerService.transfer(transfer);
 
-            modelAndView.addObject("deposit", new Transfer());
+            modelAndView.addObject("transfer", new Transfer());
             modelAndView.addObject("sender", newSender);
             modelAndView.addObject("recipients", recipients);
             modelAndView.addObject("success", true);
         } catch (Exception e) {
-            modelAndView.addObject("deposit", new Transfer());
+            modelAndView.addObject("transfer", new Transfer());
             modelAndView.addObject("sender", sender);
             modelAndView.addObject("recipients", recipients);
             modelAndView.addObject("error", true);
         }
-
+        modelAndView.setViewName("transfer/create");
         return modelAndView;
     }
 }

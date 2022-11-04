@@ -97,7 +97,6 @@ public class CustomerServiceImpl implements ICustomerService {
         return sender.get();
     }
 
-
     @Override
     public Boolean existsByIdEquals(long id) {
         return customerRepository.existsById(id);
@@ -115,6 +114,6 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     public void remove(Long id) {
-
+//        customerRepository.recovery(id);
     }
 }
