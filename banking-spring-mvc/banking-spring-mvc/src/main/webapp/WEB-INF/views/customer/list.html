@@ -109,9 +109,9 @@
 </div>
 <div class="footer">
     <div id="message-alert">
-        <th:block th:if="${success} == true">
+        <th:block th:if="${success}">
             <div class="alert-success">
-                <h5><span>Xóa khách hàng thành công</span></h5>
+                <h5 th:text="${success}"></h5>
             </div>
         </th:block>
         <th:block th:if="${error}">

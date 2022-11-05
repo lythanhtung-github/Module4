@@ -10,13 +10,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping({"/customers",""})
+@RequestMapping({"/customers", ""})
 public class CustomerController {
     @Autowired
     private ICustomerService customerService;
@@ -106,20 +107,19 @@ public class CustomerController {
     }
 
     @GetMapping("/delete/{customerId}")
-    public ModelAndView delete(@PathVariable long customerId) {
+    public ModelAndView delete(@PathVariable long customerId, RedirectAttributesModelMap redirectAttributesModelMap) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("customer/list");
+        modelAndView.setViewName("redirect:" + "/customers");
         Optional<Customer> customerOptional = customerService.findById(customerId);
 
         if (!customerOptional.isPresent()) {
-            modelAndView.addObject("error", "Thao tác không thành công");
+            redirectAttributesModelMap.addFlashAttribute("error", "Thao tác không thành công");
         }
         Customer customer = customerOptional.get();
         customer.setDeleted(true);
         customerService.save(customer);
-        List<Customer> customers = customerService.findAllByDeletedIsFalse();
-        modelAndView.addObject("customers", customers);
-        modelAndView.addObject("success", true);
+
+        redirectAttributesModelMap.addFlashAttribute("success", "Xóa thành công");
 
         return modelAndView;
     }

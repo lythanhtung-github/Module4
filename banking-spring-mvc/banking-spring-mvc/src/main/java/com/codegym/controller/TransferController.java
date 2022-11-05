@@ -96,7 +96,6 @@ public class TransferController {
         }
 
         BigDecimal currentBalanceSender = sender.getBalance();
-
         BigDecimal transferAmount = transfer.getTransferAmount();
         int fees = 10;
         BigDecimal feesAmount = transferAmount.multiply(new BigDecimal(fees)).divide(new BigDecimal(100));

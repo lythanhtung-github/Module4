@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -18,7 +20,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "customers")
-public class Customer extends BaseEntity{
+public class Customer extends BaseEntity implements Validator {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +28,7 @@ public class Customer extends BaseEntity{
 
     @Column(name = "full_name", nullable = false)
     @NotEmpty(message = "Họ tên không được để trống")
-    @Size(min = 5, max = 100, message = "Họ tên có độ dài nằm trong khoảng 5-100 ký tự")
+//    @Size(min = 5, max = 100, message = "Họ tên có độ dài nằm trong khoảng 5-100 ký tự")
     private String fullName;
 
     @NotEmpty(message = "Email không được để trống")
@@ -52,4 +54,24 @@ public class Customer extends BaseEntity{
 
     @OneToMany
     private List<Transfer> transfers;
+
+    @Override
+    public boolean supports(Class<?> aClass) {
+        return Customer.class.isAssignableFrom(aClass);
+    }
+
+    @Override
+    public void validate(Object target, Errors errors) {
+        Customer customer = (Customer) target;
+
+        String fullName = customer.getFullName();
+
+        if (fullName.length() < 5){
+            errors.rejectValue("fullName", "fullName.length.min");
+        }
+
+        if (fullName.length() > 20){
+            errors.rejectValue("fullName", "fullName.length.max");
+        }
+    }
 }
