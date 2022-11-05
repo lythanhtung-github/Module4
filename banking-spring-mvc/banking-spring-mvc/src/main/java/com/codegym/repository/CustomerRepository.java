@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     List<Customer> findAllByFullNameLikeOrEmailOrPhoneOrAddressLike(String fullName, String email,String phone, String address);
-    List<Customer> findAllByIdIsNot(Long id);
+    List<Customer> findAllByDeletedIsFalseAndIdIsNot(Long id);
 
     List<Customer> findAllByDeletedIsFalse();
 

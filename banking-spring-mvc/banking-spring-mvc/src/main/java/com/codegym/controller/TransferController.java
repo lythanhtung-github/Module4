@@ -25,7 +25,7 @@ public class TransferController {
     private ITransferService transferService;
 
     @ModelAttribute("provinces")
-    public Iterable<Customer> customers(){
+    public Iterable<Customer> customers() {
         return customerService.findAll();
     }
 
@@ -48,14 +48,13 @@ public class TransferController {
         Optional<Customer> senderOptional = customerService.findById(senderId);
 
         if (!senderOptional.isPresent()) {
-                modelAndView.setViewName("error/404");
-                return modelAndView;
-        }
-        else {
-            List    <Customer> recipients = customerService.findAllByIdNot(senderId);
+            modelAndView.setViewName("error/404");
+            return modelAndView;
+        } else {
+            List<Customer> recipients = customerService.findAllByIdNot(senderId);
             modelAndView.addObject("transfer", new Transfer());
             modelAndView.addObject("sender", senderOptional.get());
-            modelAndView.addObject ( "recipients", recipients );
+            modelAndView.addObject("recipients", recipients);
         }
         return modelAndView;
     }
@@ -77,15 +76,8 @@ public class TransferController {
 
         List<Customer> recipients = customerService.findAllByIdNot(senderId);
 
-        try{
-            Optional<Customer> recipientOptional = customerService.findById(transfer.getRecipient().getId());
-            if(!recipientOptional.isPresent()){
-                modelAndView.setViewName("transfer/create");
-                modelAndView.addObject("errorAction", "Người nhận không hợp lệ");
-                return modelAndView;
-            }
-        }catch (Exception e){
-
+        Customer recipient = transfer.getRecipient();
+        if (recipient == null) {
             modelAndView.addObject("transfer", new Transfer());
             modelAndView.addObject("sender", sender);
             modelAndView.addObject("recipients", recipients);
@@ -107,7 +99,7 @@ public class TransferController {
 
         BigDecimal transferAmount = transfer.getTransferAmount();
         int fees = 10;
-        BigDecimal feesAmount = transferAmount.multiply(new BigDecimal(fees)).divide(new BigDecimal(100L));
+        BigDecimal feesAmount = transferAmount.multiply(new BigDecimal(fees)).divide(new BigDecimal(100));
         BigDecimal transactionAmount = transferAmount.add(feesAmount);
 
         if (currentBalanceSender.compareTo(transactionAmount) < 0) {
@@ -118,7 +110,7 @@ public class TransferController {
             modelAndView.setViewName("transfer/create");
             return modelAndView;
         }
-
+        Customer newSender = customerService.transfer(transfer);
         try {
             transfer.setId(0L);
             transfer.setSender(sender);
@@ -126,17 +118,15 @@ public class TransferController {
             transfer.setFeesAmount(feesAmount);
             transfer.setTransactionAmount(transactionAmount);
 
-            Customer newSender = customerService.transfer(transfer);
-
             modelAndView.addObject("transfer", new Transfer());
             modelAndView.addObject("sender", newSender);
             modelAndView.addObject("recipients", recipients);
             modelAndView.addObject("success", true);
         } catch (Exception e) {
             modelAndView.addObject("transfer", new Transfer());
-            modelAndView.addObject("sender", sender);
+            modelAndView.addObject("sender", newSender);
             modelAndView.addObject("recipients", recipients);
-            modelAndView.addObject("error", true);
+            modelAndView.addObject("errorAction", "Vui lòng hiên hệ Admin");
         }
         modelAndView.setViewName("transfer/create");
         return modelAndView;

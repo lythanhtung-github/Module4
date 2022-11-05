@@ -5,69 +5,77 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
-        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+        crossorigin="anonymous"></script>
     <title>Customer management</title>
 </head>
 
 <body>
     <div class="container">
-        <div class="head">
+        <header>
+             <div class="row col-md-12">
+                <h1>Customer information</h1>
+            </div>
+        </header>
+        <form action="" method="">
             <div class="row">
-                <h2>Customer information</h2>
+                <div class="form-group col-md-6">
+                    <label for="fullName" class="col-form-label">Full name</label>
+                    <input class="col-md-12 form-control" type="text" id="fullName">
+                </div>
+                <div class="col-md-6">
+                    <label for="email" class="col-form-label">Email</label>
+                    <input class="col-md-12 form-control" type="email" id="email">
+                </div>
             </div>
-        </div>
 
-        <form action="">
-            <div class="row form-group">
-                <div class="col-md-6">
-                    <label for="">Full name</label>
-                    <input class="col-md-12" type="text">
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="password" class="col-form-label">Password</label>
+                    <input class="col-md-12 form-control" type="password" id="password">
                 </div>
-                <div class="col-md-6">
-                    <label for="">Email</label>
-                    <input class="col-md-12" type="email">
-                </div>
-            </div>
-            <div class="row form-group">
-                <div class="col-md-6">
-                    <label for="">Password</label>
-                    <input class="col-md-12" type="password">
-                </div>
-                <div class="col-md-6">
-                    <label for="">Re-password</label>
-                    <input class="col-md-12" type="password">
+                <div class="form-group col-md-6">
+                    <label for="re-password" class="col-form-label">Re-password</label>
+                    <input class="col-md-12 form-control" type="password" id="re-password">
                 </div>
             </div>
-            <div class="row form-group">
-                <div class="col-6">
-                    <label for="">Phone</label>
-                    <input class="col-md-12" type="text">
-                </div>
-                <div class="col-md-6">
-                    <label for="">Address</label>
-                    <input class="col-md-12" type="text">
-                </div>
-            </div>
-            <div class="row form-group">
-                <div class="col-md-2">
-                    <button type="button" class="btn btn-primary">Create Customer</button>
-                </div>
 
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="phone" class="col-form-label">Phone</label>
+                    <input class="col-md-12 form-control" type="text" id="phone">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="address" class="col-form-label">Address</label>
+                    <input class="col-md-12 form-control" type="text" id="address">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label></label>
+                    <button type="button" class="btn btn-outline-success form-control" title="Create"
+                        data-toggle="tooltip" href="#" data-bs-original-title="Edit">
+                        <i class="fa-solid fa-user-plus"></i>
+                        Create Customer</button>
+                        <label></label>
+                </div>
             </div>
         </form>
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>#</th>
-                    <th>FullName</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Address</th>
-                    <th colspan="2">Action</th>
+                    <th class="text-center">#</th>
+                    <th class="text-center">FullName</th>
+                    <th class="text-center">Email</th>
+                    <th class="text-center">Phone</th>
+                    <th class="text-center">Address</th>
+                    <th colspan="2" class="text-center">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -77,27 +85,134 @@
                     <td class="text-center">nguyenvana@gmail.com</td>
                     <td class="text-center">0999999999</td>
                     <td class="text-center">Thừa Thiên Huế</td>
-                    <td>
-                        <a class="btn btn btn-outline-dark" title="Edit" data-toggle="tooltip"
-                            href="updateCustomer.html" data-bs-original-title="Edit">
+                    <td class="text-center">
+                        <a class="btn btn btn-outline-primary" title="Edit" data-toggle="tooltip"
+                            href="updateCustomer.html" data-bs-original-title="Edit" data-bs-toggle="modal"
+                            data-bs-target="#editModal">
                             <i class="fa-solid fa-pen-to-square"></i>
                             Edit
                         </a>
                     </td>
-                
-                    <td>
-                        <a class="btn btn-outline-danger" title="Suspended" data-toggle="tooltip" href="#"
-                            data-bs-original-title="Edit">
-                            <i class="fa-solid fa-ban"></i>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-outline-danger" title="Suspended" data-toggle="tooltip"
+                            data-bs-original-title="Edit" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            <i class="fa-solid fa-trash-can"></i>
                             Delete
-                        </a>
+                        </button>
                     </td>
                 </tr>
-               
+                <tr>
+                    <td class="text-center">1004</td>
+                    <td class="text-center">Nguyễn văn A</td>
+                    <td class="text-center">nguyenvana@gmail.com</td>
+                    <td class="text-center">0999999999</td>
+                    <td class="text-center">Thừa Thiên Huế</td>
+                    <td class="text-center">
+                        <a class="btn btn btn-outline-primary" title="Edit" data-toggle="tooltip"
+                            href="updateCustomer.html" data-bs-original-title="Edit" data-bs-toggle="modal"
+                            data-bs-target="#editModal">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                            Edit
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-outline-danger" title="Suspended" data-toggle="tooltip"
+                            data-bs-original-title="Edit" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            <i class="fa-solid fa-trash-can"></i>
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center">1004</td>
+                    <td class="text-center">Nguyễn văn A</td>
+                    <td class="text-center">nguyenvana@gmail.com</td>
+                    <td class="text-center">0999999999</td>
+                    <td class="text-center">Thừa Thiên Huế</td>
+                    <td class="text-center">
+                        <a class="btn btn btn-outline-primary" title="Edit" data-toggle="tooltip"
+                            href="updateCustomer.html" data-bs-original-title="Edit" data-bs-toggle="modal"
+                            data-bs-target="#editModal">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                            Edit
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-outline-danger" title="Suspended" data-toggle="tooltip"
+                            data-bs-original-title="Edit" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            <i class="fa-solid fa-trash-can"></i>
+                            Delete
+                        </button>
+                    </td>
+                </tr>
             </tbody>
         </table>
+    </div>
 
+    <!-- Modal delete-->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img class="row" src="delete.png" alt="" style="margin:auto; height: 80px;">
+                    <span>Are you sure you want to delete the selected data?</span>
+                </div>
+                <div class="modal-footer">
+                    <div style="margin:auto">
+                        <button type="button" class="btn btn-primary">Yes, delete it!</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="editModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Customer information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="">FullName</label>
+                            <input class="col-md-12 form-control" type="text">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="">Email</label>
+                            <input class="col-md-12 form-control" type="text">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="">Phone</label>
+                            <input class="col-md-12 form-control" type="text">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="">Address</label>
+                            <input class="col-md-12 form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
-
+<script>
+    let icons = document.querySelectorAll('[data-toggle="tooltip"]');
+    icons.forEach((icon) => {
+        new bootstrap.Tooltip(icon);
+    })
+</script>
 </html>

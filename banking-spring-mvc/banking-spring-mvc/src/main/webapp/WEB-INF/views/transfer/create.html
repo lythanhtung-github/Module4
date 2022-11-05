@@ -91,9 +91,9 @@
     </div>
 </div>
 <script>
-    let elemTransferAmount = document.getElementById("transferAmount");
+    let inputTransferAmount = document.getElementById("transferAmount");
 
-    elemTransferAmount.addEventListener("input", function () {
+    inputTransferAmount.addEventListener("input", function () {
         let transferAmount = parseInt(document.getElementById("transferAmount").value);
         let fees = 10;
         let feesAmount = (transferAmount * fees) / 100;

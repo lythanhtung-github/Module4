@@ -105,7 +105,7 @@ public class CustomerController {
         return modelAndView;
     }
 
-    @DeleteMapping("/delete/{customerId}")
+    @GetMapping("/delete/{customerId}")
     public ModelAndView delete(@PathVariable long customerId) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("customer/list");
