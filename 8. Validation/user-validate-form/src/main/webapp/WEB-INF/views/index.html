@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+
+    <title>User</title>
+</head>
+<body>
+<form action="/result" th:action="@{/result}" th:object="${user}"
+      method="POST">
+    <table>
+        <tr>
+            <td>
+                <label>First Name</label>
+            </td>
+            <td>
+                <input type="text" th:field="*{firstName}"/>
+            </td>
+            <td>
+                <label style="color: red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Last Name</label>
+            </td>
+            <td>
+                <input type="text" th:field="*{lastName}"/>
+            </td>
+            <td>
+                <label style="color: red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Phone Number</label>
+            </td>
+            <td>
+                <input type="text" th:field="*{phoneNumber}"/>
+            </td>
+            <td>
+                <label style="color: red" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Age</label>
+            </td>
+            <td>
+                <input type="number" th:field="*{age}"/>
+            </td>
+            <td>
+                <label style="color: red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Email</label>
+            </td>
+            <td>
+                <input type="text" th:field="*{email}"/>
+            </td>
+            <td>
+                <label style="color: red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <button type="submit">submit</button>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
