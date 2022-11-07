@@ -1,0 +1,13 @@
+{
+    "customers":[
+        {
+            "id":1,
+            "fullName": "NVA",
+            "email": "nva@gmail.com",
+            "phone": "0987987987",
+            "address": "Thừa Thiên Huế",
+            "balance": 0,
+            "deleted": 0
+        }
+    ]
+}

@@ -1,0 +1,318 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "author": "typicode"
+    },
+    {
+      "id": 2,
+      "title": "json-server-2",
+      "author": "typicode"
+    },
+    {
+      "id": 3,
+      "title": "Cát Tường",
+      "author": "typicode"
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  },
+  "customers": [
+    {
+      "id": 2,
+      "fullName": "Lenore Pruitt",
+      "email": "hucor@mailinator.com",
+      "phone": "+1 (459) 697-6702",
+      "locationRegion": {
+        "id": 4,
+        "provinceId": "14",
+        "provinceName": "Tỉnh Sơn La",
+        "districtId": "121",
+        "districtName": "Huyện Bắc Yên",
+        "wardId": "03856",
+        "wardName": "Thị trấn Bắc Yên",
+        "address": "Beatae rerum qui dol"
+      },
+      "balance": 0
+    },
+    {
+      "id": 3,
+      "fullName": "Winter Hyde",
+      "email": "qucuwiqy@mailinator.com",
+      "phone": "+1 (518) 692-9872",
+      "locationRegion": {
+        "id": 5,
+        "provinceId": "92",
+        "provinceName": "Thành phố Cần Thơ",
+        "districtId": "925",
+        "districtName": "Huyện Cờ Đỏ",
+        "wardId": "31261",
+        "wardName": "Thị trấn Cờ Đỏ",
+        "address": "Culpa veritatis par"
+      },
+      "balance": 0
+    },
+    {
+      "id": 4,
+      "fullName": "Hermione Newton",
+      "email": "pyrolod@mailinator.com",
+      "phone": "+1 (997) 741-8574",
+      "locationRegion": {
+        "id": 6,
+        "provinceId": "64",
+        "provinceName": "Tỉnh Gia Lai",
+        "districtId": "627",
+        "districtName": "Huyện Chư Păh",
+        "wardId": "23734",
+        "wardName": "Thị trấn Ia Ly",
+        "address": "Culpa qui architect"
+      },
+      "balance": 0
+    },
+    {
+      "id": 5,
+      "fullName": "Myles Conner",
+      "email": "rykocina@mailinator.com",
+      "phone": "+1 (487) 431-3402",
+      "locationRegion": {
+        "id": 7,
+        "provinceId": "49",
+        "provinceName": "Tỉnh Quảng Nam",
+        "districtId": "515",
+        "districtName": "Huyện Bắc Trà My",
+        "wardId": "20899",
+        "wardName": "Thị trấn Trà My",
+        "address": "Aliqua Sed id ut id"
+      },
+      "balance": 0
+    },
+    {
+      "id": 6,
+      "fullName": "Randall Head",
+      "email": "bepix@mailinator.com",
+      "phone": "+1 (497) 177-7633",
+      "locationRegion": {
+        "id": 8,
+        "provinceId": "11",
+        "provinceName": "Tỉnh Điện Biên",
+        "districtId": "100",
+        "districtName": "Huyện Điện Biên",
+        "wardId": "03359",
+        "wardName": "Xã Hẹ Muông",
+        "address": "Nisi rerum irure cum"
+      },
+      "balance": 0
+    },
+    {
+      "id": 7,
+      "fullName": "Francesca Gillespie",
+      "email": "jamacyrino@mailinator.com",
+      "phone": "+1 (344) 418-9992",
+      "locationRegion": {
+        "id": 9,
+        "provinceId": "02",
+        "provinceName": "Tỉnh Hà Giang",
+        "districtId": "031",
+        "districtName": "Huyện Bắc Mê",
+        "wardId": "00991",
+        "wardName": "Thị trấn Yên Phú",
+        "address": "Sint quis iure sint"
+      },
+      "balance": 0
+    },
+    {
+      "id": 8,
+      "fullName": "Charde Turner",
+      "email": "siqal@mailinator.com",
+      "phone": "+1 (385) 898-3103",
+      "locationRegion": {
+        "id": 10,
+        "provinceId": "17",
+        "provinceName": "Tỉnh Hoà Bình",
+        "districtId": "154",
+        "districtName": "Huyện Cao Phong",
+        "wardId": "05089",
+        "wardName": "Thị trấn Cao Phong",
+        "address": "Accusantium ipsam du"
+      },
+      "balance": 0
+    },
+    {
+      "id": 9,
+      "fullName": "Rachel Williams",
+      "email": "xikexy@mailinator.com",
+      "phone": "+1 (514) 894-9178",
+      "locationRegion": {
+        "id": 11,
+        "provinceId": "94",
+        "provinceName": "Tỉnh Sóc Trăng",
+        "districtId": "942",
+        "districtName": "Huyện Châu Thành",
+        "wardId": "31569",
+        "wardName": "Thị trấn Châu Thành",
+        "address": "At optio et similiq"
+      },
+      "balance": 0
+    },
+    {
+      "id": 10,
+      "fullName": "Francesca Frederick",
+      "email": "zozerew@mailinator.com",
+      "phone": "+1 (564) 177-5934",
+      "locationRegion": {
+        "id": 12,
+        "provinceId": "37",
+        "provinceName": "Tỉnh Ninh Bình",
+        "districtId": "373",
+        "districtName": "Huyện Gia Viễn",
+        "wardId": "14464",
+        "wardName": "Thị trấn Me",
+        "address": "Ipsum et proident r"
+      },
+      "balance": 0
+    },
+    {
+      "id": 11,
+      "fullName": "Riley Spears",
+      "email": "hoqejatul@mailinator.com",
+      "phone": "+1 (642) 903-9438",
+      "locationRegion": {
+        "id": 13,
+        "provinceId": "38",
+        "provinceName": "Tỉnh Thanh Hóa",
+        "districtId": "386",
+        "districtName": "Huyện Bá Thước",
+        "wardId": "14923",
+        "wardName": "Thị trấn Cành Nàng",
+        "address": "Aut qui voluptatem v"
+      },
+      "balance": 10002100.05
+    },
+    {
+      "id": 12,
+      "fullName": "Uma Patel",
+      "email": "jehid@mailinator.com",
+      "phone": "+1 (962) 679-7767",
+      "locationRegion": {
+        "id": 14,
+        "provinceId": "04",
+        "provinceName": "Tỉnh Cao Bằng",
+        "districtId": "043",
+        "districtName": "Huyện Bảo Lạc",
+        "wardId": "01321",
+        "wardName": "Thị trấn Bảo Lạc",
+        "address": "Et optio non est nu"
+      },
+      "balance": 0
+    },
+    {
+      "id": 14,
+      "fullName": "Fredericka Webb",
+      "email": "zymemysyti@mailinator.com",
+      "phone": "+1 (622) 228-4386",
+      "locationRegion": {
+        "id": 16,
+        "provinceId": "25",
+        "provinceName": "Tỉnh Phú Thọ",
+        "districtId": "235",
+        "districtName": "Huyện Cẩm Khê",
+        "wardId": "08341",
+        "wardName": "Thị trấn Sông Thao",
+        "address": "Qui ullamco voluptat"
+      },
+      "balance": 0
+    },
+    {
+      "id": 15,
+      "fullName": "Bianca Sexton",
+      "email": "hoverone@mailinator.com",
+      "phone": "+1 (195) 804-1722",
+      "locationRegion": {
+        "id": 17,
+        "provinceId": "22",
+        "provinceName": "Tỉnh Quảng Ninh",
+        "districtId": "202",
+        "districtName": "Huyện Ba Chẽ",
+        "wardId": "06970",
+        "wardName": "Thị trấn Ba Chẽ",
+        "address": "Pariatur Velit offi"
+      },
+      "balance": 0
+    },
+    {
+      "id": 16,
+      "fullName": "Ivor Norris",
+      "email": "fifo@mailinator.com",
+      "phone": "+1 (758) 802-2142",
+      "locationRegion": {
+        "id": 18,
+        "provinceId": "75",
+        "provinceName": "Tỉnh Đồng Nai",
+        "districtId": "739",
+        "districtName": "Huyện Cẩm Mỹ",
+        "wardId": "26350",
+        "wardName": "Xã Bảo Bình",
+        "address": "Nisi ab nihil labori"
+      },
+      "balance": 11000000000
+    },
+    {
+      "id": 17,
+      "fullName": "Kyla Wallace",
+      "email": "pabosavic@mailinator.com",
+      "phone": "+1 (731) 712-8245",
+      "locationRegion": {
+        "id": 19,
+        "provinceId": "62",
+        "provinceName": "Tỉnh Kon Tum",
+        "districtId": "610",
+        "districtName": "Huyện Đắk Glei",
+        "wardId": "23341",
+        "wardName": "Thị trấn Đắk Glei",
+        "address": "Hic ipsa et deserun"
+      },
+      "balance": 8900000000
+    },
+    {
+      "id": 18,
+      "fullName": "Barrett Oneill",
+      "email": "raqyq@mailinator.com",
+      "phone": "+1 (921) 387-7393",
+      "locationRegion": {
+        "id": 20,
+        "provinceId": "37",
+        "provinceName": "Tỉnh Ninh Bình",
+        "districtId": "373",
+        "districtName": "Huyện Gia Viễn",
+        "wardId": "14464",
+        "wardName": "Thị trấn Me",
+        "address": "Eiusmod dicta est a "
+      },
+      "balance": 50
+    }
+  ],
+  "transfers": [
+    {
+      "id": 1,
+      "transactionAmount": 1100000000,
+      "transferAmount": 1000000000,
+      "senderId": 17,
+      "recipientId": 17,
+      "createdAt": "2021-12-12 19:12:39 +0700",
+      "feesAmount": 100000000,
+      "fees": 10,
+      "recipientName": "Kyla Wallace",
+      "senderName": "Kyla Wallace",
+      "createdOn": "2021-12-12 19:12:39 +0700"
+    }
+  ]
+}
