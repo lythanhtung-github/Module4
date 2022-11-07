@@ -16,23 +16,34 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     List<Customer> findAllByDeletedIsFalse();
 
+//    @Modifying
+//    @Query("UPDATE Customer AS c " +
+//            "SET c.balance = c.balance + :transactionAmount " +
+//            "WHERE c.id = :customerId"
+//    )
+//    void incrementBalance(@Param("transactionAmount") BigDecimal transactionAmount, @Param("customerId") long customerId);
+
     @Modifying
     @Query("UPDATE Customer AS c " +
-            "SET c.balance = c.balance + :transactionAmount " +
-            "WHERE c.id = :customerId"
-    )
-    void incrementBalance(@Param("transactionAmount") BigDecimal transactionAmount, @Param("customerId") long customerId);
+            "SET c.balance = c.balance + :balance " +
+            "WHERE c.id = :customerId")
+    void incrementBalance(@Param("balance") BigDecimal balance, @Param("customerId") Long customerId);
 
 
-    @Modifying
-    @Query(value = "UPDATE Customer AS c " +
-            "SET c.balance = c.balance - :transactionAmount " +
-            "WHERE c.id = :customerId"
-    )
-    void reduceBalance(@Param("transactionAmount") BigDecimal transactionAmount, @Param("customerId") long customerId);
+//    @Modifying
+//    @Query("UPDATE Customer AS c " +
+//            "SET c.balance = c.balance - :transactionAmount " +
+//            "WHERE c.id = :customerId")
+//    void reduceBalance(@Param("transactionAmount") BigDecimal transactionAmount, @Param("customerId") long customerId);
 
     @Modifying
-    @Query(value = "UPDATE Customer AS c " +
+    @Query("UPDATE Customer AS c " +
+            "SET c.balance = c.balance - :balance " +
+            "WHERE c.id = :customerId")
+    void reduceBalance(@Param("balance") BigDecimal balance, @Param("customerId") Long customerId);
+
+    @Modifying
+    @Query("UPDATE Customer AS c " +
             "SET c.balance = :balance " +
             "WHERE c.id = :customerId")
     void setBalance(@Param("customerId") Long customerId, @Param("balance") BigDecimal balance);

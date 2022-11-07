@@ -25,7 +25,7 @@
             <fieldset class="row g-3">
                 <div class="col-md-3">
                     <label class="form-label">Sender ID</label>
-                    <input type="text" class="form-control" th:field="${sender.id}"  readonly>
+                    <input type="text" class="form-control" th:field="${sender.id}" readonly>
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Sender Name</label>
@@ -56,7 +56,7 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Total amount of transaction (VNĐ)</label>
-                    <input type="number" class="form-control" th:field="*{transactionAmount}" readonly>
+                    <input type="number" class="form-control" id="transactionAmount" readonly>
                 </div>
                 <div class="col-md-12">
                     <button type="submit" id="btnCreateCustomer" class="btn btn-outline-primary">

@@ -109,6 +109,9 @@ public class TransferController {
             modelAndView.setViewName("transfer/create");
             return modelAndView;
         }
+        transfer.setSender(sender);
+        transfer.setTransactionAmount(transactionAmount);
+        transfer.setFeesAmount(feesAmount);
         Customer newSender = customerService.transfer(transfer);
         try {
             transfer.setId(0L);
