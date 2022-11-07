@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <title>JQuery</title>
+</head>
+
+<body>
+    <button id="button1">Start Animation 1</button>
+    <button id="button2">Start Animation 2</button>
+    <p>By default, all HTML elements have a static position, and cannot be moved. To manipulate the position, remember
+        to
+        first set the CSS position property of the element to relative, fixed, or absolute!</p>
+    <div style="background:#98bf21;height:100px;width:300px;position:absolute;">HELLO</div>
+</body>
+<script>
+    $(document).ready(function () {
+        $("#button1").click(function () {
+            var div = $("div");
+            div.html("HELLO");
+            div.css('background-color', "#98bf21");
+            div.css('color', "black");
+            div.animate({ left: '100px' }, "slow");
+            div.animate({ fontSize: '80px' }, "slow");
+        });
+        $("#button2").click(function () {
+            var div = $("div"); 
+            div.html("HI YOU!");
+            div.animate({ left: '300px' }, "slow");
+            div.animate({ fontSize: '30px' }, "slow");
+            div.animate({ fontSize: '50px' }, "slow");
+            div.css('background-color', "blue");
+            div.css('color', "white");
+        });
+    });
+</script>
+
+</html>
