@@ -1,0 +1,49 @@
+{
+  "customers": [
+    {
+      "id": 1,
+      "fullName": "Lý Thanh Tùng",
+      "email": "lythanhtung@gmail.com",
+      "phone": "0987987987",
+      "address": "Thừa Thiên Huế",
+      "balance": 100000,
+      "deleted": 0
+    },
+    {
+      "id": 2,
+      "fullName": "Lê Bá Lộc",
+      "email": "lebaloc@gmail.com",
+      "phone": "0987987988",
+      "address": "Thừa Thiên Huế",
+      "balance": 100000,
+      "deleted": 0
+    },
+    {
+      "fullName": "Hoàng Đức Khanh",
+      "email": "komekofat@mailinator.com",
+      "phone": "0987567567",
+      "address": "Aut aute tempore no",
+      "balance": 0,
+      "deleted": 0,
+      "id": 3
+    },
+    {
+      "fullName": "Nguyễn Ngọc Quý",
+      "email": "soqipo@mailinator.com",
+      "phone": "+1 (844) 567-7638",
+      "address": "Expedita in est qui ",
+      "balance": 0,
+      "deleted": 0,
+      "id": 4
+    },
+    {
+      "fullName": "Võ Văn Tài",
+      "email": "vaqagevemy@mailinator.com",
+      "phone": "+1 (796) 647-9045",
+      "address": "Dolor voluptatem Of",
+      "balance": 0,
+      "deleted": 0,
+      "id": 5
+    }
+  ]
+}

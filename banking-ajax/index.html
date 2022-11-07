@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/assets/image/logo-icon.png">
+    <title>BANKING - AJAX</title>
+    <link rel="stylesheet" href="/assets/bootstrap/v5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/fontawesome/v6.2.0/css/all.min.css">
+    <link rel="stylesheet" href="/assets/sweetalert2/sweetalert2.min.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="row col-sm-12">
+                <div class="col-sm-6">
+                    <h1>List of customers</h1>
+                </div>
+                <div class="col-sm-6">
+                    <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#modalCreateCustomer">
+                        <i class="fa-solid fa-square-plus"></i>
+                        Add new customer
+                    </button>
+                    <button class="btn btn-outline-light">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        Transfer histories
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="content">
+            <table id="tbCustomer" class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">#</th>
+                        <th class="text-center">Full name</th>
+                        <th class="text-center">Email</th>
+                        <th class="text-center">Phone</th>
+                        <th class="text-center">Address</th>
+                        <th class="text-center">Balance ($)</th>
+                        <th colspan="5" class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- <tr>
+                        <td class="text-center">1</td>
+                        <td class="text-center">Lý Thanh Tùng</td>
+                        <td class="text-center">lythanhtung@gmail.com</td>
+                        <td class="text-center">0987654321</td>
+                        <td class="text-center">Thừa Thiên Huế</td>
+                        <td class="text-end">0 đ</td>
+                        <td>
+                            <button data-id="${obj.id}" class="btn btn btn-outline-dark" title="Edit" data-toggle="tooltip"
+                                data-bs-original-title="Edit">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <button data-id="${obj.id}" class="btn btn-outline-success" title="Deposit" data-toggle="tooltip"
+                                data-bs-original-title="Edit">
+                                <i class="fa-regular fa-square-plus"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <button data-id="${obj.id}" class="btn btn-outline-warning" title="Withdraw" data-toggle="tooltip"
+                                data-bs-original-title="Edit">
+                                <i class="fa-regular fa-square-minus"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <button data-id="${obj.id}" class="btn btn-outline-info" title="Transfer" data-toggle="tooltip"
+                                data-bs-original-title="Edit">
+                                <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <button data-id="${obj.id}" class="btn btn-outline-danger" title="Suspended" data-toggle="tooltip"
+                                data-bs-original-title="Edit">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr> -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal Create -->
+    <div class="modal fade" id="modalCreateCustomer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add new customer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-alert-danger hide"></div>
+                    <form action="" id="frmCreate">
+                        <div class="row">
+                            <div class="col-lg-6 mt-3">
+                                <label for="fullNameCre">Full name</label>
+                                <input type="text" class="form-control" id="fullNameCre" name="fullNameCre">
+                            </div>
+                            <div class="col-lg-6 mt-3">
+                                <label for="emailCre">Email</label>
+                                <input type="email" class="form-control" id="emailCre" name="emailCre">
+                            </div>
+                            <div class="col-lg-6 mt-3">
+                                <label for="phoneCre">Phone</label>
+                                <input type="tel" class="form-control" id="phoneCre" name="phoneCre">
+                            </div>
+                            <div class="col-lg-6 mt-3">
+                                <label for="addressCre">Address</label>
+                                <input type="text" class="form-control" id="addressCre" name="addressCre">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-primary" id="btnCreate">
+                        <i class="fa-solid fa-square-plus"></i>
+                        Create
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="/assets/jquery/v3.6.1/jquery-3.6.1.min.js"></script>
+<script src="/assets/bootstrap/v5.2/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/fontawesome/v6.2.0/js/all.min.js"></script>
+<script src="/assets/sweetalert2/sweetalert2.min.js"></script>
+<script src="/assets/jquery-validate/1.19.3/jquery.validate-1.19.3.min.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+    let customer = new Customer();
+
+    $(document).ready(function () {
+        loadCustomers();
+    });
+
+    function loadCustomers() {
+        $.ajax({
+            headers: {
+                accept: "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: "http://localhost:1502/customers?deleted=0"
+        })
+            .done((data) => {
+                let tbCustomer = $("#tbCustomer tbody");
+
+                data.forEach(item => {
+                    let str = renderCustomer(item);
+                    tbCustomer.prepend(str);
+                });
+
+                enableTooltip();
+
+                // removeHandleShowModal();
+
+                handleShowGroupModal();
+            })
+            .fail((jqXHR) => {
+                console.log(jqXHR);
+            })
+    }
+
+    function renderCustomer(obj) {
+        let str = `
+                <tr id="tr_${obj.id}">
+                    <td class="text-center">${obj.id}</td>
+                    <td class="text-center">${obj.fullName}</td>
+                    <td class="text-center">${obj.email}</td>
+                    <td class="text-center">${obj.phone}</td>
+                    <td class="text-center">${obj.address}</td>
+                    <td class="text-end">${obj.balance}</td>
+                    <td class="text-center">
+                            <button data-id="${obj.id}" 
+                                class="btn btn btn-outline-dark edit" 
+                                title="Edit" 
+                                data-toggle="tooltip"
+                                data-bs-original-title="Edit" 
+                                data-bs-placement="top">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <button data-id="${obj.id}" 
+                                class="btn btn-outline-success deposit" 
+                                title="Deposit" 
+                                data-toggle="tooltip"
+                                data-bs-original-title="Edit"
+                                data-bs-placement="top">
+                                <i class="fa-regular fa-square-plus"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <button data-id="${obj.id}" 
+                                class="btn btn-outline-warning withdraw" 
+                                title="Withdraw" 
+                                data-toggle="tooltip"
+                                data-bs-original-title="Edit"
+                                data-bs-placement="top">
+                                <i class="fa-regular fa-square-minus"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <button data-id="${obj.id}" 
+                                class="btn btn-outline-info transfer" 
+                                title="Transfer" 
+                                data-toggle="tooltip"
+                                data-bs-original-title="Edit"
+                                data-bs-placement="top">
+                                <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <button data-id="${obj.id}" 
+                                class="btn btn-outline-danger delete" 
+                                title="Suspended" 
+                                data-toggle="tooltip"
+                                data-bs-original-title="Edit"
+                                data-bs-placement="top">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                </tr>
+            `;
+        return str;
+    }
+
+    function handleShowGroupModal() {
+        // handleShowUpdateModal();
+
+        // handleShowWithdrawModal();
+
+        handleShowConfirmDelete();
+    }
+
+
+    function handleShowConfirmDelete() {
+        $(".delete").on("click", function () {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+            swalWithBootstrapButtons.fire({
+                title: 'Bạn có chắc chắn không',
+                text: "Bạn sẽ không thể hoàn tác điều này!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Đồng ý, xóa nó',
+                cancelButtonText: 'Hủy bỏ',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swalWithBootstrapButtons.fire(
+                        'Đã xóa!',
+                        'Khách hàng đã được xóa.',
+                        'success'
+                    )
+                } else if (
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        'Hủy bỏ',
+                        'Thao tác hủy bỏ thành công!',
+                        'error'
+                    )
+                }
+            })
+        });
+    }
+
+
+    function enableTooltip() {
+        let icons = document.querySelectorAll('[data-toggle="tooltip"]');
+        icons.forEach((icon) => {
+            new bootstrap.Tooltip(icon);
+        })
+    }
+</script>
+
+</html>
