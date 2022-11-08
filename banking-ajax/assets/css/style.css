@@ -48,3 +48,15 @@ thead {
     background-color: #0a8aca;
     color: white;
 }
+
+label.error {
+    display: inline-block;
+    color:red;
+}
+
+input:read-only {
+    background-color: #b0b5be;
+}
+input:read-only:focus{
+    background-color: #b0b5be;
+}

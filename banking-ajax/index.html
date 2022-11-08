@@ -47,44 +47,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- <tr>
-                        <td class="text-center">1</td>
-                        <td class="text-center">Lý Thanh Tùng</td>
-                        <td class="text-center">lythanhtung@gmail.com</td>
-                        <td class="text-center">0987654321</td>
-                        <td class="text-center">Thừa Thiên Huế</td>
-                        <td class="text-end">0 đ</td>
-                        <td>
-                            <button data-id="${obj.id}" class="btn btn btn-outline-dark" title="Edit" data-toggle="tooltip"
-                                data-bs-original-title="Edit">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </button>
-                        </td>
-                        <td>
-                            <button data-id="${obj.id}" class="btn btn-outline-success" title="Deposit" data-toggle="tooltip"
-                                data-bs-original-title="Edit">
-                                <i class="fa-regular fa-square-plus"></i>
-                            </button>
-                        </td>
-                        <td>
-                            <button data-id="${obj.id}" class="btn btn-outline-warning" title="Withdraw" data-toggle="tooltip"
-                                data-bs-original-title="Edit">
-                                <i class="fa-regular fa-square-minus"></i>
-                            </button>
-                        </td>
-                        <td>
-                            <button data-id="${obj.id}" class="btn btn-outline-info" title="Transfer" data-toggle="tooltip"
-                                data-bs-original-title="Edit">
-                                <i class="fa-solid fa-arrow-right-arrow-left"></i>
-                            </button>
-                        </td>
-                        <td>
-                            <button data-id="${obj.id}" class="btn btn-outline-danger" title="Suspended" data-toggle="tooltip"
-                                data-bs-original-title="Edit">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr> -->
+                    <!-- Dữ liệu đổ vào -->
                 </tbody>
             </table>
         </div>
@@ -97,10 +60,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Add new customer</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="modal-alert-danger hide"></div>
                     <form action="" id="frmCreate">
                         <div class="row">
                             <div class="col-lg-6 mt-3">
@@ -129,6 +92,141 @@
                         Create
                     </button>
                 </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Update -->
+    <div class="modal fade" id="modalUpdateCustomer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update customer</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form action="" id="frmUpdate">
+                        <input type="hidden" id="customerIdUp">
+                        <div class="row">
+                            <div class="col-lg-6 mt-3">
+                                <label for="fullNameUp">Full name</label>
+                                <input type="text" class="form-control" id="fullNameUp" name="fullNameUp">
+                            </div>
+                            <div class="col-lg-6 mt-3">
+                                <label for="emailUp">Email</label>
+                                <input type="email" class="form-control" id="emailUp" name="emailUp" readonly>
+                            </div>
+                            <div class="col-lg-6 mt-3">
+                                <label for="phoneUp">Phone</label>
+                                <input type="tel" class="form-control" id="phoneUp" name="phoneUp">
+                            </div>
+                            <div class="col-lg-6 mt-3">
+                                <label for="addressUp">Address</label>
+                                <input type="text" class="form-control" id="addressUp" name="addressUp">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-success" id="btnUpdate">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        Update
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Deposit -->
+    <div class="modal fade" id="modalDeposit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Deposit</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="" id="frmDeposit">
+                        <div class="row">
+                            <div class="col-lg-6 mt-3">
+                                <label for="customerIdDeposit">Customer Id</label>
+                                <input type="text" class="form-control" id="customerIdDeposit" readonly>
+                            </div>
+                            <div class="col-lg-6 mt-3">
+                                <label for="fullNameDeposit">Full name</label>
+                                <input type="text" class="form-control" id="fullNameDeposit" name="fullNameDeposit"
+                                    readonly>
+                            </div>
+                            <div class="col-lg-6 mt-3">
+                                <label for="balanceDeposit">Current balance ($)</label>
+                                <input type="text" class="form-control" id="balanceDeposit" name="balanceDeposit"
+                                    readonly>
+                            </div>
+                            <div class="col-lg-6 mt-3">
+                                <label for="transactionAmountDeposit">Transaction Amount ($)</label>
+                                <input type="number" class="form-control" id="transactionAmountDeposit"
+                                    name="transactionAmountDeposit">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-success" id="btnDeposit">
+                        <i class="fa-regular fa-square-plus"></i>
+                        Deposit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Withdraw-->
+    <div class="modal fade" id="modalWithdraw" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Withdraw</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="" id="frmWithdraw">
+                        <div class="row">
+                            <div class="col-lg-6 mt-3">
+                                <label for="customerIdWithdraw">Customer Id</label>
+                                <input type="text" class="form-control" id="customerIdWithdraw" readonly>
+                            </div>
+                            <div class="col-lg-6 mt-3">
+                                <label for="fullNameWithdraw">Full name</label>
+                                <input type="text" class="form-control" id="fullNameWithdraw" readonly>
+                            </div>
+                            <div class="col-lg-6 mt-3">
+                                <label for="balanceWithdraw">Current balance ($)</label>
+                                <input type="text" class="form-control" id="balanceWithdraw" readonly>
+                            </div>
+                            <div class="col-lg-6 mt-3">
+                                <label for="transactionAmountWithdraw">Transaction Amount ($)</label>
+                                <input type="text" class="form-control" id="transactionAmountWithdraw"
+                                    name="transactionAmountWithdraw">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-warning" id="btnWithdraw">
+                        <i class="fa-regular fa-square-minus"></i>
+                        Withdraw
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -139,18 +237,21 @@
 <script src="/assets/fontawesome/v6.2.0/js/all.min.js"></script>
 <script src="/assets/sweetalert2/sweetalert2.min.js"></script>
 <script src="/assets/jquery-validate/1.19.3/jquery.validate-1.19.3.min.js"></script>
-<script src="/assets/js/app.js"></script>
+<script src="/assets/js/model.js"></script>
+<script src="/assets/js/validate.js"></script>
 <script>
     let customer = new Customer();
+    let deposit = new Deposit();
+    let withdraw = new Withdraw();
+    let customers = [];
 
-    $(document).ready(function () {
-        loadCustomers();
-    });
+    loadCustomers();
 
+    // SHOW CUSTOMERS //
     function loadCustomers() {
         $.ajax({
             headers: {
-                accept: "application/json",
+                "accept": "application/json",
                 "content-type": "application/json"
             },
             type: "GET",
@@ -158,20 +259,20 @@
         })
             .done((data) => {
                 let tbCustomer = $("#tbCustomer tbody");
-
-                data.forEach(item => {
+                customers = data;
+                customers.forEach(item => {
                     let str = renderCustomer(item);
                     tbCustomer.prepend(str);
                 });
 
                 enableTooltip();
 
-                // removeHandleShowModal();
+                removeHandleShowModal();
 
                 handleShowGroupModal();
             })
-            .fail((jqXHR) => {
-                console.log(jqXHR);
+            .fail((error) => {
+                console.log(error);
             })
     }
 
@@ -185,106 +286,535 @@
                     <td class="text-center">${obj.address}</td>
                     <td class="text-end">${obj.balance}</td>
                     <td class="text-center">
-                            <button data-id="${obj.id}" 
-                                class="btn btn btn-outline-dark edit" 
+                        <button data-id="${obj.id}" 
+                                class="btn btn btn-outline-dark update" 
                                 title="Edit" 
                                 data-toggle="tooltip"
                                 data-bs-original-title="Edit" 
-                                data-bs-placement="top">
+                                data-bs-placement="top"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#modalUpdateCustomer">
                                 <i class="fa-solid fa-pen-to-square"></i>
-                            </button>
-                        </td>
-                        <td>
-                            <button data-id="${obj.id}" 
+                        </button>
+                    </td>
+                    <td>
+                        <button data-id="${obj.id}" 
                                 class="btn btn-outline-success deposit" 
                                 title="Deposit" 
                                 data-toggle="tooltip"
                                 data-bs-original-title="Edit"
                                 data-bs-placement="top">
                                 <i class="fa-regular fa-square-plus"></i>
-                            </button>
-                        </td>
-                        <td>
-                            <button data-id="${obj.id}" 
+                        </button>
+                    </td>
+                    <td>
+                        <button data-id="${obj.id}" 
                                 class="btn btn-outline-warning withdraw" 
                                 title="Withdraw" 
                                 data-toggle="tooltip"
                                 data-bs-original-title="Edit"
                                 data-bs-placement="top">
                                 <i class="fa-regular fa-square-minus"></i>
-                            </button>
-                        </td>
-                        <td>
-                            <button data-id="${obj.id}" 
+                        </button>
+                    </td>
+                    <td>
+                        <button data-id="${obj.id}" 
                                 class="btn btn-outline-info transfer" 
                                 title="Transfer" 
                                 data-toggle="tooltip"
                                 data-bs-original-title="Edit"
                                 data-bs-placement="top">
                                 <i class="fa-solid fa-arrow-right-arrow-left"></i>
-                            </button>
-                        </td>
-                        <td>
-                            <button data-id="${obj.id}" 
+                        </button>
+                    </td>
+                    <td>
+                        <button data-id="${obj.id}" 
                                 class="btn btn-outline-danger delete" 
                                 title="Suspended" 
                                 data-toggle="tooltip"
                                 data-bs-original-title="Edit"
                                 data-bs-placement="top">
                                 <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </td>
+                        </button>
+                    </td>
                 </tr>
             `;
         return str;
     }
+    // END SHOW //
 
-    function handleShowGroupModal() {
-        // handleShowUpdateModal();
+    //CREATE CUSTOMER//
+    $("#btnCreate").on("click", () => {
+        $("#frmCreate").submit();
+    })
 
-        // handleShowWithdrawModal();
+    $("#frmCreate").validate({
+        rules: {
+            fullNameCre: {
+                required: true,
+                minlength: 5,
+                maxlength: 50
+            },
+            emailCre: {
+                required: true,
+                minlength: 5,
+                maxlength: 50,
+                email: true
+            },
+            phoneCre: {
+                phone_valid: true,
+                required: true,
+            }
+        },
+        messages: {
+            fullNameCre: {
+                required: "Vui lòng nhập tên đầy đủ",
+                minlength: "Độ dài tối thiểu là 5 ký tự",
+                maxlength: "Độ dài tối đa là 35 ký tự"
+            },
+            emailCre: {
+                required: "Vui lòng nhập email đầy đủ",
+                minlength: "Độ dài tối thiểu là 5 ký tự",
+                maxlength: "Độ dài tối đa là 35 ký tự",
+                email: "Định dạng email không đúng"
+            },
+            phoneCre: {
+                phone_valid: "Định dạng số điện thoại không đúng",
+                required: "Vui lòng nhập số điện thoại đầy đủ"
+            }
+        },
+        submitHandler: function () {
+            customer.fullName = $("#fullNameCre").val();
+            customer.email = $("#emailCre").val();
+            customer.phone = $("#phoneCre").val();
+            customer.address = $("#addressCre").val();
+            customer.balance = 0;
+            customer.deleted = 0;
+            createCustomer(customer);
+        }
+    })
 
-        handleShowConfirmDelete();
+    function createCustomer(obj) {
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "POST",
+            url: "http://localhost:1502/customers",
+            data: JSON.stringify(obj)
+        })
+            .done((data) => {
+                let str = renderCustomer(data);
+                $("#tbCustomer tbody").append(str);
+
+                removeHandleShowModal();
+                handleShowGroupModal();
+            })
+            .fail((error) => {
+                console.error(error);
+            })
+    }
+    //END CREATE//
+
+    // UPDATE CUSTOMER //
+    function handleShowUpdateModal() {
+        $(".update").on("click", function () {
+            let id = $(this).data("id");
+            getCustomerById(id).then((data) => {
+                $("#customerIdUp").val(id);
+                $("#fullNameUp").val(data.fullName);
+                $("#emailUp").val(data.email);
+                $("#phoneUp").val(data.phone);
+                $("#addressUp").val(data.address);
+
+                $("#modalUpdateCustomer").modal("show");
+            })
+                .catch(() => {
+                    alert("ID not valid");
+                });
+        })
     }
 
+    $("#btnUpdate").on("click", () => {
+        $("#frmUpdate").submit();
+    })
 
+    $("#frmUpdate").validate({
+        rules: {
+            fullNameUp: {
+                required: true,
+                minlength: 5,
+                maxlength: 50
+            },
+            emailUp: {
+                required: true,
+                minlength: 5,
+                maxlength: 50,
+                email: true
+            },
+            phoneUp: {
+                phone_valid: true,
+                required: true,
+            }
+        },
+        messages: {
+            fullNameUp: {
+                required: "Vui lòng nhập tên đầy đủ",
+                minlength: "Độ dài tối thiểu là 5 ký tự",
+                maxlength: "Độ dài tối đa là 35 ký tự"
+            },
+            emailUp: {
+                required: "Vui lòng nhập email đầy đủ",
+                minlength: "Độ dài tối thiểu là 5 ký tự",
+                maxlength: "Độ dài tối đa là 35 ký tự",
+                email: "Định dạng email không đúng"
+            },
+            phoneUp: {
+                phone_valid: "Định dạng số điện thoại không đúng",
+                required: "Vui lòng nhập số điện thoại đầy đủ"
+            }
+        },
+        submitHandler: function () {
+            customer.id = $("#customerIdUp").val();
+            customer.fullName = $("#fullNameUp").val();
+            customer.email = $("#emailUp").val();
+            customer.phone = $("#phoneUp").val();
+            customer.address = $("#addressUp").val();
+            updateCustomer(customer);
+        }
+    })
+
+    function updateCustomer(obj) {
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "PATCH",
+            url: "http://localhost:1502/customers/" + obj.id,
+            data: JSON.stringify(obj)
+        })
+            .done((data) => {
+
+                let str = renderCustomer(data);
+                let updateRow = $("#tr_" + obj.id);
+                updateRow.replaceWith(str);
+
+                $("#modalUpdate").modal("hide");
+
+                removeHandleShowModal();
+                handleShowUpdateModal();
+            })
+            .fail((error) => {
+                console.error(error);
+            })
+    }
+    //END UPDATE//
+
+    //--- DELETE CUSTOMER ---//
     function handleShowConfirmDelete() {
         $(".delete").on("click", function () {
-            const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                },
-                buttonsStyling: false
+            let customerId = $(this).data("id");
+            getCustomerById(customerId).then(() => {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        customer.deleted = 1;
+                        deleteCustomer(customer.id)
+                    }
+                })
+                    .catch(() => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Customer ID invalid',
+                        })
+                    })
             })
-            swalWithBootstrapButtons.fire({
-                title: 'Bạn có chắc chắn không',
-                text: "Bạn sẽ không thể hoàn tác điều này!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Đồng ý, xóa nó',
-                cancelButtonText: 'Hủy bỏ',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    swalWithBootstrapButtons.fire(
-                        'Đã xóa!',
-                        'Khách hàng đã được xóa.',
-                        'success'
-                    )
-                } else if (
-                    result.dismiss === Swal.DismissReason.cancel
-                ) {
-                    swalWithBootstrapButtons.fire(
-                        'Hủy bỏ',
-                        'Thao tác hủy bỏ thành công!',
-                        'error'
-                    )
-                }
-            })
+
         });
     }
 
+    function deleteCustomer(customerId) {
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "PATCH",
+            url: "http://localhost:1502/customers/" + customerId,
+            data: JSON.stringify(customer)
+        })
+            .done((data) => {
+                $("#tr_" + customerId).remove();
+                Swal.fire(
+                    'Deleted!',
+                    'The client has been deleted.',
+                    'success'
+                )
+            })
+            .fail((error) => {
+                console.log(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                })
+            })
+    }
+    //--- END DELETE ---//
+
+    //--- DEPOSIT ---//
+    function handleShowDepositModal() {
+        $(".deposit").on("click", function () {
+            let id = $(this).data("id");
+            getCustomerById(id).then((data) => {
+                $("#customerIdDeposit").val(id);
+                $("#fullNameDeposit").val(data.fullName);
+                $("#balanceDeposit").val(data.balance);
+
+                $("#modalDeposit").modal("show");
+            })
+                .catch(() => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Customer ID invalid',
+                    })
+                });
+        })
+    }
+
+    $("#btnDeposit").on("click", () => {
+        $("#frmDeposit").submit();
+    })
+
+    $("#frmDeposit").validate({
+        rules: {
+            transactionAmountDeposit: {
+                required: true,
+                min: 100000,
+                max: 1000000000
+            }
+        },
+        messages: {
+            transactionAmountDeposit: {
+                required: "Vui lòng nhập số tiền",
+                min: "Giá trị nhỏ nhất là 100.000 VNĐ",
+                max: "Giá trị lớn nhất là 1.000.000.000 VNĐ"
+            }
+
+        },
+        submitHandler: function () {
+            customer.id = $("#customerIdDeposit").val();
+            getCustomerById(customer.id).then((data) => {
+                deposit.customerId = customer.id;
+                deposit.transactionAmount = $("#transactionAmountDeposit").val();
+                depositAmount(deposit);
+            })
+                .catch(() => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Customer ID invalid',
+                    })
+                });
+        }
+    })
+
+    function depositAmount(obj) {
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "POST",
+            url: "http://localhost:1502/deposits",
+            data: JSON.stringify(obj)
+        })
+            .done((data) => {
+                let str = renderCustomer(customer);
+                let updateRow = $("#tr_" + customer.id);
+                updateRow.replaceWith(str);
+                customer.balance = +customer.balance + +obj.transactionAmount;
+
+                updateBalance(customer.id)
+
+                enableTooltip();
+
+                removeHandleShowModal();
+
+                handleShowGroupModal();
+
+                $("#modalDeposit").modal("hide");
+            })
+            .fail((error) => {
+                console.error(error);
+            })
+
+    }
+    // END DEPOSIT//
+
+    // WITHDRAW //
+
+    function handleShowWithdrawModal() {
+        $(".withdraw").on("click", function () {
+            let id = $(this).data("id");
+            getCustomerById(id).then((data) => {
+                $("#customerIdWithdraw").val(id);
+                $("#fullNameWithdraw").val(data.fullName);
+                $("#balanceWithdraw").val(data.balance);
+
+                $("#modalWithdraw").modal("show");
+            })
+                .catch(() => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Customer ID invalid',
+                    })
+                });
+        })
+    }
+
+    $("#btnWithdraw").on("click", () => {
+        $("#frmWithdraw").submit();
+    })
+
+    $("#frmWithdraw").validate({
+        rules: {
+            transactionAmountWithdraw: {
+                required: true,
+                min: 100000,
+                max: 1000000000
+            }
+        },
+        messages: {
+            transactionAmountWithdraw: {
+                required: "Vui lòng nhập số tiền",
+                min: "Giá trị nhỏ nhất là 100.000 VNĐ",
+                max: "Giá trị lớn nhất là 1.000.000.000 VNĐ"
+            }
+
+        },
+        submitHandler: function () {
+            customer.id = $("#customerIdWithdraw").val();
+            getCustomerById(customer.id).then((data) => {
+                withdraw.customerId = customer.id;
+                withdraw.transactionAmount = $("#transactionAmountWithdraw").val();
+                if (+withdraw.transactionAmount > +customer.balance) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Số tiền muốn rút nhiều hơn số tiền hiện có',
+                    })
+                    $("#transactionAmountWithdraw").css("border-color", "red");
+                }
+                else {
+                    withdrawAmount(withdraw);
+                }
+
+            })
+                .catch(() => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Customer ID invalid',
+                    })
+                });
+        }
+    })
+
+    function withdrawAmount(obj){
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "POST",
+            url: "http://localhost:1502/withdraws",
+            data: JSON.stringify(obj)
+        })
+            .done((data) => {
+                let str = renderCustomer(customer);
+                let updateRow = $("#tr_" + customer.id);
+                updateRow.replaceWith(str);
+                customer.balance = +customer.balance - +obj.transactionAmount;
+
+                updateBalance(customer.id)
+
+                enableTooltip();
+
+                removeHandleShowModal();
+
+                handleShowGroupModal();
+
+                $("#modalWithdraw").modal("hide");
+            })
+            .fail((error) => {
+                console.error(error);
+            })
+    }
+    //END WITHDRAW//
+
+    function updateBalance(customerId) {
+        return $.ajax({
+            headers: {
+                accept: "application/json",
+                "content-type": "application/json"
+            },
+            type: "PATCH",
+            url: "http://localhost:1502/customers/" + customerId,
+            data: JSON.stringify(customer)
+        })
+            .done((data) => {
+                customer = data;
+            })
+            .fail((error) => {
+                console.log(error);
+            })
+    }
+
+    //FIND BY ID//
+    function getCustomerById(customerId) {
+        return $.ajax({
+            type: "GET",
+            url: "http://localhost:1502/customers/" + customerId
+        })
+            .done((data) => {
+                customer = data;
+            })
+            .fail((error) => {
+                console.error(error);
+            })
+    }
+    // END FIND BY ID//
+
+    function handleShowGroupModal() {
+        handleShowUpdateModal();
+
+        handleShowConfirmDelete();
+
+        handleShowDepositModal();
+
+        handleShowWithdrawModal();
+    }
+
+    function removeHandleShowModal() {
+        $(".edit").off("click");
+        $(".delete").off("click");
+        $(".deposit").off("click");
+        $(".withdraw").off("click");
+        $(".transfer").off("click");
+    }
 
     function enableTooltip() {
         let icons = document.querySelectorAll('[data-toggle="tooltip"]');

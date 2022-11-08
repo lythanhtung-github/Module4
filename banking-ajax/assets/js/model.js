@@ -11,10 +11,18 @@ class Customer {
 }
 
 class Withdraw {
-    constructor(id, customerId, transactionAmount, deleted = 0) {
+    constructor(id, customerId, transactionAmount) {
         this.id = id;
         this.customerId = customerId;
         this.transactionAmount = transactionAmount;
-        this.deleted = deleted;
+    }
+}
+
+
+class Deposit {
+    constructor(id, customerId, transactionAmount) {
+        this.id = id;
+        this.customerId = customerId;
+        this.transactionAmount = transactionAmount;
     }
 }
