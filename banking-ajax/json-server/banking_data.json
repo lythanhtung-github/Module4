@@ -62,6 +62,24 @@
       "balance": 0,
       "deleted": 1,
       "id": 7
+    },
+    {
+      "fullName": "Ria Mcbride",
+      "email": "dopigagow@mailinator.com",
+      "phone": "+1 (671) 524-9697",
+      "address": "Dolorem voluptate ip",
+      "balance": 0,
+      "deleted": 1,
+      "id": 8
+    },
+    {
+      "fullName": "Barrett Zimmerman",
+      "email": "xetydub@mailinator.com",
+      "phone": "+1 (398) 933-8493",
+      "address": "Unde dolore aperiam ",
+      "balance": 0,
+      "deleted": 1,
+      "id": 9
     }
   ]
 }
