@@ -42,7 +42,7 @@
                         <th class="text-center">Email</th>
                         <th class="text-center">Phone</th>
                         <th class="text-center">Address</th>
-                        <th class="text-center">Balance ($)</th>
+                        <th class="text-center">Balance</th>
                         <th colspan="5" class="text-center">Action</th>
                     </tr>
                 </thead>
@@ -64,7 +64,7 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="" id="frmCreate">
+                    <form id="frmCreate">
                         <div class="row">
                             <div class="col-lg-6 mt-3">
                                 <label for="fullNameCre">Full name</label>
@@ -92,7 +92,6 @@
                         Create
                     </button>
                 </div>
-
             </div>
         </div>
     </div>
@@ -107,9 +106,8 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
-
                 <div class="modal-body">
-                    <form action="" id="frmUpdate">
+                    <form id="frmUpdate">
                         <input type="hidden" id="customerIdUp">
                         <div class="row">
                             <div class="col-lg-6 mt-3">
@@ -153,7 +151,7 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="" id="frmDeposit">
+                    <form id="frmDeposit">
                         <div class="row">
                             <div class="col-lg-6 mt-3">
                                 <label for="customerIdDeposit">Customer Id</label>
@@ -198,7 +196,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="" id="frmWithdraw">
+                    <form id="frmWithdraw">
                         <div class="row">
                             <div class="col-lg-6 mt-3">
                                 <label for="customerIdWithdraw">Customer Id</label>
@@ -245,7 +243,6 @@
     let withdraw = new Withdraw();
     let customers = [];
 
-    loadCustomers();
 
     // SHOW CUSTOMERS //
     function loadCustomers() {
@@ -260,7 +257,7 @@
             .done((data) => {
                 let tbCustomer = $("#tbCustomer tbody");
                 customers = data;
-                customers.forEach(item => {
+                customers.map(item => {
                     let str = renderCustomer(item);
                     tbCustomer.prepend(str);
                 });
@@ -345,7 +342,7 @@
 
     //CREATE CUSTOMER//
     $("#btnCreate").on("click", () => {
-        $("#frmCreate").submit();
+        $("#frmCreate").trigger("submit");
     })
 
     $("#frmCreate").validate({
@@ -406,10 +403,12 @@
         })
             .done((data) => {
                 let str = renderCustomer(data);
-                $("#tbCustomer tbody").append(str);
+
+                $("#tbCustomer tbody").prepend(str);
 
                 removeHandleShowModal();
                 handleShowGroupModal();
+                $("#modalCreateCustomer").modal("hide");
             })
             .fail((error) => {
                 console.error(error);
@@ -501,10 +500,9 @@
                 let updateRow = $("#tr_" + obj.id);
                 updateRow.replaceWith(str);
 
-                $("#modalUpdate").modal("hide");
-
                 removeHandleShowModal();
                 handleShowUpdateModal();
+                $("#modalUpdateCustomer").modal("hide");
             })
             .fail((error) => {
                 console.error(error);
@@ -641,12 +639,13 @@
             data: JSON.stringify(obj)
         })
             .done((data) => {
+                customer.balance = +customer.balance + +obj.transactionAmount;
+
+                updateBalance(customer.id);
+
                 let str = renderCustomer(customer);
                 let updateRow = $("#tr_" + customer.id);
                 updateRow.replaceWith(str);
-                customer.balance = +customer.balance + +obj.transactionAmount;
-
-                updateBalance(customer.id)
 
                 enableTooltip();
 
@@ -655,6 +654,12 @@
                 handleShowGroupModal();
 
                 $("#modalDeposit").modal("hide");
+
+                Swal.fire(
+                    'Thành công',
+                    'Tiền đã được nạp vào tài khoản.',
+                    'success'
+                )
             })
             .fail((error) => {
                 console.error(error);
@@ -733,7 +738,7 @@
         }
     })
 
-    function withdrawAmount(obj){
+    function withdrawAmount(obj) {
         $.ajax({
             headers: {
                 "accept": "application/json",
@@ -744,12 +749,13 @@
             data: JSON.stringify(obj)
         })
             .done((data) => {
-                let str = renderCustomer(customer);
-                let updateRow = $("#tr_" + customer.id);
-                updateRow.replaceWith(str);
                 customer.balance = +customer.balance - +obj.transactionAmount;
 
                 updateBalance(customer.id)
+
+                let str = renderCustomer(customer);
+                let updateRow = $("#tr_" + customer.id);
+                updateRow.replaceWith(str);
 
                 enableTooltip();
 
@@ -758,6 +764,13 @@
                 handleShowGroupModal();
 
                 $("#modalWithdraw").modal("hide");
+
+                
+                Swal.fire(
+                    'Thành công',
+                    'Rút tiền thành công.',
+                    'success'
+                )
             })
             .fail((error) => {
                 console.error(error);
@@ -822,6 +835,11 @@
             new bootstrap.Tooltip(icon);
         })
     }
+
+
+    $(document).ready(function () {
+        loadCustomers();
+    })
 </script>
 
 </html>

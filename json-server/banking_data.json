@@ -1,0 +1,411 @@
+{
+  "customers": [
+    {
+      "id": 1,
+      "fullName": "Lý Thanh Tùng",
+      "email": "lythanhtung@gmail.com",
+      "phone": "0987987987",
+      "address": "Thừa Thiên Huế",
+      "balance": 100000,
+      "deleted": 0
+    },
+    {
+      "id": 2,
+      "fullName": "Lộc xin lỗi bố mẹ",
+      "email": "lebaloc@gmail.com",
+      "phone": "0923234234",
+      "address": "Thừa Thiên Huế",
+      "balance": 100000,
+      "deleted": 0
+    },
+    {
+      "fullName": "Hoàng Đức Khanh",
+      "email": "komekofat@mailinator.com",
+      "phone": "0987567567",
+      "address": "Aut aute tempore no",
+      "balance": 400000,
+      "deleted": 0,
+      "id": 3
+    },
+    {
+      "fullName": "Quý xin lỗi bố mẹ",
+      "email": "soqipo@mailinator.com",
+      "phone": "0745656756",
+      "address": "Expedita in est qui ",
+      "balance": 0,
+      "deleted": 0,
+      "id": 4
+    },
+    {
+      "fullName": "Võ Văn Tài",
+      "email": "vaqagevemy@mailinator.com",
+      "phone": "0756756575",
+      "address": "Dolor voluptatem Of",
+      "balance": 0,
+      "deleted": 0,
+      "id": 5
+    },
+    {
+      "fullName": "Tần Thụy Hoàng",
+      "email": "macuziwut@mailinator.com",
+      "phone": "0723454234",
+      "address": "Pariatur Sit culpa",
+      "balance": 0,
+      "deleted": 0,
+      "id": 6
+    },
+    {
+      "fullName": "Warren Owen",
+      "email": "hygo@mailinator.com",
+      "phone": "+1 (826) 658-4316",
+      "address": "Reprehenderit illo l",
+      "balance": 0,
+      "deleted": 0,
+      "id": 7
+    },
+    {
+      "fullName": "Ria Mcbride",
+      "email": "dopigagow@mailinator.com",
+      "phone": "0789657456",
+      "address": "Dolorem voluptate ip",
+      "balance": 0,
+      "deleted": 0,
+      "id": 8
+    },
+    {
+      "fullName": "Barrett Zimmerman",
+      "email": "xetydub@mailinator.com",
+      "phone": "+1 (398) 933-8493",
+      "address": "Unde dolore aperiam ",
+      "balance": 0,
+      "deleted": 0,
+      "id": 9
+    },
+    {
+      "fullName": "Edward Woodward",
+      "email": "byzytom@mailinator.com",
+      "phone": "+1 (328) 157-8817",
+      "address": "Commodo officia cupi",
+      "balance": 0,
+      "deleted": 1,
+      "id": 10
+    },
+    {
+      "fullName": "Gay Conrad",
+      "email": "zumymytiko@mailinator.com",
+      "phone": "0765456456",
+      "address": "Sit ipsa aliqua Su",
+      "balance": 0,
+      "deleted": 1,
+      "id": 11
+    },
+    {
+      "fullName": "Preston Key",
+      "email": "hynerovihe@mailinator.com",
+      "phone": "+1 (946) 753-3309",
+      "address": "Consequatur incidun",
+      "balance": 0,
+      "deleted": 1,
+      "id": 12
+    },
+    {
+      "fullName": "Sade Blake",
+      "email": "zilokeb@mailinator.com",
+      "phone": "+1 (956) 629-5044",
+      "address": "Fugit duis rerum im",
+      "balance": 0,
+      "deleted": 1,
+      "id": 13
+    },
+    {
+      "fullName": "Lê Thị Ngọc Ánh",
+      "email": "gimulih@mailinator.com",
+      "phone": "0987789789",
+      "address": "Aut in consequat Vo",
+      "balance": 0,
+      "deleted": 1,
+      "id": 14
+    },
+    {
+      "fullName": "Chelsea Brock",
+      "email": "jucekub@mailinator.com",
+      "phone": "0987789987",
+      "address": "Sint reiciendis aut 2",
+      "balance": 0,
+      "deleted": 1,
+      "id": 15
+    },
+    {
+      "fullName": "Burke Britt",
+      "email": "mejapygidy@mailinator.com",
+      "phone": "0906745634",
+      "address": "Omnis dolore fugit 2",
+      "balance": 0,
+      "deleted": 1,
+      "id": 16
+    },
+    {
+      "fullName": "Madaline Justice",
+      "email": "jycaxagyzu@mailinator.com",
+      "phone": "0912312312",
+      "address": "Consequatur dolor e",
+      "balance": 0,
+      "deleted": 1,
+      "id": 17
+    },
+    {
+      "fullName": "Alfonso Ingram",
+      "email": "hivu@mailinator.com",
+      "phone": "0956425645",
+      "address": "Excepteur autem2",
+      "balance": 600000,
+      "deleted": 1,
+      "id": 18
+    },
+    {
+      "fullName": "Malachi Watts",
+      "email": "bolejocewu@mailinator.com",
+      "phone": "0967856745",
+      "address": "Magnam magna sed inc",
+      "balance": 100000,
+      "deleted": 0,
+      "id": 19
+    },
+    {
+      "fullName": "Amethyst 4tf4f4f4",
+      "email": "qugyzuqu@mailinator.com",
+      "phone": "0734523434",
+      "address": "Iure odit sit excep",
+      "balance": 0,
+      "deleted": 0,
+      "id": 20
+    },
+    {
+      "fullName": "Clarke Dunlap",
+      "email": "nahosupo@mailinator.com",
+      "phone": "0883019026",
+      "address": "Doloribus ipsa veri",
+      "balance": 0,
+      "deleted": 0,
+      "id": 21
+    },
+    {
+      "fullName": "Rudyard",
+      "email": "demyxawi@mailinator.com",
+      "phone": "0923445634",
+      "address": "Vel sapiente lorem a",
+      "balance": 1000000,
+      "deleted": 0,
+      "id": 22
+    },
+    {
+      "fullName": "Olga Roach",
+      "email": "jucotequki@mailinator.com",
+      "phone": "0987456345",
+      "address": "Ut sed magnam dolore",
+      "balance": 0,
+      "deleted": 0,
+      "id": 23
+    },
+    {
+      "fullName": "Martina Turner2",
+      "email": "bydon@mailinator.com",
+      "phone": "0987456345",
+      "address": "Nulla autem officia ",
+      "balance": 0,
+      "deleted": 0,
+      "id": 24
+    },
+    {
+      "fullName": "Giacomo Sandoval2",
+      "email": "zejupymyc@mailinator.com",
+      "phone": "0987456345",
+      "address": "Sapiente excepturi i",
+      "balance": 0,
+      "deleted": 0,
+      "id": 25
+    },
+    {
+      "fullName": "Sharon Dennis",
+      "email": "wego@mailinator.com",
+      "phone": "0934523423",
+      "address": "Totam debitis maxime",
+      "balance": 0,
+      "deleted": 1,
+      "id": 26
+    },
+    {
+      "fullName": "Blake Hatfield",
+      "email": "bawipiw@mailinator.com",
+      "phone": "0789623422",
+      "address": "Culpa odio officia n",
+      "balance": 0,
+      "deleted": 1,
+      "id": 27
+    },
+    {
+      "fullName": "Edan Boyle",
+      "email": "dolafi@mailinator.com",
+      "phone": "0987567456",
+      "address": "Cumque nulla debitis",
+      "balance": 1000000,
+      "deleted": 0,
+      "id": 28
+    },
+    {
+      "fullName": "Yoshio Chambers",
+      "email": "fexixac@mailinator.com",
+      "phone": "0789567456",
+      "address": "Lorem eum temporibus",
+      "balance": 200000,
+      "deleted": 0,
+      "id": 29
+    },
+    {
+      "fullName": "Blythe Garrison233",
+      "email": "qyramuzez@mailinator.com",
+      "phone": "0789567456",
+      "address": "Praesentium sed sit ",
+      "balance": 0,
+      "deleted": 1,
+      "id": 30
+    },
+    {
+      "fullName": "Stephen Gordon",
+      "email": "wypizulo@mailinator.com",
+      "phone": "0789456345",
+      "address": "Nisi magna ad suscip",
+      "balance": 1000000,
+      "deleted": 0,
+      "id": 31
+    },
+    {
+      "fullName": "Emily Madden",
+      "email": "desetojeco@mailinator.com",
+      "phone": "0956723423",
+      "address": "Voluptatem sint qui",
+      "balance": 9800000,
+      "deleted": 0,
+      "id": 32
+    },
+    {
+      "fullName": "Tatum Abbott",
+      "email": "pumel@mailinator.com",
+      "phone": "0987678567",
+      "address": "Earum assumenda eu a",
+      "balance": 0,
+      "deleted": 1,
+      "id": 33
+    }
+  ],
+  "deposits": [
+    {
+      "id": 1,
+      "customerId": 1,
+      "transactionAmount": 0,
+      "deleted": 0
+    },
+    {
+      "customerId": 18,
+      "transactionAmount": "1000000",
+      "id": 2
+    },
+    {
+      "customerId": 18,
+      "transactionAmount": "100000000",
+      "id": 3
+    },
+    {
+      "customerId": 18,
+      "transactionAmount": "1000000",
+      "id": 4
+    },
+    {
+      "customerId": 18,
+      "transactionAmount": "1000000000",
+      "id": 5
+    },
+    {
+      "customerId": 3,
+      "transactionAmount": "200000",
+      "id": 6
+    },
+    {
+      "customerId": 18,
+      "transactionAmount": "1000000000",
+      "id": 7
+    },
+    {
+      "customerId": 18,
+      "transactionAmount": "1000000000",
+      "id": 8
+    },
+    {
+      "customerId": 3,
+      "transactionAmount": "200000",
+      "id": 9
+    },
+    {
+      "customerId": 18,
+      "transactionAmount": "400000",
+      "id": 10
+    },
+    {
+      "customerId": 19,
+      "transactionAmount": "100000",
+      "id": 11
+    },
+    {
+      "customerId": 22,
+      "transactionAmount": "1000000",
+      "id": 12
+    },
+    {
+      "customerId": 28,
+      "transactionAmount": "1000000",
+      "id": 13
+    },
+    {
+      "customerId": 32,
+      "transactionAmount": "10000000",
+      "id": 14
+    },
+    {
+      "customerId": 31,
+      "transactionAmount": "1000000",
+      "id": 15
+    },
+    {
+      "customerId": 29,
+      "transactionAmount": "100000",
+      "id": 16
+    },
+    {
+      "customerId": 29,
+      "transactionAmount": "100000",
+      "id": 17
+    }
+  ],
+  "withdraws": [
+    {
+      "customerId": 18,
+      "transactionAmount": "200000",
+      "id": 1
+    },
+    {
+      "customerId": 18,
+      "transactionAmount": "100000",
+      "id": 2
+    },
+    {
+      "customerId": 32,
+      "transactionAmount": "100000",
+      "id": 3
+    },
+    {
+      "customerId": 32,
+      "transactionAmount": "100000",
+      "id": 4
+    }
+  ]
+}

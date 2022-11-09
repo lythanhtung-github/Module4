@@ -18,7 +18,6 @@ class Withdraw {
     }
 }
 
-
 class Deposit {
     constructor(id, customerId, transactionAmount) {
         this.id = id;
@@ -26,3 +25,7 @@ class Deposit {
         this.transactionAmount = transactionAmount;
     }
 }
+
+// class Transfer {
+//     constructor(id, senderId, 
+// }
