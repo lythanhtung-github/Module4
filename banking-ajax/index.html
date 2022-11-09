@@ -32,7 +32,7 @@
                 </div>
             </div>
         </header>
-
+        
         <div class="content">
             <table id="tbCustomer" class="table table-hover">
                 <thead>
@@ -193,7 +193,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Withdraw</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="frmWithdraw">
@@ -219,10 +220,71 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-outline-warning" id="btnWithdraw">
                         <i class="fa-regular fa-square-minus"></i>
                         Withdraw
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Transfer-->
+    <div class="modal fade" id="modalTransfer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Transfer</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="frmTransfer">
+                        <div class="row">
+                            <div class="col-lg-3 mt-3">
+                                <label for="senderIdTransfer">Sender ID</label>
+                                <input type="text" class="form-control" id="senderIdTransfer" readonly>
+                            </div>
+                            <div class="col-lg-3 mt-3">
+                                <label for="senderNameTransfer">Sender Name</label>
+                                <input type="text" class="form-control" id="senderNameTransfer" readonly>
+                            </div>
+                            <div class="col-lg-3 mt-3">
+                                <label for="senderEmailTransfer">Email</label>
+                                <input type="text" class="form-control" id="senderEmailTransfer" readonly>
+                            </div>
+                            <div class="col-lg-3 mt-3">
+                                <label for="senderBalanceTransfer">Sender balance (VNĐ)</label>
+                                <input type="number" class="form-control" id="senderBalanceTransfer" readonly>
+                            </div>
+                            <div class="col-lg-3 mt-3">
+                                <label>Recipient Name</label>
+                                <select class="form-select" id="recipientsTransfer" name="recipientsTransfer">
+                                </select>
+                            </div>
+                            <div class="col-lg-3 mt-3">
+                                <label for="transferAmountTransfer">Transfer Amount</label>
+                                <input type="number" class="form-control" id="transferAmountTransfer"
+                                    name="transferAmountTransfer" value="100000">
+                            </div>
+                            <div class="col-lg-3 mt-3">
+                                <label for="feesTransfer">Fees (VNĐ)</label>
+                                <input type="number" class="form-control" id="feesTransfer" value="10" readonly>
+                            </div>
+                            <div class="col-lg-3 mt-3">
+                                <label for="transactionAmountTransfer">Total amount of transaction (VNĐ)</label>
+                                <input type="number" class="form-control" id="transactionAmountTransfer" readonly>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-primary" id="btnTransfer">
+                        <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                        Transfer
                     </button>
                 </div>
             </div>
@@ -235,29 +297,47 @@
 <script src="/assets/fontawesome/v6.2.0/js/all.min.js"></script>
 <script src="/assets/sweetalert2/sweetalert2.min.js"></script>
 <script src="/assets/jquery-validate/1.19.3/jquery.validate-1.19.3.min.js"></script>
-<script src="/assets/js/model.js"></script>
+<script src="/assets/js/app.js"></script>
 <script src="/assets/js/validate.js"></script>
 <script>
+    const page = {
+        urls: {
+            getAllCustomers: App.CUSTOMER_API + "?deleted=0",
+            getCustomerById: App.CUSTOMER_API,
+            createCustomer: App.CUSTOMER_API,
+            updateCustomer: App.CUSTOMER_API
+        },
+        elements: {},
+        loadData: {},
+        commands: {},
+        dialogs: {
+            elements: {},
+            loadData: {},
+            commands: {},
+            alertDanger: {}
+        },
+        inItializeEventControl: {}
+    }
+
     let customer = new Customer();
     let deposit = new Deposit();
     let withdraw = new Withdraw();
-    let customers = [];
+    let transfer = new Transfer();
 
 
     // SHOW CUSTOMERS //
-    function loadCustomers() {
+    page.commands.getAllCustomers = () => {
         $.ajax({
             headers: {
                 "accept": "application/json",
                 "content-type": "application/json"
             },
             type: "GET",
-            url: "http://localhost:1502/customers?deleted=0"
+            url: page.urls.getAllCustomers
         })
             .done((data) => {
                 let tbCustomer = $("#tbCustomer tbody");
-                customers = data;
-                customers.map(item => {
+                data.map(item => {
                     let str = renderCustomer(item);
                     tbCustomer.prepend(str);
                 });
@@ -405,10 +485,14 @@
                 let str = renderCustomer(data);
 
                 $("#tbCustomer tbody").prepend(str);
-
                 removeHandleShowModal();
                 handleShowGroupModal();
                 $("#modalCreateCustomer").modal("hide");
+                Swal.fire(
+                    'Thành công',
+                    'Thêm mới khách hàng thành công.',
+                    'success'
+                )
             })
             .fail((error) => {
                 console.error(error);
@@ -420,7 +504,7 @@
     function handleShowUpdateModal() {
         $(".update").on("click", function () {
             let id = $(this).data("id");
-            getCustomerById(id).then((data) => {
+            getCustomerById(id).done((data) => {
                 $("#customerIdUp").val(id);
                 $("#fullNameUp").val(data.fullName);
                 $("#emailUp").val(data.email);
@@ -450,6 +534,7 @@
                 required: true,
                 minlength: 5,
                 maxlength: 50,
+                // email_valid
                 email: true
             },
             phoneUp: {
@@ -480,11 +565,11 @@
             customer.email = $("#emailUp").val();
             customer.phone = $("#phoneUp").val();
             customer.address = $("#addressUp").val();
-            updateCustomer(customer);
+            doUpdateCustomer(customer);
         }
     })
 
-    function updateCustomer(obj) {
+    function doUpdateCustomer(obj) {
         $.ajax({
             headers: {
                 "accept": "application/json",
@@ -495,14 +580,19 @@
             data: JSON.stringify(obj)
         })
             .done((data) => {
-
                 let str = renderCustomer(data);
                 let updateRow = $("#tr_" + obj.id);
                 updateRow.replaceWith(str);
 
                 removeHandleShowModal();
-                handleShowUpdateModal();
+                handleShowGroupModal();
+
                 $("#modalUpdateCustomer").modal("hide");
+                Swal.fire(
+                    'Thành công',
+                    'Chỉnh sửa khách hàng thành công.',
+                    'success'
+                )
             })
             .fail((error) => {
                 console.error(error);
@@ -526,7 +616,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         customer.deleted = 1;
-                        deleteCustomer(customer.id)
+                        doDeleteCustomer(customer.id)
                     }
                 })
                     .catch(() => {
@@ -541,7 +631,7 @@
         });
     }
 
-    function deleteCustomer(customerId) {
+    function doDeleteCustomer(customerId) {
         $.ajax({
             headers: {
                 "accept": "application/json",
@@ -578,7 +668,7 @@
                 $("#customerIdDeposit").val(id);
                 $("#fullNameDeposit").val(data.fullName);
                 $("#balanceDeposit").val(data.balance);
-
+                $("#transactionAmountDeposit").val(0);
                 $("#modalDeposit").modal("show");
             })
                 .catch(() => {
@@ -616,7 +706,7 @@
             getCustomerById(customer.id).then((data) => {
                 deposit.customerId = customer.id;
                 deposit.transactionAmount = $("#transactionAmountDeposit").val();
-                depositAmount(deposit);
+                doDeposit(deposit);
             })
                 .catch(() => {
                     Swal.fire({
@@ -628,7 +718,7 @@
         }
     })
 
-    function depositAmount(obj) {
+    function doDeposit(obj) {
         $.ajax({
             headers: {
                 "accept": "application/json",
@@ -641,7 +731,7 @@
             .done((data) => {
                 customer.balance = +customer.balance + +obj.transactionAmount;
 
-                updateBalance(customer.id);
+                updateCustomer(customer);
 
                 let str = renderCustomer(customer);
                 let updateRow = $("#tr_" + customer.id);
@@ -664,12 +754,10 @@
             .fail((error) => {
                 console.error(error);
             })
-
     }
-    // END DEPOSIT//
+    //--- END DEPOSIT ---//
 
-    // WITHDRAW //
-
+    //---- WITHDRAW ---//
     function handleShowWithdrawModal() {
         $(".withdraw").on("click", function () {
             let id = $(this).data("id");
@@ -677,7 +765,7 @@
                 $("#customerIdWithdraw").val(id);
                 $("#fullNameWithdraw").val(data.fullName);
                 $("#balanceWithdraw").val(data.balance);
-
+                $("#transactionAmountWithdraw").val(0);
                 $("#modalWithdraw").modal("show");
             })
                 .catch(() => {
@@ -724,7 +812,7 @@
                     $("#transactionAmountWithdraw").css("border-color", "red");
                 }
                 else {
-                    withdrawAmount(withdraw);
+                    doWithdraw(withdraw);
                 }
 
             })
@@ -738,7 +826,7 @@
         }
     })
 
-    function withdrawAmount(obj) {
+    function doWithdraw(obj) {
         $.ajax({
             headers: {
                 "accept": "application/json",
@@ -751,7 +839,7 @@
             .done((data) => {
                 customer.balance = +customer.balance - +obj.transactionAmount;
 
-                updateBalance(customer.id)
+                updateCustomer(customer)
 
                 let str = renderCustomer(customer);
                 let updateRow = $("#tr_" + customer.id);
@@ -765,7 +853,6 @@
 
                 $("#modalWithdraw").modal("hide");
 
-                
                 Swal.fire(
                     'Thành công',
                     'Rút tiền thành công.',
@@ -776,41 +863,215 @@
                 console.error(error);
             })
     }
-    //END WITHDRAW//
+    //--- END WITHDRAW ---//
 
-    function updateBalance(customerId) {
-        return $.ajax({
+    //--- TRANSFER ---//
+    function handleShowTransferModal() {
+        $(".transfer").on("click", function () {
+            let id = $(this).data("id");
+            getCustomerById(id).then((data) => {
+                $("#senderIdTransfer").val(id);
+                $("#senderNameTransfer").val(data.fullName);
+                $("#senderEmailTransfer").val(data.email);
+                $("#senderBalanceTransfer").val(data.balance);
+                getCustomersWhereIdIsNot(id);
+                $("#modalTransfer").modal("show");
+            })
+                .catch(() => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Customer ID invalid',
+                    })
+                });
+        })
+    }
+
+    $("#btnTransfer").on("click", () => {
+        $("#frmTransfer").submit();
+    })
+
+    $("#frmTransfer").validate({
+        rules: {
+            transferAmountTransfer: {
+                required: true,
+                min: 100000,
+                max: 1000000000
+            }
+        },
+        messages: {
+            transferAmountTransfer: {
+                required: "Vui lòng nhập số tiền",
+                min: "Giá trị nhỏ nhất là 100.000 VNĐ",
+                max: "Giá trị lớn nhất là 1.000.000.000 VNĐ"
+            }
+
+        },
+        submitHandler: () => {
+            let senderId = $("#senderIdTransfer").val();
+            let recipientId = $("#recipientsTransfer").val();
+            let transferAmount = $("#transferAmountTransfer").val();
+            let fees = 10;
+            let feesAmount = (+transferAmount * +fees) / 100;
+            let transactionAmount = +transferAmount + feesAmount;
+            let sender = new Customer();
+            let recipient = new Customer();
+            getCustomerById(senderId).then((data) => {
+                sender = data;
+                transfer.senderId = senderId;
+                getCustomerById(recipientId).then((data) => {
+                    recipient = data;
+                    transfer.recipientId = recipientId;
+                    transfer.transferAmount = transferAmount;
+                    transfer.fees = fees;
+                    transfer.feesAmount = feesAmount;
+                    transfer.transactionAmount = transactionAmount;
+                    if (transactionAmount < sender.balance) {
+                        console.log(transfer);
+                        doTransfer(transfer, sender, recipient);
+                    }
+                    else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Số tiền muốn chuyển lớn hơn số tiền có trong tài khoản',
+                        })
+                    }
+
+
+                })
+                    .catch(() => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Recipient ID invalid',
+                        })
+                    });
+
+            })
+                .catch(() => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Sender ID invalid',
+                    })
+                });
+        }
+    })
+
+    function doTransfer(transferInput, sender, recipient) {
+        $.ajax({
             headers: {
-                accept: "application/json",
+                "accept": "application/json",
                 "content-type": "application/json"
             },
-            type: "PATCH",
-            url: "http://localhost:1502/customers/" + customerId,
-            data: JSON.stringify(customer)
+            type: "POST",
+            url: "http://localhost:1502/transfers",
+            data: JSON.stringify(transferInput)
         })
             .done((data) => {
-                customer = data;
+                Promise.resolve().then(function () {
+                    sender.balance = +sender.balance - +transferInput.transactionAmount;
+                    updateCustomer(sender);
+                    let str = renderCustomer(sender);
+                    let updateRow = $("#tr_" + sender.id);
+                    updateRow.replaceWith(str);
+                }).then(function () {
+                    recipient.balance = +recipient.balance + +transferInput.transferAmount;
+                    updateCustomer(recipient);
+                    let str = renderCustomer(recipient);
+                    let updateRow = $("#tr_" + recipient.id);
+                    updateRow.replaceWith(str);
+                })
+                enableTooltip();
+
+                removeHandleShowModal();
+
+                handleShowGroupModal();
+
+                $("#modalTransfer").modal("hide");
+
+                Swal.fire(
+                    'Thành công',
+                    'Chuyển ' + transferInput.transferAmount + ' VNĐ từ khách hàng ' + sender.fullName + ' đến khách hàng ' + recipient.fullName + ' thành công!',
+                    'success'
+                )
+            })
+            .fail((error) => {
+                console.error(error);
+            })
+    }
+
+    function getCustomersWhereIdIsNot(senderId) {
+        $("#recipientsTransfer").empty();
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: "http://localhost:1502/customers/?deleted=0&id_ne=" + senderId
+        })
+            .done((data) => {
+                $.each(data, (i, item) => {
+                    $("#recipientsTransfer").append($('<option>',
+                        {
+                            value: item.id,
+                            text: item.id + " - " + item.fullName
+                        }));
+                })
+
             })
             .fail((error) => {
                 console.log(error);
             })
     }
 
-    //FIND BY ID//
+    $("#transferAmountTransfer").on("input", function () {
+        let transferAmount = +$(this).val();
+        let fees = 10;
+        let feesAmount = transferAmount * fees / 100;
+        let transactionAmount = transferAmount + feesAmount;
+
+        $("#transactionAmountTransfer").val(transactionAmount);
+    })
+    //--- END TRANSFER ---//
+
+    //--- UPDATE BALANCE ---//
+    function updateCustomer(obj) {
+        return $.ajax({
+            headers: {
+                accept: "application/json",
+                "content-type": "application/json"
+            },
+            type: "PATCH",
+            url: "http://localhost:1502/customers/" + obj.id,
+            data: JSON.stringify(obj)
+        })
+            .done((data) => {
+            })
+            .fail((error) => {
+                console.log(error);
+            })
+    }
+    //--- END UPDATE BALANCE ---//
+
+
+    //--- FIND BY ID ---//
     function getCustomerById(customerId) {
         return $.ajax({
             type: "GET",
-            url: "http://localhost:1502/customers/" + customerId
+            url: page.urls.getCustomerById + "/" + customerId
+        }).done((data) => {
+            customer = data;
         })
-            .done((data) => {
-                customer = data;
-            })
             .fail((error) => {
                 console.error(error);
             })
     }
-    // END FIND BY ID//
+    //--- END FIND BY ID ---//
 
+    //--- SHOW GROUP MODAL ---//
     function handleShowGroupModal() {
         handleShowUpdateModal();
 
@@ -819,8 +1080,12 @@
         handleShowDepositModal();
 
         handleShowWithdrawModal();
-    }
 
+        handleShowTransferModal();
+    }
+    //--- END SHOW GROUP MODAL ---//
+
+    //--- REMOVE SHOW MODAL ---//
     function removeHandleShowModal() {
         $(".edit").off("click");
         $(".delete").off("click");
@@ -828,6 +1093,7 @@
         $(".withdraw").off("click");
         $(".transfer").off("click");
     }
+    //--- END REMOVE SHOW MODAL ---//
 
     function enableTooltip() {
         let icons = document.querySelectorAll('[data-toggle="tooltip"]');
@@ -836,10 +1102,24 @@
         })
     }
 
+    page.commands.loadData = () => {
+            page.commands.getAllCustomers();
+    }
 
-    $(document).ready(function () {
-        loadCustomers();
-    })
+    page.initializeEventControl = () => {
+            // page.commands.handleShowCreateModal();
+
+            // page.dialogs.elements.modalCreateCustomer.on("hidden.bs.modal", function () {
+            //     page.dialogs.commands.handleCloseCreateModal();
+            // });
+        }
+
+       
+    $(() => {
+            page.commands.loadData();
+
+            page.initializeEventControl();
+        });
 </script>
 
 </html>
