@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/assets/image/logo-icon.png">
+    <link rel="stylesheet" href="/assets/bootstrap/v5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/fontawesome/v6.2.0/css/all.min.css">
+    <link rel="stylesheet" href="/assets/sweetalert2/sweetalert2.min.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <title>BANKING - AJAX</title>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="row col-sm-12">
+                <div class="col-sm-6">
+                    <h1>Transfer money Information</h1>
+                </div>
+                <div class="col-sm-6">
+
+                    <a class="btn btn-outline-light" href="index.html">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        List of customers
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <div class="content">
+            <table id="tbTransfer" class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">#</th>
+                        <th class="text-center">Sender ID</th>
+                        <th class="text-center">Sender Name</th>
+                        <th class="text-center">Recipient ID</th>
+                        <th class="text-center">Recipient Name</th>
+                        <th class="text-center">Transfer Amount ($)</th>
+                        <th class="text-center">Fees (%)</th>
+                        <th class="text-center">Fees Amount ($)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dữ liệu đổ vào -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+<script src="/assets/jquery/v3.6.1/jquery-3.6.1.min.js"></script>
+<script src="/assets/bootstrap/v5.2/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/fontawesome/v6.2.0/js/all.min.js"></script>
+<script src="/assets/js/app.js"></script>
+<script>
+    const page = {
+        urls: {
+            getAllTransfer: App.TRANSFER_API,
+            getCustomerById: App.CUSTOMER_API
+        },
+        elements: {},
+        loadData: {},
+        commands: {},
+        dialogs: {
+            elements: {},
+            loadData: {},
+            commands: {},
+            alertDanger: {}
+        },
+        inItializeEventControl: {}
+    }
+
+    page.elements.tbTransfer = $("#tbTransfer");
+    page.elements.tbTransferBody = $("#tbTransfer tbody");
+
+    // SHOW CUSTOMERS //
+    page.commands.getAllTransfers = () => {
+        $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: page.urls.getAllTransfer
+        })
+            .done((data) => {
+                data.map(item => {
+                    page.elements.tbTransferBody.prepend(page.commands.renderCustomer(item));
+                });
+            })
+            .fail((error) => {
+                console.log(error);
+            })
+    }
+
+    page.commands.renderCustomer = (obj) => {
+        let str = `
+                <tr>
+                    <td class="text-center">${obj.id}</td>
+                    <td class="text-center">${obj.senderId}</td>
+                    <td class = "text-center"></td>
+                    <td class ="text-center">${obj.recipientId}</td>
+                    <td class = "text-center"></td>
+                    <td class="text-end">${obj.transferAmount}</td>
+                    <td class="text-end">${obj.fees}</td>
+                    <td class="text-end">${obj.feesAmount}</td>
+                </tr>
+            `;
+        return str;
+    }
+    // END SHOW //
+
+    page.commands.getCustomerById = (customerId) => {
+        return $.ajax({
+            type: "GET",
+            url: page.urls.getCustomerById + "/" + customerId
+        })
+            .done((data) => {
+
+            })
+            .fail((error) => {
+                console.error(error);
+            })
+    }
+
+    page.commands.loadData = () => {
+        page.commands.getAllTransfers();
+    }
+
+    page.initializeEventControl = () => {
+
+    }
+
+    $(() => {
+        page.commands.loadData();
+
+        page.initializeEventControl();
+    });
+</script>

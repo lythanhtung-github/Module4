@@ -25,10 +25,10 @@
                         <i class="fa-solid fa-square-plus"></i>
                         Add new customer
                     </button>
-                    <button class="btn btn-outline-light">
+                    <a class="btn btn-outline-light" href = "transfer.html">
                         <i class="fa-solid fa-clock-rotate-left"></i>
                         Transfer histories
-                    </button>
+                    </a>
                 </div>
             </div>
         </header>
@@ -268,7 +268,7 @@
                             <div class="col-lg-3 mt-3">
                                 <label for="transferAmountTransfer">Transfer Amount</label>
                                 <input type="number" class="form-control" id="transferAmountTransfer"
-                                    name="transferAmountTransfer" value="100000">
+                                    name="transferAmountTransfer" value="0">
                             </div>
                             <div class="col-lg-3 mt-3">
                                 <label for="feesTransfer">Fees (VNĐ)</label>
@@ -572,7 +572,7 @@
                 page.dialogs.elements.modalUpdateCustomer.modal("show");
             })
                 .catch(() => {
-                    alert("ID not valid");
+                    alert('ID khách hàng không hợp lệ.');
                 });
         })
     }
@@ -642,6 +642,7 @@
                 let updateRow = $("#tr_" + obj.id);
                 updateRow.replaceWith(str);
 
+                page.commands.enableTooltip();
                 page.commands.removeHandleShowModal();
                 page.commands.handleShowGroupModal();
 
@@ -733,7 +734,7 @@
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Customer ID invalid',
+                        text: 'ID khách hàng không hợp lệ.',
                     })
                 });
         })
@@ -806,7 +807,7 @@
 
                 Swal.fire(
                     'Thành công',
-                    'Tiền đã được nạp vào tài khoản.',
+                    "Nạp thành công <b>'"+ obj.transactionAmount +"'</b> VNĐ cho khách hàng <b>'"+ customer.fullName +"'</b>",
                     'success'
                 )
             })
@@ -940,17 +941,17 @@
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Customer ID invalid',
+                        text: 'ID người gửi không hợp lệ',
                     })
                 });
         })
     }
 
     page.dialogs.elements.btnTransfer.on("click", () => {
-        $("#frmTransfer").submit();
+        page.dialogs.elements.frmTransfer.submit();
     })
 
-    $("#frmTransfer").validate({
+    page.dialogs.elements.frmTransfer.validate({
         rules: {
             transferAmountTransfer: {
                 required: true,
@@ -1002,7 +1003,7 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'Oops...',
-                            text: 'Recipient ID invalid',
+                            text: 'ID người nhận không hợp lệ',
                         })
                     });
 
@@ -1034,6 +1035,7 @@
                     let str = page.commands.renderCustomer(sender);
                     let updateRow = $("#tr_" + sender.id);
                     updateRow.replaceWith(str);
+
                     page.commands.enableTooltip();
 
                     page.commands.removeHandleShowModal();
@@ -1045,6 +1047,7 @@
                     let str = page.commands.renderCustomer(recipient);
                     let updateRow = $("#tr_" + recipient.id);
                     updateRow.replaceWith(str);
+
                     page.commands.enableTooltip();
 
                     page.commands.removeHandleShowModal();
@@ -1058,7 +1061,7 @@
 
                 Swal.fire(
                     'Thành công',
-                    'Chuyển ' + transferInput.transferAmount + ' VNĐ từ khách hàng ' + sender.fullName + ' đến khách hàng ' + recipient.fullName + ' thành công!',
+                    "Chuyển <b>'" + transferInput.transferAmount + "'</b> VNĐ từ khách hàng <b>'" + sender.fullName + "'</b> đến khách hàng <b>'" + recipient.fullName + "'</b> thành công!",
                     'success'
                 )
             })
@@ -1167,6 +1170,21 @@
         page.dialogs.elements.frmCreateCustomer.validate().resetForm();
     }
 
+    page.dialogs.commands.handleCloseDepositModal = () => {
+        page.dialogs.elements.frmDeposit[0].reset();
+        page.dialogs.elements.frmDeposit.validate().resetForm();
+    }
+
+    page.dialogs.commands.handleCloseWithdrawModal = () => {
+        page.dialogs.elements.frmWithdraw[0].reset();
+        page.dialogs.elements.frmWithdraw.validate().resetForm();
+    }
+
+    page.dialogs.commands.handleCloseTransferModal = () => {
+        page.dialogs.elements.frmTransfer[0].reset();
+        page.dialogs.elements.frmTransfer.validate().resetForm();
+    }
+
     page.commands.enableTooltip = () => {
         let icons = document.querySelectorAll('[data-toggle="tooltip"]');
         icons.forEach((icon) => {
@@ -1177,15 +1195,26 @@
     page.commands.loadData = () => {
         page.commands.getAllCustomers();
     }
-
+    
     page.initializeEventControl = () => {
-        page.commands.handleShowCreateModal();
+        // page.commands.handleShowCreateModal();
 
         page.dialogs.elements.modalCreateCustomer.on("hidden.bs.modal", function () {
             page.dialogs.commands.handleCloseCreateModal();
         });
-    }
 
+        page.dialogs.elements.modalDeposit.on("hidden.bs.modal", function () {
+            page.dialogs.commands.handleCloseDepositModal();
+        });
+
+        page.dialogs.elements.modalWithdraw.on("hidden.bs.modal", function () {
+            page.dialogs.commands.handleCloseWithdrawModal();
+        });
+
+        page.dialogs.elements.modalTransfer.on("hidden.bs.modal", function () {
+            page.dialogs.commands.handleCloseTransferModal();
+        });
+    }
 
     $(() => {
         page.commands.loadData();

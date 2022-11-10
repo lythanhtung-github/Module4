@@ -6,7 +6,7 @@
       "email": "lythanhtung@gmail.com",
       "phone": "0987987987",
       "address": "Thừa Thiên Huế",
-      "balance": 2090000,
+      "balance": 2290000,
       "deleted": 0
     },
     {
@@ -465,7 +465,7 @@
       "email": "dikufe@mailinator.com",
       "phone": "0923233323",
       "address": "Fugiat praesentium e",
-      "balance": 10470000,
+      "balance": 10250000,
       "deleted": 0
     },
     {
@@ -519,6 +519,15 @@
       "email": "sopepidi@mailinator.com",
       "phone": "0923233333",
       "address": "Consequatur laudanti",
+      "balance": 0,
+      "deleted": 0
+    },
+    {
+      "id": 59,
+      "fullName": "Ebony Kennedy",
+      "email": "qelyqopuw@mailinator.com",
+      "phone": "0987332434",
+      "address": "Dolore cillum conseq",
       "balance": 0,
       "deleted": 0
     }
@@ -799,6 +808,11 @@
       "customerId": "52",
       "transactionAmount": "1000000",
       "id": 55
+    },
+    {
+      "customerId": "58",
+      "transactionAmount": "100000",
+      "id": 56
     }
   ],
   "withdraws": [
@@ -891,6 +905,11 @@
       "customerId": 52,
       "transactionAmount": "100000",
       "id": 18
+    },
+    {
+      "customerId": 58,
+      "transactionAmount": "100000",
+      "id": 19
     }
   ],
   "transfers": [
@@ -1163,6 +1182,24 @@
       "transactionAmount": 110000,
       "recipientId": "1",
       "id": 30
+    },
+    {
+      "senderId": "52",
+      "transferAmount": "100000",
+      "fees": 10,
+      "feesAmount": 10000,
+      "transactionAmount": 110000,
+      "recipientId": "1",
+      "id": 31
+    },
+    {
+      "senderId": "52",
+      "transferAmount": "100000",
+      "fees": 10,
+      "feesAmount": 10000,
+      "transactionAmount": 110000,
+      "recipientId": "1",
+      "id": 32
     }
   ]
 }
