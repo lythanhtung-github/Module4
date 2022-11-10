@@ -44,8 +44,28 @@ thead {
     display: block;
 }
 
-.modal-header{
-    background-color: #0a8aca;
+#modalCreateCustomer .modal-header{
+    background-color: #0aca67;
+    color: white;
+}
+
+#modalUpdateCustomer .modal-header{
+    background-color: #0a7dca;
+    color: white;
+}
+
+#modalDeposit .modal-header{
+    background-color: #049157;
+    color: white;
+}
+
+#modalWithdraw .modal-header{
+    background-color: #cdc71c;
+    color: white;
+}
+
+#modalTransfer .modal-header{
+    background-color: #055ea2;
     color: white;
 }
 

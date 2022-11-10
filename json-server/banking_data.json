@@ -6,7 +6,7 @@
       "email": "lythanhtung@gmail.com",
       "phone": "0987987987",
       "address": "Thừa Thiên Huế",
-      "balance": 600000,
+      "balance": 2090000,
       "deleted": 0
     },
     {
@@ -51,7 +51,7 @@
       "phone": "0723454234",
       "address": "Pariatur Sit culpa",
       "balance": 0,
-      "deleted": 0,
+      "deleted": 1,
       "id": 6
     },
     {
@@ -284,7 +284,7 @@
       "email": "butuda@mailinator.com",
       "phone": "0987887878",
       "address": "Possimus rerum qui ",
-      "balance": 0,
+      "balance": 100000,
       "deleted": 0,
       "id": 32
     },
@@ -320,7 +320,7 @@
       "email": "sujokucu@mailinator.com",
       "phone": "0987567456",
       "address": "Aliquip aut quo temp",
-      "balance": 0,
+      "balance": 100000,
       "deleted": 0,
       "id": 36
     },
@@ -329,7 +329,7 @@
       "email": "wujurymulu@mailinator.com",
       "phone": "0923232333",
       "address": "Eum porro sit velit",
-      "balance": 0,
+      "balance": 100000,
       "deleted": 0,
       "id": 37
     },
@@ -338,7 +338,7 @@
       "email": "hivuhadoj@mai",
       "phone": "0784574355",
       "address": "Iste ad ex minus ver",
-      "balance": 0,
+      "balance": 1000000,
       "deleted": 0,
       "id": 38
     },
@@ -347,7 +347,7 @@
       "email": "nytomeryne@mailinator.com",
       "phone": "0796453344",
       "address": "Qui qui nesciunt la",
-      "balance": 0,
+      "balance": 1000000,
       "deleted": 0,
       "id": 39
     },
@@ -356,7 +356,7 @@
       "email": "butuda@mailinator.com",
       "phone": "0987887878",
       "address": "Possimus rerum qui ",
-      "balance": 200000,
+      "balance": 1090000,
       "deleted": 0,
       "id": 40
     },
@@ -374,9 +374,153 @@
       "email": "nyxymabuk@mailinator.com",
       "phone": "0922333232",
       "address": "Velit ut quis ut sed",
-      "balance": 100000,
+      "balance": 100000000,
       "deleted": 0,
       "id": 42
+    },
+    {
+      "fullName": "Acton Dominguez",
+      "email": "rewu@mailinator.com",
+      "phone": "0987567456",
+      "address": "Blanditiis ut lorem ",
+      "balance": 89560000,
+      "deleted": 0,
+      "id": 43
+    },
+    {
+      "fullName": "Ezra York",
+      "email": "gegujozam@mailinator.com",
+      "phone": "0987678678",
+      "address": "Tempore laborum est",
+      "balance": 10900000,
+      "deleted": 1,
+      "id": 44
+    },
+    {
+      "fullName": "Noelani Wynn",
+      "email": "qefud@mailinator.com",
+      "phone": "0987567567",
+      "address": "Ipsum nulla sit vol",
+      "balance": 2070000,
+      "deleted": 0,
+      "id": 45
+    },
+    {
+      "fullName": "Dakota Spencer",
+      "email": "ciwelehy@mailinator.com",
+      "phone": "0923232333",
+      "address": "Accusamus velit veri",
+      "balance": 0,
+      "deleted": 1,
+      "id": 46
+    },
+    {
+      "id": 47,
+      "fullName": "Owen Byrd",
+      "email": "didyhad@mailinator.com",
+      "phone": "0923232323",
+      "address": "Omnis est ipsum rer",
+      "balance": 1690000,
+      "deleted": 0
+    },
+    {
+      "id": 48,
+      "fullName": "Bert Boyer",
+      "email": "navyk@mailinator.com",
+      "phone": "0978734353",
+      "address": "Nisi duis nostrud et",
+      "balance": 0,
+      "deleted": 1
+    },
+    {
+      "id": 49,
+      "fullName": "Bryar Burton",
+      "email": "guqycehohe@mailinator.com",
+      "phone": "0923232333",
+      "address": "In consequuntur ipsa",
+      "balance": 0,
+      "deleted": 1
+    },
+    {
+      "id": 50,
+      "fullName": "Buckminster Bryant",
+      "email": "wymaq@mailinator.com",
+      "phone": "0823233333",
+      "address": "Officiis eligendi ea",
+      "balance": 990000,
+      "deleted": 0
+    },
+    {
+      "id": 51,
+      "fullName": "Nero Holmes",
+      "email": "wycasedyhu@mailinator.com",
+      "phone": "0723233444",
+      "address": "Sit sed enim ipsum ",
+      "balance": 8770000,
+      "deleted": 0
+    },
+    {
+      "id": 52,
+      "fullName": "Breanna Russell",
+      "email": "dikufe@mailinator.com",
+      "phone": "0923233323",
+      "address": "Fugiat praesentium e",
+      "balance": 10470000,
+      "deleted": 0
+    },
+    {
+      "id": 53,
+      "fullName": "Ima Blackwell",
+      "email": "gelogeh@mailinator.com",
+      "phone": "0923234444",
+      "address": "Thừa Thiên Huế",
+      "balance": 0,
+      "deleted": 0
+    },
+    {
+      "id": 54,
+      "fullName": "Zorita Bush",
+      "email": "caqiwywen@mailinator.com",
+      "phone": "0923233333",
+      "address": "Voluptas ab voluptas",
+      "balance": 0,
+      "deleted": 1
+    },
+    {
+      "id": 55,
+      "fullName": "Zorita Bush",
+      "email": "caqiwywen@mailinator.com",
+      "phone": "0923233333",
+      "address": "Voluptas ab voluptas",
+      "balance": 0,
+      "deleted": 1
+    },
+    {
+      "id": 56,
+      "fullName": "Ivan Austin",
+      "email": "wumas@mailinator.com",
+      "phone": "0923232323",
+      "address": "Anim consectetur ve",
+      "balance": 0,
+      "deleted": 1
+    },
+    {
+      "id": 57,
+      "fullName": "Isadora Silva",
+      "email": "rigula@mailinator.com",
+      "phone": "0987453535",
+      "address": "Sit id sint vel sit ",
+      "balance": 0,
+      "deleted": 0
+    },
+    {
+      "id": 58,
+      "fullName": "Uriel Morgan",
+      "email": "sopepidi@mailinator.com",
+      "phone": "0923233333",
+      "address": "Consequatur laudanti",
+      "balance": 0,
+      "deleted": 0
     }
   ],
   "deposits": [
@@ -530,6 +674,131 @@
       "customerId": 42,
       "transactionAmount": "100000",
       "id": 30
+    },
+    {
+      "customerId": 42,
+      "transactionAmount": "100000000",
+      "id": 31
+    },
+    {
+      "customerId": 39,
+      "transactionAmount": "1000000",
+      "id": 32
+    },
+    {
+      "customerId": 40,
+      "transactionAmount": "1000000",
+      "id": 33
+    },
+    {
+      "customerId": 44,
+      "transactionAmount": "10000000",
+      "id": 34
+    },
+    {
+      "customerId": 43,
+      "transactionAmount": "100000000",
+      "id": 35
+    },
+    {
+      "customerId": 45,
+      "transactionAmount": "100000",
+      "id": 36
+    },
+    {
+      "customerId": 45,
+      "transactionAmount": "100000",
+      "id": 37
+    },
+    {
+      "customerId": 38,
+      "transactionAmount": "1000000",
+      "id": 38
+    },
+    {
+      "customerId": 45,
+      "transactionAmount": "1000000",
+      "id": 39
+    },
+    {
+      "customerId": 37,
+      "transactionAmount": "100000",
+      "id": 40
+    },
+    {
+      "customerId": 36,
+      "transactionAmount": "100000",
+      "id": 41
+    },
+    {
+      "customerId": 32,
+      "transactionAmount": "100000",
+      "id": 42
+    },
+    {
+      "customerId": 45,
+      "transactionAmount": "100000",
+      "id": 43
+    },
+    {
+      "customerId": 45,
+      "transactionAmount": "1000000",
+      "id": 44
+    },
+    {
+      "customerId": 45,
+      "transactionAmount": "100000",
+      "id": 45
+    },
+    {
+      "customerId": 45,
+      "transactionAmount": "1000000",
+      "id": 46
+    },
+    {
+      "customerId": 44,
+      "transactionAmount": "1000000",
+      "id": 47
+    },
+    {
+      "customerId": 47,
+      "transactionAmount": "1000000",
+      "id": 48
+    },
+    {
+      "customerId": "47",
+      "transactionAmount": "1000000",
+      "id": 49
+    },
+    {
+      "customerId": "51",
+      "transactionAmount": "10000000",
+      "id": 50
+    },
+    {
+      "customerId": "50",
+      "transactionAmount": "100000",
+      "id": 51
+    },
+    {
+      "customerId": "51",
+      "transactionAmount": "100000",
+      "id": 52
+    },
+    {
+      "customerId": "50",
+      "transactionAmount": "1000000",
+      "id": 53
+    },
+    {
+      "customerId": "52",
+      "transactionAmount": "10000000",
+      "id": 54
+    },
+    {
+      "customerId": "52",
+      "transactionAmount": "1000000",
+      "id": 55
     }
   ],
   "withdraws": [
@@ -572,6 +841,56 @@
       "customerId": 2,
       "transactionAmount": "100000",
       "id": 8
+    },
+    {
+      "customerId": 42,
+      "transactionAmount": "100000",
+      "id": 9
+    },
+    {
+      "customerId": 45,
+      "transactionAmount": "1000000",
+      "id": 10
+    },
+    {
+      "customerId": 44,
+      "transactionAmount": "100000",
+      "id": 11
+    },
+    {
+      "customerId": 47,
+      "transactionAmount": "100000",
+      "id": 12
+    },
+    {
+      "customerId": 47,
+      "transactionAmount": "100000",
+      "id": 13
+    },
+    {
+      "customerId": 51,
+      "transactionAmount": "1000000",
+      "id": 14
+    },
+    {
+      "customerId": 52,
+      "transactionAmount": "100000",
+      "id": 15
+    },
+    {
+      "customerId": 43,
+      "transactionAmount": "10000000",
+      "id": 16
+    },
+    {
+      "customerId": 2,
+      "transactionAmount": "100000",
+      "id": 17
+    },
+    {
+      "customerId": 52,
+      "transactionAmount": "100000",
+      "id": 18
     }
   ],
   "transfers": [
@@ -691,6 +1010,159 @@
       "transactionAmount": 110000,
       "recipientId": "1",
       "id": 13
+    },
+    {
+      "senderId": "45",
+      "transferAmount": "100000",
+      "fees": 10,
+      "feesAmount": 10000,
+      "transactionAmount": 110000,
+      "recipientId": "1",
+      "id": 14
+    },
+    {
+      "senderId": "43",
+      "transferAmount": "100000",
+      "fees": 10,
+      "feesAmount": 10000,
+      "transactionAmount": 110000,
+      "recipientId": "1",
+      "id": 15
+    },
+    {
+      "senderId": "43",
+      "transferAmount": "100000",
+      "fees": 10,
+      "feesAmount": 10000,
+      "transactionAmount": 110000,
+      "recipientId": "1",
+      "id": 16
+    },
+    {
+      "senderId": "40",
+      "transferAmount": "100000",
+      "fees": 10,
+      "feesAmount": 10000,
+      "transactionAmount": 110000,
+      "recipientId": "1",
+      "id": 17
+    },
+    {
+      "senderId": "45",
+      "transferAmount": "100000",
+      "fees": 10,
+      "feesAmount": 10000,
+      "transactionAmount": 110000,
+      "recipientId": "1",
+      "id": 18
+    },
+    {
+      "senderId": "43",
+      "transferAmount": "100000",
+      "fees": 10,
+      "feesAmount": 10000,
+      "transactionAmount": 110000,
+      "recipientId": "1",
+      "id": 19
+    },
+    {
+      "senderId": "47",
+      "transferAmount": "100000",
+      "fees": 10,
+      "feesAmount": 10000,
+      "transactionAmount": 110000,
+      "recipientId": "1",
+      "id": 20
+    },
+    {
+      "senderId": "45",
+      "transferAmount": "100000",
+      "fees": 10,
+      "feesAmount": 10000,
+      "transactionAmount": 110000,
+      "recipientId": "1",
+      "id": 21
+    },
+    {
+      "senderId": "43",
+      "transferAmount": "100000",
+      "fees": 10,
+      "feesAmount": 10000,
+      "transactionAmount": 110000,
+      "recipientId": "1",
+      "id": 22
+    },
+    {
+      "senderId": "51",
+      "transferAmount": "100000",
+      "fees": 10,
+      "feesAmount": 10000,
+      "transactionAmount": 110000,
+      "recipientId": "1",
+      "id": 23
+    },
+    {
+      "senderId": "50",
+      "transferAmount": "100000",
+      "fees": 10,
+      "feesAmount": 10000,
+      "transactionAmount": 110000,
+      "recipientId": "1",
+      "id": 24
+    },
+    {
+      "senderId": "52",
+      "transferAmount": "100000",
+      "fees": 10,
+      "feesAmount": 10000,
+      "transactionAmount": 110000,
+      "recipientId": "1",
+      "id": 25
+    },
+    {
+      "senderId": "1",
+      "transferAmount": "100000",
+      "fees": 10,
+      "feesAmount": 10000,
+      "transactionAmount": 110000,
+      "recipientId": "2",
+      "id": 26
+    },
+    {
+      "senderId": "51",
+      "transferAmount": "100000",
+      "fees": 10,
+      "feesAmount": 10000,
+      "transactionAmount": 110000,
+      "recipientId": "1",
+      "id": 27
+    },
+    {
+      "senderId": "52",
+      "transferAmount": "100000",
+      "fees": 10,
+      "feesAmount": 10000,
+      "transactionAmount": 110000,
+      "recipientId": "1",
+      "id": 28
+    },
+    {
+      "senderId": "52",
+      "transferAmount": "100000",
+      "fees": 10,
+      "feesAmount": 10000,
+      "transactionAmount": 110000,
+      "recipientId": "1",
+      "id": 29
+    },
+    {
+      "senderId": "51",
+      "transferAmount": "100000",
+      "fees": 10,
+      "feesAmount": 10000,
+      "transactionAmount": 110000,
+      "recipientId": "1",
+      "id": 30
     }
   ]
 }

@@ -6,11 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/assets/image/logo-icon.png">
-    <title>BANKING - AJAX</title>
     <link rel="stylesheet" href="/assets/bootstrap/v5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/fontawesome/v6.2.0/css/all.min.css">
     <link rel="stylesheet" href="/assets/sweetalert2/sweetalert2.min.css">
     <link rel="stylesheet" href="/assets/css/style.css">
+    <title>BANKING - AJAX</title>
 </head>
 
 <body>
@@ -21,7 +21,7 @@
                     <h1>List of customers</h1>
                 </div>
                 <div class="col-sm-6">
-                    <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#modalCreateCustomer">
+                    <button id="btnShowCreateModal" class="btn btn-outline-light">
                         <i class="fa-solid fa-square-plus"></i>
                         Add new customer
                     </button>
@@ -32,7 +32,7 @@
                 </div>
             </div>
         </header>
-        
+
         <div class="content">
             <table id="tbCustomer" class="table table-hover">
                 <thead>
@@ -64,7 +64,7 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="frmCreate">
+                    <form id="frmCreateCustomer">
                         <div class="row">
                             <div class="col-lg-6 mt-3">
                                 <label for="fullNameCre">Full name</label>
@@ -86,7 +86,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-outline-primary" id="btnCreate">
                         <i class="fa-solid fa-square-plus"></i>
                         Create
@@ -107,7 +107,7 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="frmUpdate">
+                    <form id="frmUpdateCustomer">
                         <input type="hidden" id="customerIdUp">
                         <div class="row">
                             <div class="col-lg-6 mt-3">
@@ -130,7 +130,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-outline-success" id="btnUpdate">
                         <i class="fa-solid fa-pen-to-square"></i>
                         Update
@@ -176,7 +176,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-outline-success" id="btnDeposit">
                         <i class="fa-regular fa-square-plus"></i>
                         Deposit
@@ -220,7 +220,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-outline-warning" id="btnWithdraw">
                         <i class="fa-regular fa-square-minus"></i>
                         Withdraw
@@ -261,7 +261,8 @@
                             </div>
                             <div class="col-lg-3 mt-3">
                                 <label>Recipient Name</label>
-                                <select class="form-select" id="recipientsTransfer" name="recipientsTransfer">
+                                <select class="form-select" id="selectRecipientsTransfer"
+                                    name="selectRecipientsTransfer">
                                 </select>
                             </div>
                             <div class="col-lg-3 mt-3">
@@ -305,7 +306,12 @@
             getAllCustomers: App.CUSTOMER_API + "?deleted=0",
             getCustomerById: App.CUSTOMER_API,
             createCustomer: App.CUSTOMER_API,
-            updateCustomer: App.CUSTOMER_API
+            updateCustomer: App.CUSTOMER_API,
+            deleteCustomer: App.CUSTOMER_API,
+            getCustomersWhereIdIsNot: App.CUSTOMER_API + "?deleted=0&id_ne=",
+            deposit: App.DEPOSIT_API,
+            withdraw: App.WITHDRAW_API,
+            transfer: App.TRANSFER_API
         },
         elements: {},
         loadData: {},
@@ -319,11 +325,59 @@
         inItializeEventControl: {}
     }
 
+    page.elements.btnShowCreateModal = $("#btnShowCreateModal");
+    page.elements.tbCustomer = $("#tbCustomer");
+    page.elements.tbCustomerBody = $("#tbCustomer tbody");
+
+    page.dialogs.elements.modalCreateCustomer = $("#modalCreateCustomer");
+    page.dialogs.elements.frmCreateCustomer = $("#frmCreateCustomer");
+    page.dialogs.elements.fullNameCre = $("#fullNameCre");
+    page.dialogs.elements.emailCre = $("#emailCre");
+    page.dialogs.elements.phoneCre = $("#phoneCre");
+    page.dialogs.elements.addressCre = $("#addressCre");
+    page.dialogs.elements.btnCreate = $("#btnCreate");
+
+    page.dialogs.elements.modalUpdateCustomer = $("#modalUpdateCustomer");
+    page.dialogs.elements.frmUpdateCustomer = $("#frmUpdateCustomer");
+    page.dialogs.elements.customerIdUp = $("#customerIdUp");
+    page.dialogs.elements.fullNameUp = $("#fullNameUp");
+    page.dialogs.elements.emailUp = $("#emailUp");
+    page.dialogs.elements.phoneUp = $("#phoneUp");
+    page.dialogs.elements.addressUp = $("#addressUp");
+    page.dialogs.elements.btnUpdate = $("#btnUpdate");
+
+    page.dialogs.elements.modalDeposit = $("#modalDeposit");
+    page.dialogs.elements.frmDeposit = $("#frmDeposit");
+    page.dialogs.elements.customerIdDeposit = $("#customerIdDeposit");
+    page.dialogs.elements.fullNameDeposit = $("#fullNameDeposit");
+    page.dialogs.elements.balanceDeposit = $("#balanceDeposit");
+    page.dialogs.elements.transactionAmountDeposit = $("#transactionAmountDeposit");
+    page.dialogs.elements.btnDeposit = $("#btnDeposit");
+
+    page.dialogs.elements.modalWithdraw = $("#modalWithdraw");
+    page.dialogs.elements.frmWithdraw = $("#frmWithdraw");
+    page.dialogs.elements.customerIdWithdraw = $("#customerIdWithdraw");
+    page.dialogs.elements.fullNameWithdraw = $("#fullNameWithdraw");
+    page.dialogs.elements.balanceWithdraw = $("#balanceWithdraw");
+    page.dialogs.elements.transactionAmountWithdraw = $("#transactionAmountWithdraw");
+    page.dialogs.elements.btnWithdraw = $("#btnWithdraw");
+
+    page.dialogs.elements.modalTransfer = $("#modalTransfer");
+    page.dialogs.elements.frmTransfer = $("#frmTransfer");
+    page.dialogs.elements.senderIdTransfer = $("#senderIdTransfer");
+    page.dialogs.elements.senderNameTransfer = $("#senderNameTransfer");
+    page.dialogs.elements.senderEmailTransfer = $("#senderEmailTransfer");
+    page.dialogs.elements.senderBalanceTransfer = $("#senderBalanceTransfer");
+    page.dialogs.elements.selectRecipientsTransfer = $("#selectRecipientsTransfer");
+    page.dialogs.elements.transferAmountTransfer = $("#transferAmountTransfer");
+    page.dialogs.elements.feesTransfer = $("#feesTransfer");
+    page.dialogs.elements.transactionAmountTransfer = $("#transactionAmountTransfer");
+    page.dialogs.elements.btnTransfer = $("#btnTransfer");
+
     let customer = new Customer();
     let deposit = new Deposit();
     let withdraw = new Withdraw();
     let transfer = new Transfer();
-
 
     // SHOW CUSTOMERS //
     page.commands.getAllCustomers = () => {
@@ -336,31 +390,29 @@
             url: page.urls.getAllCustomers
         })
             .done((data) => {
-                let tbCustomer = $("#tbCustomer tbody");
                 data.map(item => {
-                    let str = renderCustomer(item);
-                    tbCustomer.prepend(str);
+                    page.elements.tbCustomerBody.prepend(page.commands.renderCustomer(item));
                 });
 
-                enableTooltip();
+                page.commands.enableTooltip();
 
-                removeHandleShowModal();
+                page.commands.removeHandleShowModal();
 
-                handleShowGroupModal();
+                page.commands.handleShowGroupModal();
             })
             .fail((error) => {
                 console.log(error);
             })
     }
 
-    function renderCustomer(obj) {
+    page.commands.renderCustomer = (obj) => {
         let str = `
                 <tr id="tr_${obj.id}">
-                    <td class="text-center">${obj.id}</td>
-                    <td class="text-center">${obj.fullName}</td>
-                    <td class="text-center">${obj.email}</td>
-                    <td class="text-center">${obj.phone}</td>
-                    <td class="text-center">${obj.address}</td>
+                    <td>${obj.id}</td>
+                    <td>${obj.fullName}</td>
+                    <td>${obj.email}</td>
+                    <td>${obj.phone}</td>
+                    <td>${obj.address}</td>
                     <td class="text-end">${obj.balance}</td>
                     <td class="text-center">
                         <button data-id="${obj.id}" 
@@ -421,11 +473,17 @@
     // END SHOW //
 
     //CREATE CUSTOMER//
-    $("#btnCreate").on("click", () => {
-        $("#frmCreate").trigger("submit");
+    page.commands.handleShowCreateModal = () => {
+        page.elements.btnShowCreateModal.on("click", () => {
+            page.dialogs.elements.modalCreateCustomer.modal("show");
+        })
+    }
+
+    page.dialogs.elements.btnCreate.on("click", () => {
+        page.dialogs.elements.frmCreateCustomer.trigger("submit");
     })
 
-    $("#frmCreate").validate({
+    page.dialogs.elements.frmCreateCustomer.validate({
         rules: {
             fullNameCre: {
                 required: true,
@@ -461,36 +519,36 @@
             }
         },
         submitHandler: function () {
-            customer.fullName = $("#fullNameCre").val();
-            customer.email = $("#emailCre").val();
-            customer.phone = $("#phoneCre").val();
-            customer.address = $("#addressCre").val();
+            customer.fullName = page.dialogs.elements.fullNameCre.val();
+            customer.email = page.dialogs.elements.emailCre.val();
+            customer.phone = page.dialogs.elements.phoneCre.val();
+            customer.address = page.dialogs.elements.addressCre.val();
             customer.balance = 0;
             customer.deleted = 0;
-            createCustomer(customer);
+            customer.id = null;
+            page.commands.createCustomer(customer);
         }
     })
 
-    function createCustomer(obj) {
+    page.commands.createCustomer = (obj) => {
         $.ajax({
             headers: {
                 "accept": "application/json",
                 "content-type": "application/json"
             },
             type: "POST",
-            url: "http://localhost:1502/customers",
+            url: page.urls.createCustomer,
             data: JSON.stringify(obj)
         })
             .done((data) => {
-                let str = renderCustomer(data);
-
-                $("#tbCustomer tbody").prepend(str);
-                removeHandleShowModal();
-                handleShowGroupModal();
-                $("#modalCreateCustomer").modal("hide");
+                let str = page.commands.renderCustomer(data);
+                page.elements.tbCustomerBody.prepend(str);
+                page.commands.removeHandleShowModal();
+                page.commands.handleShowGroupModal();
+                page.dialogs.elements.modalCreateCustomer.modal("hide");
                 Swal.fire(
                     'Thành công',
-                    'Thêm mới khách hàng thành công.',
+                    "Thêm mới khách hàng <b>'"+ obj.fullName +"'</b> thành công.",
                     'success'
                 )
             })
@@ -501,17 +559,17 @@
     //END CREATE//
 
     // UPDATE CUSTOMER //
-    function handleShowUpdateModal() {
+    page.commands.handleShowUpdateModal = () => {
         $(".update").on("click", function () {
             let id = $(this).data("id");
-            getCustomerById(id).done((data) => {
-                $("#customerIdUp").val(id);
-                $("#fullNameUp").val(data.fullName);
-                $("#emailUp").val(data.email);
-                $("#phoneUp").val(data.phone);
-                $("#addressUp").val(data.address);
+            page.commands.getCustomerById(id).done((data) => {
+                page.dialogs.elements.customerIdUp.val(id);
+                page.dialogs.elements.fullNameUp.val(data.fullName);
+                page.dialogs.elements.emailUp.val(data.email);
+                page.dialogs.elements.phoneUp.val(data.phone);
+                page.dialogs.elements.addressUp.val(data.address);
 
-                $("#modalUpdateCustomer").modal("show");
+                page.dialogs.elements.modalUpdateCustomer.modal("show");
             })
                 .catch(() => {
                     alert("ID not valid");
@@ -519,11 +577,11 @@
         })
     }
 
-    $("#btnUpdate").on("click", () => {
-        $("#frmUpdate").submit();
+    page.dialogs.elements.btnUpdate.on("click", () => {
+        page.dialogs.elements.frmUpdateCustomer.submit();
     })
 
-    $("#frmUpdate").validate({
+    page.dialogs.elements.frmUpdateCustomer.validate({
         rules: {
             fullNameUp: {
                 required: true,
@@ -560,37 +618,37 @@
             }
         },
         submitHandler: function () {
-            customer.id = $("#customerIdUp").val();
-            customer.fullName = $("#fullNameUp").val();
-            customer.email = $("#emailUp").val();
-            customer.phone = $("#phoneUp").val();
-            customer.address = $("#addressUp").val();
-            doUpdateCustomer(customer);
+            customer.id = page.dialogs.elements.customerIdUp.val();
+            customer.fullName = page.dialogs.elements.fullNameUp.val();
+            customer.email = page.dialogs.elements.emailUp.val();
+            customer.phone = page.dialogs.elements.phoneUp.val();
+            customer.address = page.dialogs.elements.addressUp.val();
+            page.commands.doUpdateCustomer(customer);
         }
     })
 
-    function doUpdateCustomer(obj) {
+    page.commands.doUpdateCustomer = (obj) => {
         $.ajax({
             headers: {
                 "accept": "application/json",
                 "content-type": "application/json"
             },
             type: "PATCH",
-            url: "http://localhost:1502/customers/" + obj.id,
+            url: page.urls.updateCustomer + "/" + obj.id,
             data: JSON.stringify(obj)
         })
             .done((data) => {
-                let str = renderCustomer(data);
+                let str = page.commands.renderCustomer(data);
                 let updateRow = $("#tr_" + obj.id);
                 updateRow.replaceWith(str);
 
-                removeHandleShowModal();
-                handleShowGroupModal();
+                page.commands.removeHandleShowModal();
+                page.commands.handleShowGroupModal();
 
-                $("#modalUpdateCustomer").modal("hide");
+                page.dialogs.elements.modalUpdateCustomer.modal("hide");
                 Swal.fire(
                     'Thành công',
-                    'Chỉnh sửa khách hàng thành công.',
+                    "Chỉnh sửa khách hàng <b>'"+ obj.fullName +"'</b> thành công.",
                     'success'
                 )
             })
@@ -601,10 +659,10 @@
     //END UPDATE//
 
     //--- DELETE CUSTOMER ---//
-    function handleShowConfirmDelete() {
+    page.commands.handleShowConfirmDelete = () => {
         $(".delete").on("click", function () {
             let customerId = $(this).data("id");
-            getCustomerById(customerId).then(() => {
+            page.commands.getCustomerById(customerId).then(() => {
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -616,14 +674,14 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         customer.deleted = 1;
-                        doDeleteCustomer(customer.id)
+                        page.commands.doDeleteCustomer(customer.id)
                     }
                 })
                     .catch(() => {
                         Swal.fire({
                             icon: 'error',
                             title: 'Oops...',
-                            text: 'Customer ID invalid',
+                            text: 'ID Khách hàng không hợp lệ',
                         })
                     })
             })
@@ -631,21 +689,21 @@
         });
     }
 
-    function doDeleteCustomer(customerId) {
+    page.commands.doDeleteCustomer = (customerId) => {
         $.ajax({
             headers: {
                 "accept": "application/json",
                 "content-type": "application/json"
             },
             type: "PATCH",
-            url: "http://localhost:1502/customers/" + customerId,
+            url: page.urls.deleteCustomer + "/" + customerId,
             data: JSON.stringify(customer)
         })
             .done((data) => {
                 $("#tr_" + customerId).remove();
                 Swal.fire(
                     'Deleted!',
-                    'The client has been deleted.',
+                    "Xóa thành công khách hàng <b>'"+ customer.fullName +"'</b>",
                     'success'
                 )
             })
@@ -661,15 +719,15 @@
     //--- END DELETE ---//
 
     //--- DEPOSIT ---//
-    function handleShowDepositModal() {
+    page.commands.handleShowDepositModal = () => {
         $(".deposit").on("click", function () {
             let id = $(this).data("id");
-            getCustomerById(id).then((data) => {
-                $("#customerIdDeposit").val(id);
-                $("#fullNameDeposit").val(data.fullName);
-                $("#balanceDeposit").val(data.balance);
-                $("#transactionAmountDeposit").val(0);
-                $("#modalDeposit").modal("show");
+            page.commands.getCustomerById(id).then((data) => {
+                page.dialogs.elements.customerIdDeposit.val(id);
+                page.dialogs.elements.fullNameDeposit.val(data.fullName);
+                page.dialogs.elements.balanceDeposit.val(data.balance);
+                page.dialogs.elements.transactionAmountDeposit.val(0);
+                page.dialogs.elements.modalDeposit.modal("show");
             })
                 .catch(() => {
                     Swal.fire({
@@ -681,11 +739,11 @@
         })
     }
 
-    $("#btnDeposit").on("click", () => {
-        $("#frmDeposit").submit();
+    page.dialogs.elements.btnDeposit.on("click", () => {
+        page.dialogs.elements.frmDeposit.submit();
     })
 
-    $("#frmDeposit").validate({
+    page.dialogs.elements.frmDeposit.validate({
         rules: {
             transactionAmountDeposit: {
                 required: true,
@@ -702,17 +760,18 @@
 
         },
         submitHandler: function () {
-            customer.id = $("#customerIdDeposit").val();
-            getCustomerById(customer.id).then((data) => {
-                deposit.customerId = customer.id;
-                deposit.transactionAmount = $("#transactionAmountDeposit").val();
+            let customerId = page.dialogs.elements.customerIdDeposit.val();
+            page.commands.getCustomerById(customerId).then((data) => {
+                customer = data;
+                deposit.customerId = customerId;
+                deposit.transactionAmount = page.dialogs.elements.transactionAmountDeposit.val();
                 doDeposit(deposit);
             })
                 .catch(() => {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Customer ID invalid',
+                        text: 'ID khách hàng không hợp lệ.',
                     })
                 });
         }
@@ -725,25 +784,25 @@
                 "content-type": "application/json"
             },
             type: "POST",
-            url: "http://localhost:1502/deposits",
+            url: page.urls.deposit,
             data: JSON.stringify(obj)
         })
             .done((data) => {
                 customer.balance = +customer.balance + +obj.transactionAmount;
 
-                updateCustomer(customer);
+                page.commands.updateCustomer(customer);
 
-                let str = renderCustomer(customer);
+                let str = page.commands.renderCustomer(customer);
                 let updateRow = $("#tr_" + customer.id);
                 updateRow.replaceWith(str);
 
-                enableTooltip();
+                page.commands.enableTooltip();
 
-                removeHandleShowModal();
+                page.commands.removeHandleShowModal();
 
-                handleShowGroupModal();
+                page.commands.handleShowGroupModal();
 
-                $("#modalDeposit").modal("hide");
+                page.dialogs.elements.modalDeposit.modal("hide");
 
                 Swal.fire(
                     'Thành công',
@@ -758,31 +817,31 @@
     //--- END DEPOSIT ---//
 
     //---- WITHDRAW ---//
-    function handleShowWithdrawModal() {
+    page.commands.handleShowWithdrawModal = () => {
         $(".withdraw").on("click", function () {
             let id = $(this).data("id");
-            getCustomerById(id).then((data) => {
-                $("#customerIdWithdraw").val(id);
-                $("#fullNameWithdraw").val(data.fullName);
-                $("#balanceWithdraw").val(data.balance);
-                $("#transactionAmountWithdraw").val(0);
-                $("#modalWithdraw").modal("show");
+            page.commands.getCustomerById(id).then((data) => {
+                page.dialogs.elements.customerIdWithdraw.val(id);
+                page.dialogs.elements.fullNameWithdraw.val(data.fullName);
+                page.dialogs.elements.balanceWithdraw.val(data.balance);
+                page.dialogs.elements.transactionAmountWithdraw.val(0);
+                page.dialogs.elements.modalWithdraw.modal("show");
             })
                 .catch(() => {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Customer ID invalid',
+                        text: 'ID khách hàng không hợp lệ',
                     })
                 });
         })
     }
 
-    $("#btnWithdraw").on("click", () => {
-        $("#frmWithdraw").submit();
+    page.dialogs.elements.btnWithdraw.on("click", () => {
+        page.dialogs.elements.frmWithdraw.submit();
     })
 
-    $("#frmWithdraw").validate({
+    page.dialogs.elements.frmWithdraw.validate({
         rules: {
             transactionAmountWithdraw: {
                 required: true,
@@ -799,8 +858,8 @@
 
         },
         submitHandler: function () {
-            customer.id = $("#customerIdWithdraw").val();
-            getCustomerById(customer.id).then((data) => {
+            customer.id = page.dialogs.elements.customerIdWithdraw.val();
+            page.commands.getCustomerById(customer.id).then((data) => {
                 withdraw.customerId = customer.id;
                 withdraw.transactionAmount = $("#transactionAmountWithdraw").val();
                 if (+withdraw.transactionAmount > +customer.balance) {
@@ -809,10 +868,10 @@
                         title: 'Error',
                         text: 'Số tiền muốn rút nhiều hơn số tiền hiện có',
                     })
-                    $("#transactionAmountWithdraw").css("border-color", "red");
+                    page.dialogs.elements.transactionAmountWithdraw.css("border-color", "red");
                 }
                 else {
-                    doWithdraw(withdraw);
+                    page.commands.doWithdraw(withdraw);
                 }
 
             })
@@ -820,42 +879,42 @@
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Customer ID invalid',
+                        text: 'ID Khách hàng không hợp lệ',
                     })
                 });
         }
     })
 
-    function doWithdraw(obj) {
+    page.commands.doWithdraw = (obj) => {
         $.ajax({
             headers: {
                 "accept": "application/json",
                 "content-type": "application/json"
             },
             type: "POST",
-            url: "http://localhost:1502/withdraws",
+            url: page.urls.withdraw,
             data: JSON.stringify(obj)
         })
             .done((data) => {
                 customer.balance = +customer.balance - +obj.transactionAmount;
 
-                updateCustomer(customer)
+                page.commands.updateCustomer(customer)
 
-                let str = renderCustomer(customer);
+                let str = page.commands.renderCustomer(customer);
                 let updateRow = $("#tr_" + customer.id);
                 updateRow.replaceWith(str);
 
-                enableTooltip();
+                page.commands.enableTooltip();
 
-                removeHandleShowModal();
+                page.commands.removeHandleShowModal();
 
-                handleShowGroupModal();
+                page.commands.handleShowGroupModal();
 
-                $("#modalWithdraw").modal("hide");
+                page.dialogs.elements.modalWithdraw.modal("hide");
 
                 Swal.fire(
                     'Thành công',
-                    'Rút tiền thành công.',
+                    "Rút <b>'"+ obj.transactionAmount +"'</b> VNĐ của khách hàng <b>'"+ customer.fullName +"'</b> thành công",
                     'success'
                 )
             })
@@ -866,16 +925,16 @@
     //--- END WITHDRAW ---//
 
     //--- TRANSFER ---//
-    function handleShowTransferModal() {
+    page.commands.handleShowTransferModal = () => {
         $(".transfer").on("click", function () {
             let id = $(this).data("id");
-            getCustomerById(id).then((data) => {
-                $("#senderIdTransfer").val(id);
-                $("#senderNameTransfer").val(data.fullName);
-                $("#senderEmailTransfer").val(data.email);
-                $("#senderBalanceTransfer").val(data.balance);
+            page.commands.getCustomerById(id).then((data) => {
+                page.dialogs.elements.senderIdTransfer.val(id);
+                page.dialogs.elements.senderNameTransfer.val(data.fullName);
+                page.dialogs.elements.senderEmailTransfer.val(data.email);
+                page.dialogs.elements.senderBalanceTransfer.val(data.balance);
                 getCustomersWhereIdIsNot(id);
-                $("#modalTransfer").modal("show");
+                page.dialogs.elements.modalTransfer.modal("show");
             })
                 .catch(() => {
                     Swal.fire({
@@ -887,7 +946,7 @@
         })
     }
 
-    $("#btnTransfer").on("click", () => {
+    page.dialogs.elements.btnTransfer.on("click", () => {
         $("#frmTransfer").submit();
     })
 
@@ -908,18 +967,18 @@
 
         },
         submitHandler: () => {
-            let senderId = $("#senderIdTransfer").val();
-            let recipientId = $("#recipientsTransfer").val();
-            let transferAmount = $("#transferAmountTransfer").val();
+            let senderId = page.dialogs.elements.senderIdTransfer.val();
+            let recipientId = page.dialogs.elements.selectRecipientsTransfer.val();
+            let transferAmount = page.dialogs.elements.transferAmountTransfer.val();
             let fees = 10;
             let feesAmount = (+transferAmount * +fees) / 100;
             let transactionAmount = +transferAmount + feesAmount;
             let sender = new Customer();
             let recipient = new Customer();
-            getCustomerById(senderId).then((data) => {
+            page.commands.getCustomerById(senderId).then((data) => {
                 sender = data;
                 transfer.senderId = senderId;
-                getCustomerById(recipientId).then((data) => {
+                page.commands.getCustomerById(recipientId).then((data) => {
                     recipient = data;
                     transfer.recipientId = recipientId;
                     transfer.transferAmount = transferAmount;
@@ -927,7 +986,6 @@
                     transfer.feesAmount = feesAmount;
                     transfer.transactionAmount = transactionAmount;
                     if (transactionAmount < sender.balance) {
-                        console.log(transfer);
                         doTransfer(transfer, sender, recipient);
                     }
                     else {
@@ -966,28 +1024,35 @@
                 "content-type": "application/json"
             },
             type: "POST",
-            url: "http://localhost:1502/transfers",
+            url: page.urls.transfer,
             data: JSON.stringify(transferInput)
         })
             .done((data) => {
                 Promise.resolve().then(function () {
                     sender.balance = +sender.balance - +transferInput.transactionAmount;
-                    updateCustomer(sender);
-                    let str = renderCustomer(sender);
+                    page.commands.updateCustomer(sender);
+                    let str = page.commands.renderCustomer(sender);
                     let updateRow = $("#tr_" + sender.id);
                     updateRow.replaceWith(str);
+                    page.commands.enableTooltip();
+
+                    page.commands.removeHandleShowModal();
+
+                    page.commands.handleShowGroupModal();
                 }).then(function () {
                     recipient.balance = +recipient.balance + +transferInput.transferAmount;
-                    updateCustomer(recipient);
-                    let str = renderCustomer(recipient);
+                    page.commands.updateCustomer(recipient);
+                    let str = page.commands.renderCustomer(recipient);
                     let updateRow = $("#tr_" + recipient.id);
                     updateRow.replaceWith(str);
+                    page.commands.enableTooltip();
+
+                    page.commands.removeHandleShowModal();
+
+                    page.commands.handleShowGroupModal();
                 })
-                enableTooltip();
 
-                removeHandleShowModal();
 
-                handleShowGroupModal();
 
                 $("#modalTransfer").modal("hide");
 
@@ -1003,18 +1068,18 @@
     }
 
     function getCustomersWhereIdIsNot(senderId) {
-        $("#recipientsTransfer").empty();
+        page.dialogs.elements.selectRecipientsTransfer.empty();
         $.ajax({
             headers: {
                 "accept": "application/json",
                 "content-type": "application/json"
             },
             type: "GET",
-            url: "http://localhost:1502/customers/?deleted=0&id_ne=" + senderId
+            url: page.urls.getCustomersWhereIdIsNot + senderId
         })
             .done((data) => {
                 $.each(data, (i, item) => {
-                    $("#recipientsTransfer").append($('<option>',
+                    page.dialogs.elements.selectRecipientsTransfer.append($('<option>',
                         {
                             value: item.id,
                             text: item.id + " - " + item.fullName
@@ -1027,25 +1092,25 @@
             })
     }
 
-    $("#transferAmountTransfer").on("input", function () {
+    page.dialogs.elements.transferAmountTransfer.on("input", function () {
         let transferAmount = +$(this).val();
         let fees = 10;
         let feesAmount = transferAmount * fees / 100;
         let transactionAmount = transferAmount + feesAmount;
 
-        $("#transactionAmountTransfer").val(transactionAmount);
+        page.dialogs.elements.transactionAmountTransfer.val(transactionAmount);
     })
     //--- END TRANSFER ---//
 
     //--- UPDATE BALANCE ---//
-    function updateCustomer(obj) {
+    page.commands.updateCustomer = (obj) => {
         return $.ajax({
             headers: {
-                accept: "application/json",
+                "accept": "application/json",
                 "content-type": "application/json"
             },
             type: "PATCH",
-            url: "http://localhost:1502/customers/" + obj.id,
+            url: page.urls.updateCustomer + "/" + obj.id,
             data: JSON.stringify(obj)
         })
             .done((data) => {
@@ -1056,9 +1121,8 @@
     }
     //--- END UPDATE BALANCE ---//
 
-
     //--- FIND BY ID ---//
-    function getCustomerById(customerId) {
+    page.commands.getCustomerById = (customerId) => {
         return $.ajax({
             type: "GET",
             url: page.urls.getCustomerById + "/" + customerId
@@ -1072,21 +1136,24 @@
     //--- END FIND BY ID ---//
 
     //--- SHOW GROUP MODAL ---//
-    function handleShowGroupModal() {
-        handleShowUpdateModal();
+    page.commands.handleShowGroupModal = () => {
+        page.commands.handleShowCreateModal();
 
-        handleShowConfirmDelete();
+        page.commands.handleShowUpdateModal();
 
-        handleShowDepositModal();
+        page.commands.handleShowConfirmDelete();
 
-        handleShowWithdrawModal();
+        page.commands.handleShowDepositModal();
 
-        handleShowTransferModal();
+        page.commands.handleShowWithdrawModal();
+
+        page.commands.handleShowTransferModal();
     }
     //--- END SHOW GROUP MODAL ---//
 
     //--- REMOVE SHOW MODAL ---//
-    function removeHandleShowModal() {
+    page.commands.removeHandleShowModal = () => {
+        page.elements.btnShowCreateModal.off("click");
         $(".edit").off("click");
         $(".delete").off("click");
         $(".deposit").off("click");
@@ -1095,7 +1162,12 @@
     }
     //--- END REMOVE SHOW MODAL ---//
 
-    function enableTooltip() {
+    page.dialogs.commands.handleCloseCreateModal = () => {
+        page.dialogs.elements.frmCreateCustomer[0].reset();
+        page.dialogs.elements.frmCreateCustomer.validate().resetForm();
+    }
+
+    page.commands.enableTooltip = () => {
         let icons = document.querySelectorAll('[data-toggle="tooltip"]');
         icons.forEach((icon) => {
             new bootstrap.Tooltip(icon);
@@ -1103,23 +1175,22 @@
     }
 
     page.commands.loadData = () => {
-            page.commands.getAllCustomers();
+        page.commands.getAllCustomers();
     }
 
     page.initializeEventControl = () => {
-            // page.commands.handleShowCreateModal();
+        page.commands.handleShowCreateModal();
 
-            // page.dialogs.elements.modalCreateCustomer.on("hidden.bs.modal", function () {
-            //     page.dialogs.commands.handleCloseCreateModal();
-            // });
-        }
-
-       
-    $(() => {
-            page.commands.loadData();
-
-            page.initializeEventControl();
+        page.dialogs.elements.modalCreateCustomer.on("hidden.bs.modal", function () {
+            page.dialogs.commands.handleCloseCreateModal();
         });
-</script>
+    }
 
+
+    $(() => {
+        page.commands.loadData();
+
+        page.initializeEventControl();
+    });
+</script>
 </html>
