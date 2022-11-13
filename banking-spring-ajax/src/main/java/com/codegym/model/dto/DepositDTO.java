@@ -1,5 +1,6 @@
 package com.codegym.model.dto;
 
+import com.codegym.model.Deposit;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,48 +9,21 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import javax.validation.constraints.Pattern;
+import java.math.BigDecimal;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class DepositDTO implements Validator {
+public class DepositCreateDTO {
 
     private long id;
 
     private long customerId;
 
+    @Pattern(regexp = "^\\d+$", message = "Số tiền gửi phải là số")
     private String transactionAmount;
 
-    @Override
-    public boolean supports(@NotNull Class<?> aClass) {
-        return DepositDTO.class.isAssignableFrom(aClass);
-    }
-
-    @Override
-    public void validate(@NotNull Object target, @NotNull Errors errors) {
-        DepositDTO depositDTO = (DepositDTO) target;
-
-        String transactionAmount = depositDTO.getTransactionAmount();
-
-        if (transactionAmount != null && transactionAmount.length() > 0) {
-            if (transactionAmount.length() > 9){
-                errors.rejectValue("transactionAmount", "transactionAmount.max");
-                return;
-            }
-
-            if (!transactionAmount.matches("(^$|[0-9]*$)")){
-                errors.rejectValue("transactionAmount", "transactionAmount.number");
-            }
-
-            float transactionAmountFloat= Float.parseFloat(transactionAmount);
-
-            if (transactionAmountFloat % 10 > 0) {
-                errors.rejectValue("transactionAmount", "transactionAmount.decimal");
-            }
-
-        } else {
-            errors.rejectValue("transactionAmount",  "transactionAmount.null");
-        }
-    }
 }
 
