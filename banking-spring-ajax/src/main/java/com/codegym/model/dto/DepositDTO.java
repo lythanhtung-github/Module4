@@ -20,6 +20,7 @@ public class DepositDTO {
 
     private long id;
 
+//    @Pattern(regexp = "^\\d+$", message = "Số tiền gửi phải là số")
     private long customerId;
 
     @Pattern(regexp = "^\\d+$", message = "Số tiền gửi phải là số")

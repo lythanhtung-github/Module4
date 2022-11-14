@@ -21,8 +21,7 @@ public class Deposit extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-//    @ManyToOne(targetEntity = Customer.class, fetch = FetchType.EAGER)
-    @ManyToOne
+    @ManyToOne(targetEntity = Customer.class)
     @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
     private Customer customer;
 

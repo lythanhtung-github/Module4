@@ -21,11 +21,11 @@ public class Transfer extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne(targetEntity = Customer.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Customer.class)
     @JoinColumn(name = "sender_id", referencedColumnName = "id", nullable = false)
     private Customer sender;
 
-    @ManyToOne(targetEntity = Customer.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Customer.class)
     @JoinColumn(name = "recipient_id", referencedColumnName = "id", nullable = false)
     private Customer recipient;
 

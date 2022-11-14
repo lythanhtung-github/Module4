@@ -292,6 +292,19 @@
                 required: "Vui lòng nhập số điện thoại đầy đủ"
             }
         },
+        errorLabelContainer: "#modalCreateCustomer .modal-body .modal-alert-danger",
+        errorPlacement: function (error, element) {
+            error.appendTo("#modalCreateCustomer .modal-body .modal-alert-danger");
+        },
+        showErrors: function (errorMap, errorList) {
+            if (this.numberOfInvalids() > 0) {
+                $("#modalCreateCustomer .modal-body .modal-alert-danger").removeClass("hide").addClass("show");
+            } else {
+                $("#modalCreateCustomer .modal-body .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                $("#modalCreateCustomer input.error").removeClass("error");
+            }
+            this.defaultShowErrors();
+        },
         submitHandler: function () {
             customer.fullName = page.dialogs.elements.fullNameCre.val();
             customer.email = page.dialogs.elements.emailCre.val();
@@ -388,6 +401,19 @@
                 required: "Vui lòng nhập số điện thoại đầy đủ"
             }
         },
+        errorLabelContainer: "#modalUpdateCustomer .modal-body .modal-alert-danger",
+        errorPlacement: function (error, element) {
+            error.appendTo("#modalUpdateCustomer .modal-body .modal-alert-danger");
+        },
+        showErrors: function (errorMap, errorList) {
+            if (this.numberOfInvalids() > 0) {
+                $("#modalUpdateCustomer .modal-body .modal-alert-danger").removeClass("hide").addClass("show");
+            } else {
+                $("#modalUpdateCustomer .modal-body .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                $("#modalUpdateCustomer input.error").removeClass("error");
+            }
+            this.defaultShowErrors();
+        },
         submitHandler: function () {
             customer.id = page.dialogs.elements.customerIdUp.val();
             customer.fullName = page.dialogs.elements.fullNameUp.val();
@@ -433,8 +459,8 @@
     //--- DELETE CUSTOMER ---//
     page.commands.handleShowConfirmDelete = () => {
         $(".delete").on("click", function () {
-            let customerId = $(this).data("id");
-            page.commands.getCustomerById(customerId).then(() => {
+            let id = $(this).data("id");
+            page.commands.getCustomerById(id).then(() => {
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -445,7 +471,7 @@
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        page.commands.doDeleteCustomer(customer.id)
+                        page.commands.doDeleteCustomer(id)
                     }
                 })
             })

@@ -12,40 +12,40 @@ import org.springframework.validation.Validator;
 @AllArgsConstructor
 @Getter
 @Setter
-//public class WithdrawDTO implements Validator {
-public class WithdrawDTO {
+public class WithdrawDTO implements Validator {
+//public class WithdrawDTO {
     private Long id;
     private Long customerId;
     private String transactionAmount;
 
-//    @Override
-//    public boolean supports(@NotNull Class<?> aClass) {
-//        return WithdrawDTO.class.isAssignableFrom(aClass);
-//    }
-//
-//    @Override
-//    public void validate(@NotNull Object target, @NotNull Errors errors) {
-//        WithdrawDTO withdrawDTO = (WithdrawDTO) target;
-//        String transactionAmount = withdrawDTO.getTransactionAmount();
-//        if (transactionAmount != null && transactionAmount.length() > 0) {
-//            if (transactionAmount.length() > 9){
-//                errors.rejectValue("transactionAmount", "transactionAmount.max");
-//                return;
-//            }
-//
-//            if (!transactionAmount.matches("(^$|[0-9]*$)")){
-//                errors.rejectValue("transactionAmount", "transactionAmount.number");
-//            }
-//
-//            float transactionAmountFloat= Float.parseFloat(transactionAmount);
-//
-//            if (transactionAmountFloat % 10 > 0) {
-//                errors.rejectValue("transactionAmount", "transactionAmount.decimal");
-//            }
-//
-//        } else {
-//            errors.rejectValue("transactionAmount",  "transactionAmount.null");
-//        }
-//    }
+    @Override
+    public boolean supports(@NotNull Class<?> aClass) {
+        return WithdrawDTO.class.isAssignableFrom(aClass);
+    }
+
+    @Override
+    public void validate(@NotNull Object target, @NotNull Errors errors) {
+        WithdrawDTO withdrawDTO = (WithdrawDTO) target;
+        String transactionAmount = withdrawDTO.getTransactionAmount();
+        if (transactionAmount != null && transactionAmount.length() > 0) {
+            if (transactionAmount.length() > 9){
+                errors.rejectValue("transactionAmount", "transactionAmount.max");
+                return;
+            }
+
+            if (!transactionAmount.matches("(^$|[0-9]*$)")){
+                errors.rejectValue("transactionAmount", "transactionAmount.number");
+            }
+
+            float transactionAmountFloat= Float.parseFloat(transactionAmount);
+
+            if (transactionAmountFloat % 10 > 0) {
+                errors.rejectValue("transactionAmount", "transactionAmount.decimal");
+            }
+
+        } else {
+            errors.rejectValue("transactionAmount",  "transactionAmount.null");
+        }
+    }
 }
 

@@ -36,16 +36,16 @@ public class Customer extends BaseEntity {
     @Column(precision = 12, scale = 0, nullable = false, updatable = false)
     private BigDecimal balance;
 
-    @OneToMany(targetEntity = Deposit.class, mappedBy = "customer", fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Deposit.class, mappedBy = "customer")
     private Set<Deposit> deposits;
 
-    @OneToMany(targetEntity = Withdraw.class, mappedBy = "customer", fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Withdraw.class, mappedBy = "customer")
     private Set<Withdraw> withdraws;
 
-    @OneToMany(targetEntity = Transfer.class, mappedBy = "sender", fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Transfer.class, mappedBy = "sender")
     private Set<Transfer> senders;
 
-    @OneToMany(targetEntity = Transfer.class, mappedBy = "recipient", fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Transfer.class, mappedBy = "recipient")
     private Set<Transfer> recipients;
 
     public CustomerDTO toCustomerDTO () {
