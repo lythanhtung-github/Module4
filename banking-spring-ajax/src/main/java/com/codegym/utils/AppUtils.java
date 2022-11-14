@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class AppUtil {
+public class AppUtils {
 
     public ResponseEntity<?> mapErrorToResponse(BindingResult result) {
         List<FieldError> fieldErrors = result.getFieldErrors();

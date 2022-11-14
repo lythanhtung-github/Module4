@@ -4,7 +4,7 @@ import com.codegym.model.Customer;
 import com.codegym.model.Deposit;
 import com.codegym.model.Transfer;
 import com.codegym.model.Withdraw;
-import com.codegym.model.dto.ICustomerDTO;
+import com.codegym.model.dto.CustomerDTO;
 import com.codegym.service.IGeneralService;
 import org.springframework.data.repository.query.Param;
 
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ICustomerService extends IGeneralService<Customer> {
-    List<Customer> findAllByDeletedIsFalse();
+    List<CustomerDTO> findAllICustomerDTOByDeletedIsFalse();
 
     List<Customer> findAllByIdNot(long id);
 
@@ -29,10 +29,6 @@ public interface ICustomerService extends IGeneralService<Customer> {
     Customer transfer(Transfer transfer);
 
     void softDelete(@Param("customerId") long customerId);
-
-    List<ICustomerDTO> getAllICustomerDTOByDeletedIsFalse();
-
-    List<Customer> getAllCustomerByDeletedIsFalse();
 
 //    List<RecipientDTO> getAllRecipientDTO(long senderId);
 

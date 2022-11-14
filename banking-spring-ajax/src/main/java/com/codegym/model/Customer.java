@@ -1,5 +1,6 @@
 package com.codegym.model;
 
+import com.codegym.model.dto.CustomerDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,12 +18,12 @@ import java.util.Set;
 @Entity
 @Table(name = "customers")
 @Accessors(chain = true)
-public class Customer extends BaseEntity{
+public class Customer extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "full_name")
+    @Column(name = "full_name", nullable = false)
     private String fullName;
 
     @Column(unique = true, nullable = false)
@@ -35,16 +36,25 @@ public class Customer extends BaseEntity{
     @Column(precision = 12, scale = 0, nullable = false, updatable = false)
     private BigDecimal balance;
 
-
-    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Deposit.class, mappedBy = "customer", fetch = FetchType.EAGER)
     private Set<Deposit> deposits;
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Withdraw.class, mappedBy = "customer", fetch = FetchType.EAGER)
     private Set<Withdraw> withdraws;
 
-    @OneToMany(mappedBy = "sender", fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Transfer.class, mappedBy = "sender", fetch = FetchType.EAGER)
     private Set<Transfer> senders;
 
-    @OneToMany(mappedBy = "recipient", fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Transfer.class, mappedBy = "recipient", fetch = FetchType.EAGER)
     private Set<Transfer> recipients;
+
+    public CustomerDTO toCustomerDTO () {
+        return new CustomerDTO()
+                .setId(id)
+                .setFullName(fullName)
+                .setEmail(email)
+                .setPhone(phone)
+                .setAddress(address)
+                .setBalance(balance.toString());
+    }
 }

@@ -6,7 +6,7 @@
       "email": "lythanhtung@gmail.com",
       "phone": "0987987987",
       "address": "Thừa Thiên Huế",
-      "balance": 2290000,
+      "balance": 2390000,
       "deleted": 0
     },
     {
@@ -528,7 +528,7 @@
       "email": "qelyqopuw@mailinator.com",
       "phone": "0987332434",
       "address": "Dolore cillum conseq",
-      "balance": 0,
+      "balance": 390000,
       "deleted": 0
     }
   ],
@@ -813,6 +813,11 @@
       "customerId": "58",
       "transactionAmount": "100000",
       "id": 56
+    },
+    {
+      "customerId": "59",
+      "transactionAmount": "500000",
+      "id": 57
     }
   ],
   "withdraws": [
@@ -1200,6 +1205,15 @@
       "transactionAmount": 110000,
       "recipientId": "1",
       "id": 32
+    },
+    {
+      "senderId": "59",
+      "transferAmount": "100000",
+      "fees": 10,
+      "feesAmount": 10000,
+      "transactionAmount": 110000,
+      "recipientId": "1",
+      "id": 33
     }
   ]
 }

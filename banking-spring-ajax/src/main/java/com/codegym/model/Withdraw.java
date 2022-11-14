@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "withdraws")
 @Accessors(chain = true)
-public class Withdraw extends BaseEntity{
+public class Withdraw extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

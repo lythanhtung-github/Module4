@@ -1,7 +1,7 @@
 package com.codegym.repository;
 
 import com.codegym.model.Customer;
-import com.codegym.model.dto.ICustomerDTO;
+import com.codegym.model.dto.CustomerDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,9 +14,24 @@ import java.util.Optional;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
-    List<Customer> findAllByDeletedIsFalse();
+
+    @Query("SELECT NEW com.codegym.model.dto.CustomerDTO (" +
+                "c.id, " +
+                "c.fullName, " +
+                "c.email, " +
+                "c.phone, " +
+                "c.address, " +
+                "c.balance " +
+            ") " +
+            "FROM Customer AS c " +
+            "WHERE c.deleted = false"
+    )
+    List<CustomerDTO> getAllICustomerDTOByDeletedIsFalse();
+
     List<Customer> findAllByIdNot(long id);
+
     Optional<Customer> findByEmail(String email);
+
     Optional<Customer> findByEmailAndIdIsNot(String email, Long id);
 
     @Modifying
@@ -37,6 +52,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     @Query("UPDATE Customer AS c SET c.deleted = true WHERE c.id = :customerId")
     void softDelete(@Param("customerId") long customerId);
 
-    List<ICustomerDTO> getAllICustomerDTOByDeletedIsFalse();
-    List<Customer> getAllICustomerByDeletedIsFalse();
+
 }

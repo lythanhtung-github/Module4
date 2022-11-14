@@ -4,7 +4,7 @@ import com.codegym.model.Customer;
 import com.codegym.model.Deposit;
 import com.codegym.model.Transfer;
 import com.codegym.model.Withdraw;
-import com.codegym.model.dto.ICustomerDTO;
+import com.codegym.model.dto.CustomerDTO;
 import com.codegym.repository.CustomerRepository;
 import com.codegym.repository.DepositRepository;
 import com.codegym.repository.TransferRepository;
@@ -34,10 +34,9 @@ public class CustomerServiceImpl implements ICustomerService {
     private TransferRepository transferRepository;
 
     @Override
-    public List<Customer> findAllByDeletedIsFalse() {
-        return customerRepository.findAllByDeletedIsFalse();
+    public List<CustomerDTO> findAllICustomerDTOByDeletedIsFalse(){
+        return customerRepository.getAllICustomerDTOByDeletedIsFalse();
     }
-
 
     @Override
     public List<Customer> findAll() {
@@ -80,17 +79,16 @@ public class CustomerServiceImpl implements ICustomerService {
         BigDecimal transactionAmount = deposit.getTransactionAmount();
 
         try {
-
             customerRepository.incrementBalance(transactionAmount, customer.getId());
+
             deposit.setId(0L);
             deposit.setCustomer(customer);
             depositRepository.save(deposit);
 
             Optional<Customer> newCustomer = customerRepository.findById(customer.getId());
-
             return newCustomer.get();
         } catch (Exception e) {
-            e.printStackTrace();
+               e.printStackTrace();
             customer.setBalance(currentBalance);
             return customer;
         }
@@ -145,16 +143,6 @@ public class CustomerServiceImpl implements ICustomerService {
     @Override
     public void softDelete(long customerId) {
         customerRepository.softDelete(customerId);
-    }
-
-    @Override
-    public List<ICustomerDTO> getAllICustomerDTOByDeletedIsFalse() {
-        return customerRepository.getAllICustomerDTOByDeletedIsFalse();
-    }
-
-    @Override
-    public List<Customer> getAllCustomerByDeletedIsFalse() {
-        return customerRepository.getAllICustomerByDeletedIsFalse();
     }
 
 //    @Override

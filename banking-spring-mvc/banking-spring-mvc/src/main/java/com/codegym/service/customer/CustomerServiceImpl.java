@@ -25,7 +25,6 @@ public class CustomerServiceImpl implements ICustomerService {
     private DepositRepository depositRepository;
     @Autowired
     private WithdrawRepository withdrawRepository;
-
     @Autowired
     private TransferRepository transferRepository;
 

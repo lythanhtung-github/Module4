@@ -69,9 +69,12 @@ thead {
     color: white;
 }
 
-label.error {
-    display: inline-block;
-    color:red;
+.modal-alert-danger {
+    padding: 10px 35px;
+    margin-bottom: 15px;
+    color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
 }
 
 input:read-only {

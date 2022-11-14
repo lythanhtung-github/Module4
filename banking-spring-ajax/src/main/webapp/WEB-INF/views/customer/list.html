@@ -67,11 +67,11 @@
 <script>
     const page = {
         urls: {
-            getAllCustomers: App.CUSTOMER_API + "?deleted=0",
+            getAllCustomers: App.CUSTOMER_API,
             getCustomerById: App.CUSTOMER_API,
             createCustomer: App.CUSTOMER_API,
             updateCustomer: App.CUSTOMER_API,
-            deleteCustomer: App.CUSTOMER_API,
+            deleteCustomer: App.CUSTOMER_API + "/delete",
             getCustomersWhereIdIsNot: App.CUSTOMER_API + "?deleted=0&id_ne=",
             deposit: App.DEPOSIT_API,
             withdraw: App.WITHDRAW_API,
@@ -138,6 +138,12 @@
     page.dialogs.elements.transactionAmountTransfer = $("#transactionAmountTransfer");
     page.dialogs.elements.btnTransfer = $("#btnTransfer");
 
+    page.dialogs.alertDanger.modalCreateCustomer = $("#modalCreateCustomer .modal-body .modal-alert-danger");
+    page.dialogs.alertDanger.modalUpdateCustomer = $("#modalUpdateCustomer .modal-body .modal-alert-danger");
+    page.dialogs.alertDanger.modalDeposit = $("#modalDeposit .modal-body .modal-alert-danger");
+    page.dialogs.alertDanger.modalWithdraw = $("#modalWithdraw .modal-body .modal-alert-danger");
+    page.dialogs.alertDanger.modalTransfer = $("#modalTransfer .modal-body .modal-alert-danger");
+
     let customer = new Customer();
     let deposit = new Deposit();
     let withdraw = new Withdraw();
@@ -154,7 +160,7 @@
             url: page.urls.getAllCustomers
         })
             .done((data) => {
-                data.map(item => {
+                $.each(data, (i, item) => {
                     page.elements.tbCustomerBody.prepend(page.commands.renderCustomer(item));
                 });
 
@@ -170,14 +176,19 @@
     }
 
     page.commands.renderCustomer = (obj) => {
-        let str = `
+        return `
                 <tr id="tr_${obj.id}">
                     <td>${obj.id}</td>
                     <td>${obj.fullName}</td>
                     <td>${obj.email}</td>
                     <td>${obj.phone}</td>
                     <td>${obj.address}</td>
-                    <td class="text-end">${obj.balance}</td>
+                     <td class="text-end">
+                            ${new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+        }).format(obj.balance)}
+                    </td>
                     <td class="text-center">
                         <button data-id="${obj.id}"
                                 class="btn btn btn-outline-dark update"
@@ -221,7 +232,7 @@
                         </button>
                     </td>
                     <td>
-                        <button data-id="${obj.id}"
+                          <button data-id="${obj.id}"
                                 class="btn btn-outline-danger delete"
                                 title="Suspended"
                                 data-toggle="tooltip"
@@ -232,7 +243,6 @@
                     </td>
                 </tr>
             `;
-        return str;
     }
     // END SHOW //
 
@@ -333,11 +343,8 @@
                 page.dialogs.elements.phoneUp.val(data.phone);
                 page.dialogs.elements.addressUp.val(data.address);
 
-                page.dialogs.elements.modalUpdateCustomer.modal("show");
+                page.dialogs.elements.modalUpdateCustomer.modal('show');
             })
-                .catch(() => {
-                    alert('ID khách hàng không hợp lệ.');
-                });
         })
     }
 
@@ -438,19 +445,10 @@
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        customer.deleted = 1;
                         page.commands.doDeleteCustomer(customer.id)
                     }
                 })
-                    .catch(() => {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'ID Khách hàng không hợp lệ',
-                        })
-                    })
             })
-
         });
     }
 
@@ -460,11 +458,11 @@
                 "accept": "application/json",
                 "content-type": "application/json"
             },
-            type: "PATCH",
+            type: "DELETE",
             url: page.urls.deleteCustomer + "/" + customerId,
             data: JSON.stringify(customer)
         })
-            .done((data) => {
+            .done(() => {
                 $("#tr_" + customerId).remove();
                 Swal.fire(
                     'Deleted!',
@@ -472,12 +470,20 @@
                     'success'
                 )
             })
-            .fail((error) => {
-                console.log(error);
+            .fail((jqXHR) => {
+                let errors = jqXHR.responseJSON;
+                let strError = "";
+                if (errors) {
+                    $.each(errors, (k, v) => {
+                        strError += `
+                            ${v}
+                        `;
+                    })
+                }
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Something went wrong!',
+                    text: strError,
                 })
             })
     }
@@ -494,13 +500,6 @@
                 page.dialogs.elements.transactionAmountDeposit.val(0);
                 page.dialogs.elements.modalDeposit.modal("show");
             })
-                .catch(() => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'ID khách hàng không hợp lệ.',
-                    })
-                });
         })
     }
 
@@ -513,7 +512,7 @@
             transactionAmountDeposit: {
                 required: true,
                 min: 100000,
-                max: 1000000000
+                max: 10000000000
             }
         },
         messages: {
@@ -522,27 +521,32 @@
                 min: "Giá trị nhỏ nhất là 100.000 VNĐ",
                 max: "Giá trị lớn nhất là 1.000.000.000 VNĐ"
             }
-
+        },
+        errorLabelContainer: "#modalDeposit .modal-body .modal-alert-danger",
+        errorPlacement: function (error, element) {
+            error.appendTo("#modalDeposit .modal-body .modal-alert-danger");
+        },
+        showErrors: function (errorMap, errorList) {
+            if (this.numberOfInvalids() > 0) {
+                $("#modalDeposit .modal-body .modal-alert-danger").removeClass("hide").addClass("show");
+            } else {
+                $("#modalDeposit .modal-body .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                $("#modalDeposit input.error").removeClass("error");
+            }
+            this.defaultShowErrors();
         },
         submitHandler: function () {
-            let customerId = page.dialogs.elements.customerIdDeposit.val();
-            page.commands.getCustomerById(customerId).then((data) => {
-                customer = data;
-                deposit.customerId = customerId;
-                deposit.transactionAmount = page.dialogs.elements.transactionAmountDeposit.val();
-                doDeposit(deposit);
+            let id = page.dialogs.elements.customerIdDeposit.val();
+            page.commands.getCustomerById(id).then((data) => {
+                deposit.id = 0;
+                deposit.customerId = data.id;
+                deposit.transactionAmount =  page.dialogs.elements.transactionAmountDeposit.val();
+                page.commands.doDeposit(deposit);
             })
-                .catch(() => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'ID khách hàng không hợp lệ.',
-                    })
-                });
         }
     })
 
-    function doDeposit(obj) {
+    page.commands.doDeposit = (obj) => {
         $.ajax({
             headers: {
                 "accept": "application/json",
@@ -553,12 +557,8 @@
             data: JSON.stringify(obj)
         })
             .done((data) => {
-                customer.balance = +customer.balance + +obj.transactionAmount;
-
-                page.commands.updateCustomer(customer);
-
-                let str = page.commands.renderCustomer(customer);
-                let updateRow = $("#tr_" + customer.id);
+                let str = page.commands.renderCustomer(data);
+                let updateRow = $("#tr_" + data.id);
                 updateRow.replaceWith(str);
 
                 page.commands.enableTooltip();
@@ -571,7 +571,7 @@
 
                 Swal.fire(
                     'Thành công',
-                    "Nạp thành công <b>'" + obj.transactionAmount + "'</b> VNĐ cho khách hàng <b>'" + customer.fullName + "'</b>",
+                    "Nạp <b>'" + obj.transactionAmount + "'</b> VNĐ cho khách hàng <b>'" + data.fullName + "'</b> thành công",
                     'success'
                 )
             })
@@ -579,7 +579,6 @@
                 console.error(error);
             })
     }
-
     //--- END DEPOSIT ---//
 
     //---- WITHDRAW ---//
@@ -593,13 +592,6 @@
                 page.dialogs.elements.transactionAmountWithdraw.val(0);
                 page.dialogs.elements.modalWithdraw.modal("show");
             })
-                .catch(() => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'ID khách hàng không hợp lệ',
-                    })
-                });
         })
     }
 
@@ -621,32 +613,49 @@
                 min: "Giá trị nhỏ nhất là 100.000 VNĐ",
                 max: "Giá trị lớn nhất là 1.000.000.000 VNĐ"
             }
-
+        },
+        errorLabelContainer: "#modalWithdraw .modal-body .modal-alert-danger",
+        errorPlacement: function (error, element) {
+            error.appendTo("#modalWithdraw .modal-body .modal-alert-danger");
+        },
+        showErrors: function (errorMap, errorList) {
+            if (this.numberOfInvalids() > 0) {
+                $("#modalWithdraw .modal-body .modal-alert-danger").removeClass("hide").addClass("show");
+            } else {
+                $("#modalWithdraw .modal-body .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                $("#modalWithdraw input.error").removeClass("error");
+            }
+            this.defaultShowErrors();
         },
         submitHandler: function () {
             customer.id = page.dialogs.elements.customerIdWithdraw.val();
             page.commands.getCustomerById(customer.id).then((data) => {
-                withdraw.customerId = customer.id;
-                withdraw.transactionAmount = $("#transactionAmountWithdraw").val();
-                if (+withdraw.transactionAmount > +customer.balance) {
+                withdraw.id = 0;
+                withdraw.customerId = data.id;
+                withdraw.transactionAmount =  page.dialogs.elements.transactionAmountWithdraw.val();
+                if (+withdraw.transactionAmount > +data.balance) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
                         text: 'Số tiền muốn rút nhiều hơn số tiền hiện có',
                     })
-                    page.dialogs.elements.transactionAmountWithdraw.css("border-color", "red");
                 } else {
                     page.commands.doWithdraw(withdraw);
                 }
 
             })
-                .catch(() => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'ID Khách hàng không hợp lệ',
-                    })
-                });
+                .fail((jqXHR) => {
+                    let errors = jqXHR.responseJSON;
+                    if (errors) {
+                        let str = "";
+                        $.each(errors, (k, v) => {
+                            str += `
+                            <li><label for="${k + 'Withdraw'}">${v}</label></li>
+                        `;
+                        })
+                        page.dialogs.alertDanger.modalWithdraw.append(str);
+                    }
+                })
         }
     })
 
@@ -661,12 +670,8 @@
             data: JSON.stringify(obj)
         })
             .done((data) => {
-                customer.balance = +customer.balance - +obj.transactionAmount;
-
-                page.commands.updateCustomer(customer)
-
-                let str = page.commands.renderCustomer(customer);
-                let updateRow = $("#tr_" + customer.id);
+                let str = page.commands.renderCustomer(data);
+                let updateRow = $("#tr_" + data.id);
                 updateRow.replaceWith(str);
 
                 page.commands.enableTooltip();
@@ -679,7 +684,7 @@
 
                 Swal.fire(
                     'Thành công',
-                    "Rút <b>'" + obj.transactionAmount + "'</b> VNĐ của khách hàng <b>'" + customer.fullName + "'</b> thành công",
+                    "Rút <b>'" + obj.transactionAmount + "'</b> VNĐ của khách hàng <b>'" + data.fullName + "'</b> thành công",
                     'success'
                 )
             })
@@ -698,16 +703,9 @@
                 page.dialogs.elements.senderNameTransfer.val(data.fullName);
                 page.dialogs.elements.senderEmailTransfer.val(data.email);
                 page.dialogs.elements.senderBalanceTransfer.val(data.balance);
-                getCustomersWhereIdIsNot(id);
+                page.commands.getCustomersWhereIdIsNot(id);
                 page.dialogs.elements.modalTransfer.modal("show");
             })
-                .catch(() => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'ID người gửi không hợp lệ',
-                    })
-                });
         })
     }
 
@@ -725,11 +723,23 @@
         },
         messages: {
             transferAmountTransfer: {
-                required: "Vui lòng nhập số tiền",
-                min: "Giá trị nhỏ nhất là 100.000 VNĐ",
-                max: "Giá trị lớn nhất là 1.000.000.000 VNĐ"
+                required: '<label for="transferAmountTransfer">Vui lòng nhập số tiền</label>',
+                min: '<label for="transferAmountTransfer">Giá trị nhỏ nhất là 100.000 VNĐ</label>',
+                max: '<label for="transferAmountTransfer">Giá trị lớn nhất là 1.000.000.000 VNĐ</label>',
             }
-
+        },
+        errorLabelContainer: "#modalTransfer .modal-body .modal-alert-danger",
+        errorPlacement: function (error, element) {
+            error.appendTo("#modalTransfer .modal-body .modal-alert-danger");
+        },
+        showErrors: function (errorMap, errorList) {
+            if (this.numberOfInvalids() > 0) {
+                $("#modalTransfer .modal-body .modal-alert-danger").removeClass("hide").addClass("show");
+            } else {
+                $("#modalTransfer .modal-body .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                $("#modalTransfer input.error").removeClass("error");
+            }
+            this.defaultShowErrors();
         },
         submitHandler: () => {
             let senderId = page.dialogs.elements.senderIdTransfer.val();
@@ -766,8 +776,6 @@
                                 text: 'Số tiền muốn chuyển lớn hơn số tiền có trong tài khoản',
                             })
                         }
-
-
                     })
                         .catch(() => {
                             Swal.fire({
@@ -776,13 +784,12 @@
                                 text: 'ID người nhận không hợp lệ',
                             })
                         });
-
                 })
                     .catch(() => {
                         Swal.fire({
                             icon: 'error',
                             title: 'Oops...',
-                            text: 'Sender ID invalid',
+                            text: 'ID người gửi không hợp lệ',
                         })
                     });
             }
@@ -826,7 +833,6 @@
                     page.commands.handleShowGroupModal();
                 })
 
-
                 $("#modalTransfer").modal("hide");
 
                 Swal.fire(
@@ -840,7 +846,7 @@
             })
     }
 
-    function getCustomersWhereIdIsNot(senderId) {
+    page.commands.getCustomersWhereIdIsNot = (senderId) => {
         page.dialogs.elements.selectRecipientsTransfer.empty();
         $.ajax({
             headers: {
@@ -858,7 +864,6 @@
                             text: item.id + " - " + item.fullName
                         }));
                 })
-
             })
             .fail((error) => {
                 console.log(error);
@@ -900,10 +905,21 @@
             type: "GET",
             url: page.urls.getCustomerById + "/" + customerId
         }).done((data) => {
-            customer = data;
+
         })
-            .fail((error) => {
-                console.error(error);
+            .fail((jqXHR) => {
+                let errors = jqXHR.responseJSON;
+                let strError = "";
+                if (errors) {
+                    $.each(errors, (k, v) => {
+                        strError += `${v}`;
+                    })
+                }
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: strError,
+                })
             })
     }
     //--- END FIND BY ID ---//
@@ -936,21 +952,36 @@
     //--- END REMOVE SHOW MODAL ---//
 
     page.dialogs.commands.handleCloseCreateModal = () => {
+        page.dialogs.alertDanger.modalCreateCustomer = $("#modalCreateCustomer .modal-body .modal-alert-danger");
+        page.dialogs.elements.frmCreateCustomer.find("input.error").removeClass("error");
         page.dialogs.elements.frmCreateCustomer[0].reset();
         page.dialogs.elements.frmCreateCustomer.validate().resetForm();
     }
 
+    page.dialogs.commands.handleCloseUpdateModal = () => {
+        page.dialogs.alertDanger.modalUpdateCustomer = $("#modalUpdateCustomer .modal-body .modal-alert-danger");
+        page.dialogs.elements.frmUpdateCustomer.find("input.error").removeClass("error");
+        page.dialogs.elements.frmUpdateCustomer[0].reset();
+        page.dialogs.elements.frmUpdateCustomer.validate().resetForm();
+    }
+
     page.dialogs.commands.handleCloseDepositModal = () => {
+        page.dialogs.alertDanger.modalDeposit = $("#modalDeposit .modal-body .modal-alert-danger");
+        page.dialogs.elements.frmDeposit.find("input.error").removeClass("error");
         page.dialogs.elements.frmDeposit[0].reset();
         page.dialogs.elements.frmDeposit.validate().resetForm();
     }
 
     page.dialogs.commands.handleCloseWithdrawModal = () => {
+        page.dialogs.alertDanger.modalWithdraw = $("#modalWithdraw .modal-body .modal-alert-danger");
+        page.dialogs.elements.frmWithdraw.find("input.error").removeClass("error");
         page.dialogs.elements.frmWithdraw[0].reset();
         page.dialogs.elements.frmWithdraw.validate().resetForm();
     }
 
     page.dialogs.commands.handleCloseTransferModal = () => {
+        page.dialogs.alertDanger.modalTransfer = $("#modalTransfer .modal-body .modal-alert-danger");
+        page.dialogs.elements.frmTransfer.find("input.error").removeClass("error");
         page.dialogs.elements.frmTransfer[0].reset();
         page.dialogs.elements.frmTransfer.validate().resetForm();
     }
@@ -967,10 +998,14 @@
     }
 
     page.initializeEventControl = () => {
-        // page.commands.handleShowCreateModal();
+        page.commands.handleShowGroupModal();
 
         page.dialogs.elements.modalCreateCustomer.on("hidden.bs.modal", function () {
             page.dialogs.commands.handleCloseCreateModal();
+        });
+
+        page.dialogs.elements.modalUpdateCustomer.on("hidden.bs.modal", function () {
+            page.dialogs.commands.handleCloseUpdateModal();
         });
 
         page.dialogs.elements.modalDeposit.on("hidden.bs.modal", function () {
@@ -988,7 +1023,6 @@
 
     $(() => {
         page.commands.loadData();
-
         page.initializeEventControl();
     });
 </script>

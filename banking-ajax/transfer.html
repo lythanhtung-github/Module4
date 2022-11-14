@@ -21,7 +21,6 @@
                     <h1>Transfer money Information</h1>
                 </div>
                 <div class="col-sm-6">
-
                     <a class="btn btn-outline-light" href="index.html">
                         <i class="fa-solid fa-clock-rotate-left"></i>
                         List of customers
@@ -77,10 +76,36 @@
     page.elements.tbTransfer = $("#tbTransfer");
     page.elements.tbTransferBody = $("#tbTransfer tbody");
 
+
+    let customers = new Customer();
+    let transfer = new Transfer();
     // SHOW CUSTOMERS //
+
+    page.commands.getCustomerName = (id) => {
+        page.commands.getCustomerById(id).then((data) => {
+            console.log(data.fullName);
+            return data.fullName;
+            
+        })
+    }
+
+    page.commands.getCustomerById = (customerId) => {
+        return $.ajax({
+            type: "GET",
+            url: page.urls.getCustomerById + "/" + customerId
+        })
+        // .done((data) => {
+        // })
+        // .fail((error) => {
+        //     console.error(error);
+        // })
+    }
+
+
     page.commands.getAllTransfers = () => {
         $.ajax({
             headers: {
+            
                 "accept": "application/json",
                 "content-type": "application/json"
             },
@@ -102,7 +127,7 @@
                 <tr>
                     <td class="text-center">${obj.id}</td>
                     <td class="text-center">${obj.senderId}</td>
-                    <td class = "text-center"></td>
+                    <td class = "text-center">${page.commands.getCustomerName(obj.senderId)}</td>
                     <td class ="text-center">${obj.recipientId}</td>
                     <td class = "text-center"></td>
                     <td class="text-end">${obj.transferAmount}</td>
@@ -113,19 +138,6 @@
         return str;
     }
     // END SHOW //
-
-    page.commands.getCustomerById = (customerId) => {
-        return $.ajax({
-            type: "GET",
-            url: page.urls.getCustomerById + "/" + customerId
-        })
-            .done((data) => {
-
-            })
-            .fail((error) => {
-                console.error(error);
-            })
-    }
 
     page.commands.loadData = () => {
         page.commands.getAllTransfers();

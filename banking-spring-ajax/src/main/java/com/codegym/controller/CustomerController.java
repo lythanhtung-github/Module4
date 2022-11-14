@@ -3,7 +3,7 @@ package com.codegym.controller;
 import com.codegym.model.Customer;
 import com.codegym.model.Deposit;
 import com.codegym.model.Transfer;
-import com.codegym.model.dto.DepositDTO;
+import com.codegym.model.dto.CustomerDTO;
 import com.codegym.service.customer.ICustomerService;
 import com.codegym.service.deposit.IDepositService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/customers")
+@RequestMapping({"/customers",""})
 public class CustomerController {
 
     @Autowired
@@ -33,57 +33,9 @@ public class CustomerController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("customer/list");
 
-        List<Customer> customers = customerService.findAllByDeletedIsFalse();
+        List<CustomerDTO> customers = customerService.findAllICustomerDTOByDeletedIsFalse();
 
         modelAndView.addObject("customers", customers);
-
-        return modelAndView;
-    }
-
-    @GetMapping("/create")
-    public ModelAndView showCreatePage() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("customer/create");
-
-        Customer customer = new Customer();
-        modelAndView.addObject("customer", customer);
-
-        return modelAndView;
-    }
-
-    @GetMapping("/edit/{customerId}")
-    public ModelAndView showUpdatePage(@PathVariable long customerId) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("customer/update");
-
-        Optional<Customer> customerOptional = customerService.findById(customerId);
-
-        if (!customerOptional.isPresent()){
-            modelAndView.addObject("error", true);
-        }
-
-        Customer customer = customerOptional.get();
-
-        modelAndView.addObject("customer", customer);
-
-        return modelAndView;
-    }
-
-    @GetMapping("/deposit/{customerId}")
-    public ModelAndView showDepositPage(@PathVariable long customerId) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("customer/deposit");
-
-        Optional<Customer> customerOptional = customerService.findById(customerId);
-
-        if (!customerOptional.isPresent()) {
-            modelAndView.addObject("error", true);
-        }
-        else {
-            Deposit deposit = new Deposit();
-            modelAndView.addObject("deposit", deposit);
-            modelAndView.addObject("customer", customerOptional.get());
-        }
 
         return modelAndView;
     }
@@ -106,88 +58,6 @@ public class CustomerController {
             modelAndView.addObject("transfer", transfer);
             modelAndView.addObject("recipients", recipients);
             modelAndView.addObject("sender", customerOptional.get());
-        }
-
-        return modelAndView;
-    }
-
-    @PostMapping("/create")
-    public ModelAndView doCreate(@Validated @ModelAttribute Customer customer, BindingResult bindingResult) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("customer/create");
-
-        if (bindingResult.hasFieldErrors()) {
-            modelAndView.addObject("error", true);
-            return modelAndView;
-        }
-
-        try {
-            customer.setId(0L);
-            customer.setBalance(new BigDecimal(0L));
-            customerService.save(customer);
-
-            modelAndView.addObject("customer", new Customer());
-            modelAndView.addObject("success", true);
-        } catch (Exception e) {
-            modelAndView.addObject("error", true);
-        }
-
-        return modelAndView;
-    }
-
-    @PostMapping("/edit/{customerId}")
-    public ModelAndView doUpdate(@PathVariable long customerId, @ModelAttribute Customer customer) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("customer/update");
-
-        Boolean existsCustomer = customerService.existsByIdEquals(customerId);
-
-        if (!existsCustomer){
-            modelAndView.addObject("error", true);
-        }
-
-        customer.setId(customerId);
-
-        Customer newCustomer = customerService.save(customer);
-
-        modelAndView.addObject("customer", newCustomer);
-
-        return modelAndView;
-    }
-
-    @PostMapping("/deposit/{customerId}")
-    public ModelAndView doCreate(@PathVariable long customerId, @Validated @ModelAttribute DepositDTO depositDTO, BindingResult bindingResult) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("customer/deposit");
-
-        new DepositDTO().validate(depositDTO, bindingResult);
-
-        Optional<Customer> customerOptional = customerService.findById(customerId);
-
-        if (bindingResult.hasFieldErrors()) {
-            modelAndView.addObject("deposit", new Deposit());
-            modelAndView.addObject("customer", customerOptional.get());
-            modelAndView.addObject("error", true);
-            return modelAndView;
-        }
-
-        try {
-            Customer customer = customerOptional.get();
-
-            Deposit deposit = new Deposit();
-            BigDecimal transactionAmount = new BigDecimal(depositDTO.getTransactionAmount());
-            deposit.setTransactionAmount(transactionAmount);
-            deposit.setCustomer(customer);
-
-            Customer newCustomer = customerService.deposit(customer, deposit);
-
-            modelAndView.addObject("deposit", new Deposit());
-            modelAndView.addObject("customer", newCustomer);
-            modelAndView.addObject("success", true);
-        } catch (Exception e) {
-            modelAndView.addObject("deposit", new Deposit());
-            modelAndView.addObject("customer", customerOptional.get());
-            modelAndView.addObject("error", true);
         }
 
         return modelAndView;

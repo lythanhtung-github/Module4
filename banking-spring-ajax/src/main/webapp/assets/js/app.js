@@ -7,14 +7,13 @@ class App {
 }
 
 class Customer {
-    constructor(id, fullName, email, phone, address, balance, deleted) {
+    constructor(id, fullName, email, phone, address, balance) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
         this.phone = phone;
         this.address = address;
         this.balance = balance;
-        this.deleted = deleted;
     }
 }
 

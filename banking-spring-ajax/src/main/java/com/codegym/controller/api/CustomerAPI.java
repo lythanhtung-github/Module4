@@ -3,9 +3,9 @@ package com.codegym.controller.api;
 import com.codegym.exception.DataInputException;
 import com.codegym.exception.EmailExistsException;
 import com.codegym.model.Customer;
-import com.codegym.model.dto.ICustomerDTO;
+import com.codegym.model.dto.CustomerDTO;
 import com.codegym.service.customer.ICustomerService;
-import com.codegym.utils.AppUtil;
+import com.codegym.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,40 +19,34 @@ import java.util.Optional;
 @RequestMapping("/api/customers")
 public class CustomerAPI {
     @Autowired
-    private AppUtil appUtil;
+    private AppUtils appUtils;
 
     @Autowired
     private ICustomerService customerService;
 
     @GetMapping
     public ResponseEntity<?> findAllByDeletedIsFalse() {
-
-//        List<ICustomerDTO> customers = customerService.getAllICustomerDTOByDeletedIsFalse();
-        List<Customer> customers = customerService.getAllCustomerByDeletedIsFalse();
-
+        List<CustomerDTO> customers = customerService.findAllICustomerDTOByDeletedIsFalse();
+        if (customers.size() == 0) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         return new ResponseEntity<>(customers, HttpStatus.OK);
     }
 
     @GetMapping("/{customerId}")
-    public ResponseEntity<Customer> getById(@PathVariable long customerId) {
+    public ResponseEntity<?> getById(@PathVariable long customerId) {
 
         Optional<Customer> customerOptional = customerService.findById(customerId);
 
-//        if (!customerOptional.isPresent()) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-
         if (!customerOptional.isPresent()) {
-            throw new DataInputException("Customer ID not valid");
+            throw new DataInputException("ID Khách hàng không hợp lệ");
         }
 
-        Customer customer = customerOptional.get();
-
-        return new ResponseEntity<>(customer, HttpStatus.OK);
+        return new ResponseEntity<>(customerOptional.get().toCustomerDTO(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Customer> create(@RequestBody Customer customer) {
+    public ResponseEntity<?> create(@RequestBody Customer customer) {
 
         Optional<Customer> customerOptional = customerService.findByEmail(customer.getEmail());
 
@@ -68,7 +62,7 @@ public class CustomerAPI {
     }
 
     @PatchMapping("/{customerId}")
-    public ResponseEntity<Customer> update(@PathVariable Long customerId, @RequestBody Customer customer) {
+    public ResponseEntity<?> update(@PathVariable Long customerId, @RequestBody Customer customer) {
 
         Optional<Customer> customerOptional = customerService.findById(customerId);
 
@@ -87,5 +81,23 @@ public class CustomerAPI {
         Customer updatedCustomer = customerService.save(customer);
 
         return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{customerId}")
+    public ResponseEntity<?> delete(@PathVariable Long customerId) {
+
+        Optional<Customer> customerOptional = customerService.findById(customerId);
+
+        if (!customerOptional.isPresent()) {
+            throw new DataInputException("ID khách hàng không hợp lệ");
+        }
+
+        try {
+            customerService.softDelete(customerId);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DataInputException("Vui lòng liên hệ Administrator");
+        }
     }
 }
