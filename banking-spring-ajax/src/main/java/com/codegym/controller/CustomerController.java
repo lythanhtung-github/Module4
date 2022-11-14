@@ -24,10 +24,6 @@ public class CustomerController {
     @Autowired
     private ICustomerService customerService;
 
-    @Autowired
-    private IDepositService depositService;
-
-
     @GetMapping
     public ModelAndView showListPage() {
         ModelAndView modelAndView = new ModelAndView();
