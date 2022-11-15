@@ -36,8 +36,6 @@ public class CustomerServiceImpl implements ICustomerService {
     public Customer save(Customer customer, LocationRegion locationRegion) {
         LocationRegion newLocationRegion =  locationRegionRepository.save(locationRegion);
         customer.setLocationRegion(newLocationRegion);
-        customer.setId(0L);
-        customer.setBalance(BigDecimal.ZERO);
         return customerRepository.save(customer);
     }
 

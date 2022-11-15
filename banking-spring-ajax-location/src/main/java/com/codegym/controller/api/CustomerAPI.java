@@ -63,16 +63,17 @@ public class CustomerAPI {
         LocationRegion locationRegion = locationRegionDTO.toLocationRegion();
 
         Customer customer = customerDTO.toCustomer();
+        customer.setId(0L);
+        customer.setBalance(BigDecimal.ZERO);
         Customer newCustomer = customerService.save(customer, locationRegion);
 
         return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{customerId}")
-    public ResponseEntity<?> update(@PathVariable Long customerId, @RequestBody Customer customer) {
-
+    public ResponseEntity<?> update(@PathVariable Long customerId, @RequestBody CustomerDTO customerDTO) {
         Optional<Customer> customerOptional = customerService.findById(customerId);
-
+        Customer customer = customerDTO.toCustomer();
         if (!customerOptional.isPresent()) {
             throw new DataInputException("Customer ID not valid");
         }
@@ -85,9 +86,9 @@ public class CustomerAPI {
 
         customer.setId(customerId);
         customer.setBalance(customerOptional.get().getBalance());
-        Customer updatedCustomer = customerService.save(customer);
+        Customer newCustomer = customerService.save(customer);
 
-        return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
+        return new ResponseEntity<>(newCustomer, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{customerId}")

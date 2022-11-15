@@ -116,6 +116,7 @@
     page.dialogs.elements.fullNameUp = $("#fullNameUp");
     page.dialogs.elements.emailUp = $("#emailUp");
     page.dialogs.elements.phoneUp = $("#phoneUp");
+    page.dialogs.elements.locationRegionIdUp = $("#locationRegionIdUp");
     page.dialogs.elements.provinceUp = $("#provinceIdUp");
     page.dialogs.elements.districtUp = $("#districtIdUp");
     page.dialogs.elements.wardUp = $("#wardIdUp");
@@ -497,9 +498,16 @@
                 page.dialogs.elements.emailUp.val(customer.email);
                 page.dialogs.elements.phoneUp.val(customer.phone);
 
-                page.dialogs.elements.addressUp.val(locationRegion.address);
-
-                page.dialogs.elements.modalUpdateCustomer.modal('show');
+                page.dialogs.elements.locationRegionIdUp.val(locationRegion.id);
+                page.dialogs.elements.provinceUp.val(customer.locationRegion.provinceId);
+                page.commands.getAllDistrictsByProvinceId(customer.locationRegion.provinceId).then(() => {
+                    page.dialogs.elements.districtUp.val(customer.locationRegion.districtId)
+                    page.commands.getAllWardsByDistrictId(customer.locationRegion.districtId).then(() => {
+                        page.dialogs.elements.wardUp.val(customer.locationRegion.wardId);
+                        page.dialogs.elements.addressUp.val(customer.locationRegion.address);
+                        page.dialogs.elements.modalUpdateCustomer.modal('show');
+                    })
+                })
             })
         })
     }
@@ -519,11 +527,10 @@
                 required: true,
                 minlength: 5,
                 maxlength: 50,
-                // email_valid
                 email: true
             },
             phoneUp: {
-                phone_valid: true,
+                // phone_valid: true,
                 required: true,
             }
         },
@@ -540,7 +547,7 @@
                 email: "Định dạng email không đúng"
             },
             phoneUp: {
-                phone_valid: "Định dạng số điện thoại không đúng",
+                // phone_valid: "Định dạng số điện thoại không đúng",
                 required: "Vui lòng nhập số điện thoại đầy đủ"
             }
         },
@@ -562,7 +569,17 @@
             customer.fullName = page.dialogs.elements.fullNameUp.val();
             customer.email = page.dialogs.elements.emailUp.val();
             customer.phone = page.dialogs.elements.phoneUp.val();
-            customer.address = page.dialogs.elements.addressUp.val();
+
+            locationRegion.id = page.dialogs.elements.locationRegionIdUp.val();
+            locationRegion.provinceId = page.dialogs.elements.provinceUp.val();
+            locationRegion.provinceName = page.dialogs.elements.provinceUp.find("option:selected").text();
+            locationRegion.districtId = page.dialogs.elements.districtUp.val();
+            locationRegion.districtName = page.dialogs.elements.districtUp.find("option:selected").text();
+            locationRegion.wardId = page.dialogs.elements.wardUp.val();
+            locationRegion.wardName = page.dialogs.elements.wardUp.find("option:selected").text();
+            locationRegion.address = page.dialogs.elements.addressUp.val();
+
+            customer.locationRegion = locationRegion;
             page.commands.doUpdateCustomer(customer);
         }
     })
@@ -578,7 +595,9 @@
             data: JSON.stringify(obj)
         })
             .done((data) => {
-                let str = page.commands.renderCustomer(data);
+                customer = data;
+                locationRegion = customer.locationRegion;
+                let str = page.commands.renderCustomer(customer, locationRegion);
                 let updateRow = $("#tr_" + obj.id);
                 updateRow.replaceWith(str);
 
