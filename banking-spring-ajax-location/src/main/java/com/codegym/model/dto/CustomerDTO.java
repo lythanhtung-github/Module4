@@ -1,5 +1,6 @@
 package com.codegym.model.dto;
 
+import com.codegym.model.Customer;
 import com.codegym.model.LocationRegion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +24,7 @@ public class CustomerDTO {
 
     private String phone;
 
-    private BigDecimal balance;
+    private String balance;
 
     private LocationRegionDTO locationRegion;
 
@@ -32,7 +33,17 @@ public class CustomerDTO {
         this.fullName = fullName;
         this.email = email;
         this.phone = phone;
-        this.balance = balance;
+        this.balance = balance.toString();
         this.locationRegion = locationRegion.toLocationRegionDTO();
+    }
+
+    public Customer toCustomer(){
+        return new Customer()
+                .setId(id)
+                .setFullName(fullName)
+                .setEmail(email)
+                .setPhone(phone)
+                .setBalance(new BigDecimal(Long.parseLong(balance)))
+                .setLocationRegion(locationRegion.toLocationRegion());
     }
 }

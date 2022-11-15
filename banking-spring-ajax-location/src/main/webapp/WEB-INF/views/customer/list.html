@@ -341,6 +341,17 @@
             })
     }
 
+    page.dialogs.elements.provinceCre.on("change", function () {
+        let provinceId = $(this).val();
+
+        page.commands.getAllDistrictsByProvinceId(provinceId).then(() => {
+            let districtId = page.dialogs.elements.districtCre.val();
+
+            page.commands.getAllWardsByDistrictId(districtId);
+        });
+
+    });
+
 
     page.dialogs.elements.districtCre.on("change", function () {
         let districtId = $(this).val();
@@ -348,85 +359,6 @@
         page.commands.getAllWardsByDistrictId(districtId);
     });
 
-    page.dialogs.commands.provinceChange = () => {
-        // page.elements.loader.removeClass("hide");
-        return $.ajax({
-            type: "GET",
-            url: page.urls.getAllDistrictsByProvinceId + locationRegion.provinceId
-        }).done((data) => {
-            page.dialogs.elements.districtCre.empty();
-            page.dialogs.elements.districtUp.empty();
-
-            let results = data.results;
-
-            results.map(item => {
-                let str = `<option value="${item.district_id}">${item.district_name}</option>`;
-                page.dialogs.elements.districtCre.append(str);
-                page.dialogs.elements.districtUp.append(str);
-            })
-
-        }).fail(function (error) {
-            console.log(error)
-        }).always(function () {
-            page.elements.loader.addClass("hide");
-        });
-    }
-    //
-    // page.dialogs.elements.provinceCre.on("change", function () {
-    //     let provinceId = $(this).val();
-    //
-    //     page.commands.getAllDistrictsByProvinceId(provinceId).then(() => {
-    //         let districtId = page.dialogs.elements.districtCre.val();
-    //
-    //         page.commands.getAllWardsByDistrictId(districtId);
-    //     });
-    // });
-
-    // page.dialogs.commands.districtChange = () => {
-    //     // page.elements.loader.removeClass("hide");
-    //     $.ajax({
-    //         type: "GET",
-    //         url: page.urls.getAllWardsByDistrictId + locationRegion.districtId
-    //     }).done((data) => {
-    //         page.dialogs.elements.wardCre.empty();
-    //         page.dialogs.elements.wardUp.empty();
-    //
-    //         let results = data.results;
-    //
-    //         results.map(item => {
-    //             let str = `<option value="${item.ward_id}">${item.ward_name}</option>`;
-    //             page.dialogs.elements.wardCre.append(str);
-    //             page.dialogs.elements.wardUp.append(str);
-    //         })
-    //
-    //     }).fail(function (error) {
-    //         console.log(error);
-    //     }).always(function () {
-    //         page.elements.loader.addClass("hide");
-    //     });
-    // }
-
-    // page.dialogs.elements.provinceUp.on("change", function () {
-    //     locationRegion.provinceId = page.dialogs.elements.provinceUp.val();
-    //
-    //     page.dialogs.commands.provinceChange().then(() => {
-    //         locationRegion.districtId = page.dialogs.elements.districtUp.val();
-    //
-    //         page.dialogs.elements.districtUp.prop("selectedIndex", 0).val();
-    //
-    //         page.dialogs.commands.districtChange().then(() => {
-    //             page.dialogs.elements.wardUp.prop("selectedIndex", 0).val();
-    //         });
-    //     });
-    // });
-
-    // page.dialogs.elements.districtUp.on("change", function () {
-    //     locationRegion.districtId = $(this).val();
-    //
-    //     page.dialogs.commands.districtChange().then(() => {
-    //         page.dialogs.elements.wardUp.prop("selectedIndex", 0).val();
-    //     });
-    // })
 
     page.dialogs.elements.provinceUp.on("change", function () {
         let provinceId = $(this).val();
@@ -441,7 +373,6 @@
         let districtId = $(this).val();
         page.commands.getAllWardsByDistrictId(districtId);
     })
-
 
     //--------//
 
@@ -470,7 +401,7 @@
                 email: true
             },
             phoneCre: {
-                phone_valid: true,
+                // phone_valid: true,
                 required: true,
             }
         },
@@ -487,7 +418,7 @@
                 email: "Định dạng email không đúng"
             },
             phoneCre: {
-                phone_valid: "Định dạng số điện thoại không đúng",
+                // phone_valid: "Định dạng số điện thoại không đúng",
                 required: "Vui lòng nhập số điện thoại đầy đủ"
             }
         },
@@ -505,13 +436,21 @@
             this.defaultShowErrors();
         },
         submitHandler: function () {
+            locationRegion.id = null;
+            locationRegion.provinceId = page.dialogs.elements.provinceCre.val();
+            locationRegion.provinceName = page.dialogs.elements.provinceCre.find("option:selected").text();
+            locationRegion.districtId = page.dialogs.elements.districtCre.val();
+            locationRegion.districtName = page.dialogs.elements.districtCre.find("option:selected").text();
+            locationRegion.wardId = page.dialogs.elements.wardCre.val();
+            locationRegion.wardName = page.dialogs.elements.wardCre.find("option:selected").text();
+            locationRegion.address = page.dialogs.elements.addressCre.val();
+
+            customer.id = null;
             customer.fullName = page.dialogs.elements.fullNameCre.val();
             customer.email = page.dialogs.elements.emailCre.val();
             customer.phone = page.dialogs.elements.phoneCre.val();
-            customer.address = page.dialogs.elements.addressCre.val();
             customer.balance = 0;
-            customer.deleted = 0;
-            customer.id = null;
+            customer.locationRegion = locationRegion;
             page.commands.createCustomer(customer);
         }
     })
@@ -527,7 +466,9 @@
             data: JSON.stringify(obj)
         })
             .done((data) => {
-                let str = page.commands.renderCustomer(data);
+                customer = data;
+                locationRegion = customer.locationRegion;
+                let str = page.commands.renderCustomer(customer, locationRegion);
                 page.elements.tbCustomerBody.prepend(str);
                 page.commands.removeHandleShowModal();
                 page.commands.handleShowGroupModal();
@@ -549,11 +490,14 @@
         $(".update").on("click", function () {
             let id = $(this).data("id");
             page.commands.getCustomerById(id).done((data) => {
+                customer = data;
+                locationRegion = customer.locationRegion;
                 page.dialogs.elements.customerIdUp.val(id);
-                page.dialogs.elements.fullNameUp.val(data.fullName);
-                page.dialogs.elements.emailUp.val(data.email);
-                page.dialogs.elements.phoneUp.val(data.phone);
-                page.dialogs.elements.addressUp.val(data.address);
+                page.dialogs.elements.fullNameUp.val(customer.fullName);
+                page.dialogs.elements.emailUp.val(customer.email);
+                page.dialogs.elements.phoneUp.val(customer.phone);
+
+                page.dialogs.elements.addressUp.val(locationRegion.address);
 
                 page.dialogs.elements.modalUpdateCustomer.modal('show');
             })
@@ -601,7 +545,7 @@
             }
         },
         errorLabelContainer: "#modalUpdateCustomer .modal-body .modal-alert-danger",
-        errorPlacement: function (error, element) {
+        errorPlacement: function (error) {
             error.appendTo("#modalUpdateCustomer .modal-body .modal-alert-danger");
         },
         showErrors: function () {

@@ -3,8 +3,11 @@ package com.codegym.controller.api;
 import com.codegym.exception.DataInputException;
 import com.codegym.exception.EmailExistsException;
 import com.codegym.model.Customer;
+import com.codegym.model.LocationRegion;
 import com.codegym.model.dto.CustomerDTO;
+import com.codegym.model.dto.LocationRegionDTO;
 import com.codegym.service.customer.ICustomerService;
+import com.codegym.service.locationRegion.ILocationRegionService;
 import com.codegym.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +26,9 @@ public class CustomerAPI {
 
     @Autowired
     private ICustomerService customerService;
+
+    @Autowired
+    private ILocationRegionService locationRegionService;
 
     @GetMapping
     public ResponseEntity<?> getAllByDeletedIsFalse() {
@@ -46,17 +52,18 @@ public class CustomerAPI {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody Customer customer) {
+    public ResponseEntity<?> create(@RequestBody CustomerDTO customerDTO) {
 
-        Optional<Customer> customerOptional = customerService.findByEmail(customer.getEmail());
+        Optional<CustomerDTO> customerOptionalDTO = customerService.getByEmailDTO(customerDTO.getEmail());
 
-        if (customerOptional.isPresent()) {
-            throw new EmailExistsException("Customer ID not valid");
+        if (customerOptionalDTO.isPresent()) {
+            throw new EmailExistsException("Email not valid");
         }
+        LocationRegionDTO locationRegionDTO = customerDTO.getLocationRegion();
+        LocationRegion locationRegion = locationRegionDTO.toLocationRegion();
 
-        customer.setId(0L);
-        customer.setBalance(BigDecimal.ZERO);
-        Customer newCustomer = customerService.save(customer);
+        Customer customer = customerDTO.toCustomer();
+        Customer newCustomer = customerService.save(customer, locationRegion);
 
         return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
     }

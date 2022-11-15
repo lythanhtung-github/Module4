@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 
@@ -14,6 +15,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "location_region")
+@Accessors(chain = true)
 public class LocationRegion extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

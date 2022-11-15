@@ -26,6 +26,19 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     )
     List<CustomerDTO> getAllCustomerDTO();
 
+    @Query("SELECT NEW com.codegym.model.dto.CustomerDTO (" +
+            "c.id, " +
+            "c.fullName, " +
+            "c.email, " +
+            "c.phone, " +
+            "c.balance, " +
+            "c.locationRegion" +
+            ") FROM Customer AS c " +
+            "WHERE c.deleted = false " +
+            "AND c.email = :email"
+    )
+    Optional<CustomerDTO> getByEmailDTO(@Param("email") String email);
+
     @Modifying
     @Query("UPDATE Customer AS c " +
             "SET c.balance = c.balance + :transactionAmount " +

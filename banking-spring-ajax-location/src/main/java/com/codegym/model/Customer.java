@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -16,6 +17,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "customers")
+@Accessors(chain = true)
 public class Customer extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,8 +56,9 @@ public class Customer extends BaseEntity{
                 .setFullName(fullName)
                 .setEmail(email)
                 .setPhone(phone)
-                .setBalance(balance)
+                .setBalance(balance.toString())
                 .setLocationRegion(locationRegion.toLocationRegionDTO());
+
     }
 }
 
