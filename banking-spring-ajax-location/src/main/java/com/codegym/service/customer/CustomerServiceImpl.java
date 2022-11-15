@@ -1,9 +1,11 @@
 package com.codegym.service.customer;
 
 import com.codegym.model.Customer;
+import com.codegym.model.Deposit;
 import com.codegym.model.LocationRegion;
 import com.codegym.model.dto.CustomerDTO;
 import com.codegym.repository.CustomerRepository;
+import com.codegym.repository.DepositRepository;
 import com.codegym.repository.LocationRegionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,15 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Autowired
     private LocationRegionRepository locationRegionRepository;
+
+    @Autowired
+    private DepositRepository depositRepository;
+
+//    @Autowired
+//    private WithdrawRepository withdrawRepository;
+//
+//    @Autowired
+//    private TransferRepository transferRepository;
 
     @Override
     public List<CustomerDTO> getAllCustomerDTO() {
@@ -82,5 +93,26 @@ public class CustomerServiceImpl implements ICustomerService {
     @Override
     public Optional<CustomerDTO> getByEmailDTO(String email){
         return customerRepository.getByEmailDTO(email);
+    }
+
+
+    @Override
+    public Customer deposit(Customer customer, Deposit deposit) {
+        BigDecimal currentBalance = customer.getBalance();
+        BigDecimal transactionAmount = deposit.getTransactionAmount();
+
+        try {
+            customerRepository.incrementBalance(transactionAmount, customer.getId());
+
+            deposit.setId(0L);
+            deposit.setCustomer(customer);
+            depositRepository.save(deposit);
+
+            Optional<Customer> newCustomer = customerRepository.findById(customer.getId());
+            return newCustomer.get();
+        } catch (Exception e) {
+            customer.setBalance(currentBalance);
+            return customer;
+        }
     }
 }

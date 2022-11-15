@@ -29,8 +29,6 @@ public class CustomerAPI {
     @Autowired
     private ICustomerService customerService;
 
-    @Autowired
-    private ILocationRegionService locationRegionService;
 
     @GetMapping
     public ResponseEntity<?> getAllByDeletedIsFalse() {
@@ -47,7 +45,7 @@ public class CustomerAPI {
         Optional<Customer> customerOptional = customerService.findById(customerId);
 
         if (!customerOptional.isPresent()) {
-            throw new DataInputException("ID Khách hàng không hợp lệ");
+            throw new DataInputException("ID Khách hàng không hợp lệ.");
         }
 
         return new ResponseEntity<>(customerOptional.get().toCustomerDTO(), HttpStatus.OK);
@@ -63,7 +61,7 @@ public class CustomerAPI {
         Optional<CustomerDTO> customerOptionalDTO = customerService.getByEmailDTO(customerDTO.getEmail());
 
         if (customerOptionalDTO.isPresent()) {
-            throw new EmailExistsException("Email not valid");
+            throw new EmailExistsException("Email đã tồn tại trong hệ thống.");
         }
         LocationRegionDTO locationRegionDTO = customerDTO.getLocationRegion();
         LocationRegion locationRegion = locationRegionDTO.toLocationRegion();
@@ -77,17 +75,22 @@ public class CustomerAPI {
     }
 
     @PatchMapping("/{customerId}")
-    public ResponseEntity<?> update(@PathVariable Long customerId, @RequestBody CustomerDTO customerDTO) {
+    public ResponseEntity<?> update(@PathVariable Long customerId, @Validated @RequestBody CustomerDTO customerDTO, BindingResult bindingResult) {
+
+        if (bindingResult.hasFieldErrors()) {
+            return appUtils.mapErrorToResponse(bindingResult);
+        }
+
         Optional<Customer> customerOptional = customerService.findById(customerId);
         Customer customer = customerDTO.toCustomer();
         if (!customerOptional.isPresent()) {
-            throw new DataInputException("Customer ID not valid");
+            throw new DataInputException("ID khách hàng không tồn tại.");
         }
 
         Optional<Customer> emailOptional = customerService.findByEmailAndIdIsNot(customer.getEmail(), customerId);
 
         if (emailOptional.isPresent()) {
-            throw new EmailExistsException("Email is exists");
+            throw new EmailExistsException("Email đã tồn tại trong hệ thống.");
         }
 
         customer.setId(customerId);
@@ -103,15 +106,14 @@ public class CustomerAPI {
         Optional<Customer> customerOptional = customerService.findById(customerId);
 
         if (!customerOptional.isPresent()) {
-            throw new DataInputException("ID khách hàng không hợp lệ");
+            throw new DataInputException("ID khách hàng không hợp lệ.");
         }
 
         try {
             customerService.softDelete(customerId);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new DataInputException("Vui lòng liên hệ Administrator");
+            throw new DataInputException("Vui lòng liên hệ Administrator.");
         }
     }
 }

@@ -409,12 +409,12 @@
             fullNameCre: {
                 required: "Vui lòng nhập tên đầy đủ",
                 minlength: "Độ dài tối thiểu là 5 ký tự",
-                maxlength: "Độ dài tối đa là 35 ký tự"
+                maxlength: "Độ dài tối đa là 100 ký tự"
             },
             emailCre: {
                 required: "Vui lòng nhập email đầy đủ",
                 minlength: "Độ dài tối thiểu là 5 ký tự",
-                maxlength: "Độ dài tối đa là 35 ký tự",
+                maxlength: "Độ dài tối đa là 100 ký tự",
                 email: "Định dạng email không đúng"
             },
             phoneCre: {
@@ -479,7 +479,6 @@
                     'success'
                 )
             })
-
             .fail((jqXHR) => {
                 let errors = jqXHR.responseJSON;
                 if (errors) {
@@ -549,12 +548,12 @@
             fullNameUp: {
                 required: "Vui lòng nhập tên đầy đủ",
                 minlength: "Độ dài tối thiểu là 5 ký tự",
-                maxlength: "Độ dài tối đa là 35 ký tự"
+                maxlength: "Độ dài tối đa là 100 ký tự"
             },
             emailUp: {
                 required: "Vui lòng nhập email đầy đủ",
                 minlength: "Độ dài tối thiểu là 5 ký tự",
-                maxlength: "Độ dài tối đa là 35 ký tự",
+                maxlength: "Độ dài tối đa là 100 ký tự",
                 email: "Định dạng email không đúng"
             },
             phoneUp: {
@@ -568,9 +567,9 @@
         },
         showErrors: function () {
             if (this.numberOfInvalids() > 0) {
-                $("#modalUpdateCustomer .modal-body .modal-alert-danger").removeClass("hide").addClass("show");
+                page.dialogs.alertDanger.modalUpdateCustomer.removeClass("hide").addClass("show");
             } else {
-                $("#modalUpdateCustomer .modal-body .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                page.dialogs.alertDanger.modalUpdateCustomer.removeClass("show").addClass("hide").empty();
                 $("#modalUpdateCustomer input.error").removeClass("error");
             }
             this.defaultShowErrors();
@@ -623,8 +622,19 @@
                     'success'
                 )
             })
-            .fail((error) => {
-                console.error(error);
+            .fail((jqXHR) => {
+                let errors = jqXHR.responseJSON;
+                if (errors) {
+                    let str = "";
+                    $.each(errors, (k, v) => {
+                        str += `
+                            <label class="error" for="${k + 'Up'}">${v}</label>
+                        `;
+                    })
+                    page.dialogs.alertDanger.modalUpdateCustomer.removeClass("hide").addClass("show");
+                    page.dialogs.alertDanger.modalUpdateCustomer.css("display","block")
+                    page.dialogs.alertDanger.modalUpdateCustomer.append(str);
+                }
             })
     }
     //END UPDATE//
@@ -727,9 +737,9 @@
         },
         showErrors: function () {
             if (this.numberOfInvalids() > 0) {
-                $("#modalDeposit .modal-body .modal-alert-danger").removeClass("hide").addClass("show");
+                page.dialogs.alertDanger.modalDeposit.removeClass("hide").addClass("show");
             } else {
-                $("#modalDeposit .modal-body .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                page.dialogs.alertDanger.modalDeposit.removeClass("show").addClass("hide").empty();
                 $("#modalDeposit input.error").removeClass("error");
             }
             this.defaultShowErrors();
@@ -756,8 +766,10 @@
             data: JSON.stringify(obj)
         })
             .done((data) => {
-                let str = page.commands.renderCustomer(data);
-                let updateRow = $("#tr_" + data.id);
+                customer = data;
+                locationRegion = customer.locationRegion;
+                let str = page.commands.renderCustomer(customer, locationRegion);
+                let updateRow = $("#tr_" + customer.id);
                 updateRow.replaceWith(str);
 
                 page.commands.enableTooltip();
@@ -770,12 +782,23 @@
 
                 Swal.fire(
                     'Thành công',
-                    "Nạp <b>'" + obj.transactionAmount + "'</b> VNĐ cho khách hàng <b>'" + data.fullName + "'</b> thành công",
+                    "Nạp <b>'" + obj.transactionAmount + "'</b> VNĐ cho khách hàng <b>'" + customer.fullName + "'</b> thành công",
                     'success'
                 )
             })
-            .fail((error) => {
-                console.error(error);
+            .fail((jqXHR) => {
+                let errors = jqXHR.responseJSON;
+                if (errors) {
+                    let str = "";
+                    $.each(errors, (k, v) => {
+                        str += `
+                            <label class="error" for="${k + 'Deposit'}">${v}</label>
+                        `;
+                    })
+                    page.dialogs.alertDanger.modalDeposit.removeClass("hide").addClass("show");
+                    page.dialogs.alertDanger.modalDeposit.css("display","block")
+                    page.dialogs.alertDanger.modalDeposit.append(str);
+                }
             })
     }
     //--- END DEPOSIT ---//
