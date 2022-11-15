@@ -21,7 +21,9 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "c.phone, " +
             "c.balance, " +
             "c.locationRegion" +
-            ") FROM Customer AS c")
+            ") FROM Customer AS c " +
+            "WHERE c.deleted = false "
+    )
     List<CustomerDTO> getAllCustomerDTO();
 
     @Modifying
