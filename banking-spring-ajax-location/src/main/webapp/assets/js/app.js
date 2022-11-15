@@ -4,7 +4,7 @@ class App {
     static DEPOSIT_API = this.DOMAIN_SERVER + "/api/deposits";
     static WITHDRAW_API = this.DOMAIN_SERVER + "/api/withdraws";
     static TRANSFER_API = this.DOMAIN_SERVER + "/api/transfers";
-    static PROVINCE_URL = "https://vapi.vnappmob.com/api/province";
+    static PROVINCE_URL = "https://vapi.vnappmob.com/api/province/";
 }
 
 class LocationRegion {

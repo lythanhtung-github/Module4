@@ -80,8 +80,8 @@
             withdraw: App.WITHDRAW_API,
             transfer: App.TRANSFER_API,
             getAllProvinces: App.PROVINCE_URL,
-            getAllDistrictsByProvinceId: App.PROVINCE_URL + "/district/",
-            getAllWardsByDistrictId: App.PROVINCE_URL + "/ward/"
+            getAllDistrictsByProvinceId: App.PROVINCE_URL + "district/",
+            getAllWardsByDistrictId: App.PROVINCE_URL + "   ward/"
         },
         elements: {},
         loadData: {},
@@ -343,20 +343,19 @@
 
     page.dialogs.commands.provinceChange = () => {
         // page.elements.loader.removeClass("hide");
-
         return $.ajax({
             type: "GET",
             url: page.urls.getAllDistrictsByProvinceId + locationRegion.provinceId
         }).done((data) => {
             page.dialogs.elements.districtCre.empty();
-            page.dialogs.elements.districtUp.empty();
+            // page.dialogs.elements.districtUp.empty();
 
             let results = data.results;
 
             results.map(item => {
                 let str = `<option value="${item.district_id}">${item.district_name}</option>`;
                 page.dialogs.elements.districtCre.append(str);
-                page.dialogs.elements.districtUp.append(str);
+                // page.dialogs.elements.districtUp.append(str);
             })
 
         }).fail(function (error) {
