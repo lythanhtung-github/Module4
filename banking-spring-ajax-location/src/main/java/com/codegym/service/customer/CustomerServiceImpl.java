@@ -3,10 +3,12 @@ package com.codegym.service.customer;
 import com.codegym.model.Customer;
 import com.codegym.model.Deposit;
 import com.codegym.model.LocationRegion;
+import com.codegym.model.Withdraw;
 import com.codegym.model.dto.CustomerDTO;
 import com.codegym.repository.CustomerRepository;
 import com.codegym.repository.DepositRepository;
 import com.codegym.repository.LocationRegionRepository;
+import com.codegym.repository.WithdrawRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,9 +29,9 @@ public class CustomerServiceImpl implements ICustomerService {
     @Autowired
     private DepositRepository depositRepository;
 
-//    @Autowired
-//    private WithdrawRepository withdrawRepository;
-//
+    @Autowired
+    private WithdrawRepository withdrawRepository;
+
 //    @Autowired
 //    private TransferRepository transferRepository;
 
@@ -95,7 +97,6 @@ public class CustomerServiceImpl implements ICustomerService {
         return customerRepository.getByEmailDTO(email);
     }
 
-
     @Override
     public Customer deposit(Customer customer, Deposit deposit) {
         BigDecimal currentBalance = customer.getBalance();
@@ -111,6 +112,28 @@ public class CustomerServiceImpl implements ICustomerService {
             Optional<Customer> newCustomer = customerRepository.findById(customer.getId());
             return newCustomer.get();
         } catch (Exception e) {
+            customer.setBalance(currentBalance);
+            return customer;
+        }
+    }
+
+    @Override
+    public Customer withdraw(Customer customer, Withdraw withdraw) {
+        BigDecimal currentBalance = customer.getBalance();
+        BigDecimal transactionAmount = withdraw.getTransactionAmount();
+
+        try {
+            customerRepository.reduceBalance(transactionAmount, customer.getId());
+
+            withdraw.setId(0L);
+            withdraw.setCustomer(customer);
+            withdrawRepository.save(withdraw);
+
+            Optional<Customer> newCustomer = customerRepository.findById(customer.getId());
+
+            return newCustomer.get();
+        } catch (Exception e) {
+            e.printStackTrace();
             customer.setBalance(currentBalance);
             return customer;
         }

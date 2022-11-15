@@ -2,8 +2,8 @@ package com.codegym.controller.api;
 
 import com.codegym.exception.DataInputException;
 import com.codegym.model.Customer;
-import com.codegym.model.Deposit;
-import com.codegym.model.dto.DepositDTO;
+import com.codegym.model.Withdraw;
+import com.codegym.model.dto.WithdrawDTO;
 import com.codegym.service.customer.ICustomerService;
 import com.codegym.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,40 +20,44 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/deposits")
-public class DepositAPI {
+@RequestMapping("/api/withdraws")
+public class WithDrawAPI {
+    @Autowired
+    private ICustomerService customerService;
 
     @Autowired
     private AppUtils appUtils;
 
-    @Autowired
-    private ICustomerService customerService;
-
     @PostMapping
-    public ResponseEntity<?> deposit(@Validated @RequestBody DepositDTO depositDTO, BindingResult bindingResult){
+    public ResponseEntity<?> withdraw(@Validated @RequestBody WithdrawDTO withdrawDTO, BindingResult bindingResult){
         if (bindingResult.hasFieldErrors()) {
             return appUtils.mapErrorToResponse(bindingResult);
         }
-        Long customerId = depositDTO.getCustomerId();
+        Long customerId = withdrawDTO.getCustomerId();
         Optional<Customer> customerOptional = customerService.findById(customerId);
-        if (!customerOptional.isPresent()) {
+        if(!customerOptional.isPresent()) {
             throw new DataInputException("ID khách hàng không hợp lệ");
         }
-
         Customer customer = customerOptional.get();
         BigDecimal balance = customer.getBalance();
+        BigDecimal transactionAmount = new BigDecimal(withdrawDTO.getTransactionAmount());
 
-        BigDecimal transactionAmount = new BigDecimal(depositDTO.getTransactionAmount());
-        BigDecimal maxBalance = new BigDecimal(999999999999L);
-        if(balance.add(transactionAmount).compareTo(maxBalance) >0){
-            throw new DataInputException("Số tiền thêm vào khiến tài khoản vượt quá ngưỡng cho phép. Bạn chỉ có thể nạp thêm " + maxBalance.subtract(balance) + " VNĐ" );
+        if(balance.compareTo(transactionAmount) < 0) {
+            throw new DataInputException("Số tiền muốn rút lớn hơn số tiền hiện có trong tài khoản");
+        }
+        if(transactionAmount.compareTo(new BigDecimal(100000)) <=0){
+            throw new DataInputException("Số tiền muốn rút ít nhất là 100.000 VNĐ");
         }
 
-        Deposit deposit = new Deposit();
-        deposit.setTransactionAmount(transactionAmount);
-        deposit.setCustomer(customerOptional.get());
+        if(transactionAmount.compareTo(new BigDecimal(1000000000)) >=0){
+            throw new DataInputException("Số tiền muốn rút nhiều nhất là 1.000.000.000 VNĐ");
+        }
 
-        Customer newCustomer = customerService.deposit(customer, deposit);
+        Withdraw withdraw = new Withdraw();
+        withdraw.setTransactionAmount(transactionAmount);
+        withdraw.setCustomer(customer);
+
+        Customer newCustomer = customerService.withdraw(customer, withdraw);
         return new ResponseEntity<>(newCustomer.toCustomerDTO(), HttpStatus.CREATED);
     }
 }

@@ -3,6 +3,7 @@ package com.codegym.service.customer;
 import com.codegym.model.Customer;
 import com.codegym.model.Deposit;
 import com.codegym.model.LocationRegion;
+import com.codegym.model.Withdraw;
 import com.codegym.model.dto.CustomerDTO;
 import com.codegym.service.IGeneralService;
 
@@ -25,4 +26,6 @@ public interface ICustomerService extends IGeneralService<Customer> {
     Optional<CustomerDTO> getByEmailDTO(String email);
 
     Customer deposit(Customer customer, Deposit deposit);
+
+    Customer withdraw(Customer customer, Withdraw withdraw);
 }

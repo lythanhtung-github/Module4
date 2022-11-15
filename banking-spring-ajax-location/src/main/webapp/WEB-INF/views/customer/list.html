@@ -837,14 +837,14 @@
             }
         },
         errorLabelContainer: "#modalWithdraw .modal-body .modal-alert-danger",
-        errorPlacement: function (error, element) {
+        errorPlacement: function (error) {
             error.appendTo("#modalWithdraw .modal-body .modal-alert-danger");
         },
-        showErrors: function (errorMap, errorList) {
+        showErrors: function () {
             if (this.numberOfInvalids() > 0) {
-                $("#modalWithdraw .modal-body .modal-alert-danger").removeClass("hide").addClass("show");
+                page.dialogs.alertDanger.modalWithdraw.removeClass("hide").addClass("show");
             } else {
-                $("#modalWithdraw .modal-body .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                page.dialogs.alertDanger.modalWithdraw.removeClass("show").addClass("hide").empty();
                 $("#modalWithdraw input.error").removeClass("error");
             }
             this.defaultShowErrors();
@@ -866,18 +866,6 @@
                 }
 
             })
-                .fail((jqXHR) => {
-                    let errors = jqXHR.responseJSON;
-                    if (errors) {
-                        let str = "";
-                        $.each(errors, (k, v) => {
-                            str += `
-                            <li><label for="${k + 'Withdraw'}">${v}</label></li>
-                        `;
-                        })
-                        page.dialogs.alertDanger.modalWithdraw.append(str);
-                    }
-                })
         }
     })
 
@@ -892,8 +880,10 @@
             data: JSON.stringify(obj)
         })
             .done((data) => {
-                let str = page.commands.renderCustomer(data);
-                let updateRow = $("#tr_" + data.id);
+                customer = data;
+                locationRegion = customer.locationRegion;
+                let str = page.commands.renderCustomer(customer, locationRegion);
+                let updateRow = $("#tr_" + customer.id);
                 updateRow.replaceWith(str);
 
                 page.commands.enableTooltip();
@@ -906,12 +896,23 @@
 
                 Swal.fire(
                     'Thành công',
-                    "Rút <b>'" + obj.transactionAmount + "'</b> VNĐ của khách hàng <b>'" + data.fullName + "'</b> thành công",
+                    "Rút <b>'" + obj.transactionAmount + "'</b> VNĐ của khách hàng <b>'" + customer.fullName + "'</b> thành công",
                     'success'
                 )
             })
-            .fail((error) => {
-                console.error(error);
+            .fail((jqXHR) => {
+                let errors = jqXHR.responseJSON;
+                if (errors) {
+                    let str = "";
+                    $.each(errors, (k, v) => {
+                        str += `
+                            <label for="${k + 'Withdraw'}">${v}</label>
+                        `;
+                    })
+                    page.dialogs.alertDanger.modalWithdraw.removeClass("hide").addClass("show");
+                    page.dialogs.alertDanger.modalWithdraw.css("display","block")
+                    page.dialogs.alertDanger.modalWithdraw.append(str);
+                }
             })
     }
     //--- END WITHDRAW ---//
@@ -921,10 +922,11 @@
         $(".transfer").on("click", function () {
             let id = $(this).data("id");
             page.commands.getCustomerById(id).then((data) => {
+                customer = data;
                 page.dialogs.elements.senderIdTransfer.val(id);
-                page.dialogs.elements.senderNameTransfer.val(data.fullName);
-                page.dialogs.elements.senderEmailTransfer.val(data.email);
-                page.dialogs.elements.senderBalanceTransfer.val(data.balance);
+                page.dialogs.elements.senderNameTransfer.val(customer.fullName);
+                page.dialogs.elements.senderEmailTransfer.val(customer.email);
+                page.dialogs.elements.senderBalanceTransfer.val(customer.balance);
                 page.commands.getCustomersWhereIdIsNot(id);
                 page.dialogs.elements.modalTransfer.modal("show");
             })
