@@ -353,7 +353,6 @@
 
     });
 
-
     page.dialogs.elements.districtCre.on("change", function () {
         let districtId = $(this).val();
 
@@ -429,15 +428,15 @@
         },
         showErrors: function () {
             if (this.numberOfInvalids() > 0) {
-                $("#modalCreateCustomer .modal-body .modal-alert-danger").removeClass("hide").addClass("show");
+                page.dialogs.alertDanger.modalCreateCustomer.removeClass("hide").addClass("show");
             } else {
-                $("#modalCreateCustomer .modal-body .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                page.dialogs.alertDanger.modalCreateCustomer.removeClass("show").addClass("hide").empty();
                 $("#modalCreateCustomer input.error").removeClass("error");
             }
             this.defaultShowErrors();
         },
         submitHandler: function () {
-            locationRegion.id = null;
+            locationRegion.id = 0;
             locationRegion.provinceId = page.dialogs.elements.provinceCre.val();
             locationRegion.provinceName = page.dialogs.elements.provinceCre.find("option:selected").text();
             locationRegion.districtId = page.dialogs.elements.districtCre.val();
@@ -446,7 +445,7 @@
             locationRegion.wardName = page.dialogs.elements.wardCre.find("option:selected").text();
             locationRegion.address = page.dialogs.elements.addressCre.val();
 
-            customer.id = null;
+            customer.id = 0;
             customer.fullName = page.dialogs.elements.fullNameCre.val();
             customer.email = page.dialogs.elements.emailCre.val();
             customer.phone = page.dialogs.elements.phoneCre.val();
@@ -480,8 +479,20 @@
                     'success'
                 )
             })
-            .fail((error) => {
-                console.error(error);
+
+            .fail((jqXHR) => {
+                let errors = jqXHR.responseJSON;
+                if (errors) {
+                    let str = "";
+                    $.each(errors, (k, v) => {
+                        str += `
+                            <label class="error" for="${k + 'Cre'}">${v}</label>
+                        `;
+                    })
+                    page.dialogs.alertDanger.modalCreateCustomer.removeClass("hide").addClass("show");
+                    page.dialogs.alertDanger.modalCreateCustomer.css("display","block")
+                   page.dialogs.alertDanger.modalCreateCustomer.append(str);
+                }
             })
     }
     //END CREATE//
@@ -641,7 +652,6 @@
     }
 
     page.commands.doDeleteCustomer = (customerId) => {
-        alert(customerId)
         $.ajax({
             headers: {
                 "accept": "application/json",

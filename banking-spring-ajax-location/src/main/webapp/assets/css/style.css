@@ -15,7 +15,7 @@ header .btn {
     border: 1px solid #fff;
 }
 
-table{
+table {
     border: 1px solid black;
 }
 
@@ -36,7 +36,7 @@ thead {
     display: list-item;
 }
 
-.hide{
+.hide {
     display: none;
 }
 
@@ -44,27 +44,27 @@ thead {
     display: block;
 }
 
-#modalCreateCustomer .modal-header{
+#modalCreateCustomer .modal-header {
     background-color: #0aca67;
     color: white;
 }
 
-#modalUpdateCustomer .modal-header{
+#modalUpdateCustomer .modal-header {
     background-color: #0a7dca;
     color: white;
 }
 
-#modalDeposit .modal-header{
+#modalDeposit .modal-header {
     background-color: #049157;
     color: white;
 }
 
-#modalWithdraw .modal-header{
+#modalWithdraw .modal-header {
     background-color: #cdc71c;
     color: white;
 }
 
-#modalTransfer .modal-header{
+#modalTransfer .modal-header {
     background-color: #055ea2;
     color: white;
 }
@@ -80,6 +80,7 @@ thead {
 input:read-only {
     background-color: #b0b5be;
 }
-input:read-only:focus{
+
+input:read-only:focus {
     background-color: #b0b5be;
 }
