@@ -7,7 +7,7 @@
 </head>
 
 <body>
-<div class="container">
+<div class="container-fluid">
     <header>
         <div class="row col-sm-12">
             <div class="col-sm-6">
@@ -18,7 +18,7 @@
                     <i class="fa-solid fa-square-plus"></i>
                     Add new customer
                 </button>
-                <a class="btn btn-outline-light" href="#">
+                <a class="btn btn-outline-light" href="/transfers">
                     <i class="fa-solid fa-clock-rotate-left"></i>
                     Transfer histories
                 </a>
@@ -75,7 +75,7 @@
             createCustomer: App.CUSTOMER_API,
             updateCustomer: App.CUSTOMER_API,
             deleteCustomer: App.CUSTOMER_API + "/delete",
-            getCustomersWhereIdIsNot: App.CUSTOMER_API + "?deleted=0&id_ne=",
+            getAllRecipients: App.CUSTOMER_API + "/get-all-recipients-without-sender",
             deposit: App.DEPOSIT_API,
             withdraw: App.WITHDRAW_API,
             transfer: App.TRANSFER_API,
@@ -145,7 +145,7 @@
     page.dialogs.elements.senderNameTransfer = $("#senderNameTransfer");
     page.dialogs.elements.senderEmailTransfer = $("#senderEmailTransfer");
     page.dialogs.elements.senderBalanceTransfer = $("#senderBalanceTransfer");
-    page.dialogs.elements.selectRecipientsTransfer = $("#selectRecipientsTransfer");
+    page.dialogs.elements.recipientIdTransfer = $("#recipientIdTransfer");
     page.dialogs.elements.transferAmountTransfer = $("#transferAmountTransfer");
     page.dialogs.elements.feesTransfer = $("#feesTransfer");
     page.dialogs.elements.transactionAmountTransfer = $("#transactionAmountTransfer");
@@ -198,7 +198,7 @@
                     <td>${obj.email}</td>
                     <td>${obj.phone}</td>
                     <td class="text-end">
-                            ${new Intl.NumberFormat('vi-VN', {style: 'currency',currency: 'VND'}).format(obj.balance)}
+                            ${new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(obj.balance)}
                     </td>
                      <td>${locationRegion.provinceName}</td>
                     <td>${locationRegion.districtName}</td>
@@ -489,8 +489,8 @@
                         `;
                     })
                     page.dialogs.alertDanger.modalCreateCustomer.removeClass("hide").addClass("show");
-                    page.dialogs.alertDanger.modalCreateCustomer.css("display","block")
-                   page.dialogs.alertDanger.modalCreateCustomer.append(str);
+                    page.dialogs.alertDanger.modalCreateCustomer.css("display", "block")
+                    page.dialogs.alertDanger.modalCreateCustomer.append(str);
                 }
             })
     }
@@ -632,7 +632,7 @@
                         `;
                     })
                     page.dialogs.alertDanger.modalUpdateCustomer.removeClass("hide").addClass("show");
-                    page.dialogs.alertDanger.modalUpdateCustomer.css("display","block")
+                    page.dialogs.alertDanger.modalUpdateCustomer.css("display", "block")
                     page.dialogs.alertDanger.modalUpdateCustomer.append(str);
                 }
             })
@@ -749,7 +749,7 @@
             page.commands.getCustomerById(id).then((data) => {
                 deposit.id = 0;
                 deposit.customerId = data.id;
-                deposit.transactionAmount =  page.dialogs.elements.transactionAmountDeposit.val();
+                deposit.transactionAmount = page.dialogs.elements.transactionAmountDeposit.val();
                 page.commands.doDeposit(deposit);
             })
         }
@@ -796,7 +796,7 @@
                         `;
                     })
                     page.dialogs.alertDanger.modalDeposit.removeClass("hide").addClass("show");
-                    page.dialogs.alertDanger.modalDeposit.css("display","block")
+                    page.dialogs.alertDanger.modalDeposit.css("display", "block")
                     page.dialogs.alertDanger.modalDeposit.append(str);
                 }
             })
@@ -854,7 +854,7 @@
             page.commands.getCustomerById(customer.id).then((data) => {
                 withdraw.id = 0;
                 withdraw.customerId = data.id;
-                withdraw.transactionAmount =  page.dialogs.elements.transactionAmountWithdraw.val();
+                withdraw.transactionAmount = page.dialogs.elements.transactionAmountWithdraw.val();
                 if (+withdraw.transactionAmount > +data.balance) {
                     Swal.fire({
                         icon: 'error',
@@ -910,7 +910,7 @@
                         `;
                     })
                     page.dialogs.alertDanger.modalWithdraw.removeClass("hide").addClass("show");
-                    page.dialogs.alertDanger.modalWithdraw.css("display","block")
+                    page.dialogs.alertDanger.modalWithdraw.css("display", "block")
                     page.dialogs.alertDanger.modalWithdraw.append(str);
                 }
             })
@@ -927,7 +927,7 @@
                 page.dialogs.elements.senderNameTransfer.val(customer.fullName);
                 page.dialogs.elements.senderEmailTransfer.val(customer.email);
                 page.dialogs.elements.senderBalanceTransfer.val(customer.balance);
-                page.commands.getCustomersWhereIdIsNot(id);
+                page.commands.getAllRecipients(id);
                 page.dialogs.elements.modalTransfer.modal("show");
             })
         })
@@ -953,21 +953,21 @@
             }
         },
         errorLabelContainer: "#modalTransfer .modal-body .modal-alert-danger",
-        errorPlacement: function (error, element) {
+        errorPlacement: function (error) {
             error.appendTo("#modalTransfer .modal-body .modal-alert-danger");
         },
         showErrors: function () {
             if (this.numberOfInvalids() > 0) {
-                $("#modalTransfer .modal-body .modal-alert-danger").removeClass("hide").addClass("show");
+                page.dialogs.alertDanger.modalTransfer.removeClass("hide").addClass("show");
             } else {
-                $("#modalTransfer .modal-body .modal-alert-danger").removeClass("show").addClass("hide").empty();
+                page.dialogs.alertDanger.modalTransfer.removeClass("show").addClass("hide").empty();
                 $("#modalTransfer input.error").removeClass("error");
             }
             this.defaultShowErrors();
         },
         submitHandler: () => {
             let senderId = page.dialogs.elements.senderIdTransfer.val();
-            let recipientId = page.dialogs.elements.selectRecipientsTransfer.val();
+            let recipientId = page.dialogs.elements.recipientIdTransfer.val();
             let transferAmount = page.dialogs.elements.transferAmountTransfer.val();
             let fees = 10;
             let feesAmount = (+transferAmount * +fees) / 100;
@@ -994,11 +994,9 @@
                         if (transactionAmount < sender.balance) {
                             doTransfer(transfer, sender, recipient);
                         } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'Số tiền muốn chuyển lớn hơn số tiền có trong tài khoản',
-                            })
+                            page.dialogs.alertDanger.modalTransfer.removeClass("hide").addClass("show");
+                            page.dialogs.alertDanger.modalTransfer.css("display", "block")
+                            page.dialogs.alertDanger.modalTransfer.append("<label class='error'>Số tiền muốn chuyển lớn hơn số tiền có trong tài khoản</label>");
                         }
                     })
                         .catch(() => {
@@ -1031,33 +1029,23 @@
             data: JSON.stringify(transferInput)
         })
             .done((data) => {
-                Promise.resolve().then(function () {
-                    sender.balance = +sender.balance - +transferInput.transactionAmount;
-                    page.commands.updateCustomer(sender);
-                    let str = page.commands.renderCustomer(sender);
-                    let updateRow = $("#tr_" + sender.id);
-                    updateRow.replaceWith(str);
+                sender = data.sender;
+                recipient = data.recipient;
+                page.dialogs.elements.senderBalanceTransfer.val(sender.balance);
 
-                    page.commands.enableTooltip();
+                let senderCurrentRow = $("#tr_" + sender.id);
+                senderCurrentRow.replaceWith(page.commands.renderCustomer(sender, sender.locationRegion));
 
-                    page.commands.removeHandleShowModal();
+                let recipientCurrentRow = $("#tr_" + recipient.id);
+                recipientCurrentRow.replaceWith(page.commands.renderCustomer(recipient, recipient.locationRegion))
 
-                    page.commands.handleShowGroupModal();
-                }).then(function () {
-                    recipient.balance = +recipient.balance + +transferInput.transferAmount;
-                    page.commands.updateCustomer(recipient);
-                    let str = page.commands.renderCustomer(recipient);
-                    let updateRow = $("#tr_" + recipient.id);
-                    updateRow.replaceWith(str);
+                page.commands.enableTooltip();
 
-                    page.commands.enableTooltip();
+                page.commands.removeHandleShowModal();
 
-                    page.commands.removeHandleShowModal();
+                page.commands.handleShowGroupModal();
 
-                    page.commands.handleShowGroupModal();
-                })
-
-                $("#modalTransfer").modal("hide");
+                page.dialogs.alertDanger.modalTransfer.modal("hide");
 
                 Swal.fire(
                     'Thành công',
@@ -1065,32 +1053,40 @@
                     'success'
                 )
             })
-            .fail((error) => {
-                console.error(error);
+            .fail((jqXHR) => {
+                let errors = jqXHR.responseJSON;
+                if (errors) {
+                    let str = "";
+                    $.each(errors, (k, v) => {
+                        str += `
+                            <label for="${k + 'Transfer'}">${v}</label>
+                        `;
+                    })
+                    page.dialogs.alertDanger.modalTransfer.removeClass("hide").addClass("show");
+                    page.dialogs.alertDanger.modalTransfer.css("display", "block")
+                    page.dialogs.alertDanger.modalTransfer.append(str);
+                }
             })
     }
 
-    page.commands.getCustomersWhereIdIsNot = (senderId) => {
-        page.dialogs.elements.selectRecipientsTransfer.empty();
+    page.commands.getAllRecipients = (senderId) => {
+        page.dialogs.elements.recipientIdTransfer.empty();
         $.ajax({
             headers: {
                 "accept": "application/json",
                 "content-type": "application/json"
             },
             type: "GET",
-            url: page.urls.getCustomersWhereIdIsNot + senderId
+            url: page.urls.getAllRecipients + "/" + senderId
         })
             .done((data) => {
-                $.each(data, (i, item) => {
-                    page.dialogs.elements.selectRecipientsTransfer.append($('<option>',
-                        {
-                            value: item.id,
-                            text: item.id + " - " + item.fullName
-                        }));
+                data.map(item => {
+                    let str = `<option value = "${item.id}">(${item.id}) - ${item.fullName}</option> `;
+                    page.dialogs.elements.recipientIdTransfer.append(str);
                 })
             })
             .fail((error) => {
-                console.log(error);
+                console.log(error)
             })
     }
 

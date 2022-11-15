@@ -28,7 +28,7 @@ public class CustomerDTO {
     @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Email không đúng định dạng")
     @NotEmpty(message = "Vui lòng nhập email")
     private String email;
-    @Pattern(regexp = "^\\d+$", message = "Số điện thoại phải là số")
+
     @NotEmpty(message = "Vui lòng nhập số điện thoại")
     private String phone;
 

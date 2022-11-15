@@ -1,14 +1,9 @@
 package com.codegym.service.customer;
 
-import com.codegym.model.Customer;
-import com.codegym.model.Deposit;
-import com.codegym.model.LocationRegion;
-import com.codegym.model.Withdraw;
+import com.codegym.model.*;
 import com.codegym.model.dto.CustomerDTO;
-import com.codegym.repository.CustomerRepository;
-import com.codegym.repository.DepositRepository;
-import com.codegym.repository.LocationRegionRepository;
-import com.codegym.repository.WithdrawRepository;
+import com.codegym.model.dto.RecipientDTO;
+import com.codegym.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,8 +27,8 @@ public class CustomerServiceImpl implements ICustomerService {
     @Autowired
     private WithdrawRepository withdrawRepository;
 
-//    @Autowired
-//    private TransferRepository transferRepository;
+    @Autowired
+    private TransferRepository transferRepository;
 
     @Override
     public List<CustomerDTO> getAllCustomerDTO() {
@@ -61,7 +56,6 @@ public class CustomerServiceImpl implements ICustomerService {
     public void remove(Long id) {
 
     }
-
     @Override
     public Customer getById(Long id) {
         return null;
@@ -97,6 +91,10 @@ public class CustomerServiceImpl implements ICustomerService {
         return customerRepository.getByEmailDTO(email);
     }
 
+    @Override
+    public List<RecipientDTO> getAllRecipientDTO(long senderId) {
+        return customerRepository.getAllRecipientDTO(senderId);
+    }
     @Override
     public Customer deposit(Customer customer, Deposit deposit) {
         BigDecimal currentBalance = customer.getBalance();
@@ -137,5 +135,16 @@ public class CustomerServiceImpl implements ICustomerService {
             customer.setBalance(currentBalance);
             return customer;
         }
+    }
+
+
+    @Override
+    public Customer transfer(Transfer transfer) {
+        customerRepository.reduceBalance(transfer.getTransactionAmount(), transfer.getSender().getId());
+        customerRepository.incrementBalance(transfer.getTransferAmount(), transfer.getRecipient().getId());
+        transferRepository.save(transfer);
+        Optional<Customer> newSender = customerRepository.findById(transfer.getSender().getId());
+
+        return newSender.get();
     }
 }

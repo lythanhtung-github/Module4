@@ -2,6 +2,7 @@ package com.codegym.repository;
 
 import com.codegym.model.Customer;
 import com.codegym.model.dto.CustomerDTO;
+import com.codegym.model.dto.RecipientDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -63,4 +64,17 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     Optional<Customer> findByEmailAndIdIsNot(String email, Long id);
 
+    @Query("SELECT NEW com.codegym.model.dto.RecipientDTO(" +
+            "c.id, " +
+            "c.fullName" +
+            ") " +
+            "FROM Customer AS c " +
+            "WHERE c.id <> :senderId " +
+            "AND c.deleted = false "
+    )
+    List<RecipientDTO> getAllRecipientDTO(@Param("senderId") long senderId);
+
+    @Modifying
+    @Query("UPDATE Customer AS c SET c.deleted = true WHERE c.id = :customerId")
+    void softDelete(@Param("customerId") Long customerId);
 }

@@ -6,6 +6,7 @@ import com.codegym.model.Customer;
 import com.codegym.model.LocationRegion;
 import com.codegym.model.dto.CustomerDTO;
 import com.codegym.model.dto.LocationRegionDTO;
+import com.codegym.model.dto.RecipientDTO;
 import com.codegym.service.customer.ICustomerService;
 import com.codegym.service.locationRegion.ILocationRegionService;
 import com.codegym.utils.AppUtils;
@@ -115,5 +116,20 @@ public class CustomerAPI {
         } catch (Exception e) {
             throw new DataInputException("Vui lòng liên hệ Administrator.");
         }
+    }
+
+    @GetMapping("/get-all-recipients-without-sender/{senderId}")
+    public ResponseEntity<?> getAllRecipientsWithoutSender(@PathVariable long senderId) {
+
+        Optional<Customer> senderOptional = customerService.findById(senderId);
+
+        if (!senderOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        List<RecipientDTO> recipientDTOS = customerService.getAllRecipientDTO(senderId);
+
+
+        return new ResponseEntity<>(recipientDTOS, HttpStatus.OK);
     }
 }

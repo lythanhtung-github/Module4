@@ -1,10 +1,8 @@
 package com.codegym.service.customer;
 
-import com.codegym.model.Customer;
-import com.codegym.model.Deposit;
-import com.codegym.model.LocationRegion;
-import com.codegym.model.Withdraw;
+import com.codegym.model.*;
 import com.codegym.model.dto.CustomerDTO;
+import com.codegym.model.dto.RecipientDTO;
 import com.codegym.service.IGeneralService;
 
 import java.util.List;
@@ -25,7 +23,12 @@ public interface ICustomerService extends IGeneralService<Customer> {
 
     Optional<CustomerDTO> getByEmailDTO(String email);
 
+    List<RecipientDTO> getAllRecipientDTO(long senderId);
+
     Customer deposit(Customer customer, Deposit deposit);
 
     Customer withdraw(Customer customer, Withdraw withdraw);
+
+    Customer transfer(Transfer transfer);
+
 }

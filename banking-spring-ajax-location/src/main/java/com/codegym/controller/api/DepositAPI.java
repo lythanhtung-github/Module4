@@ -4,6 +4,7 @@ import com.codegym.exception.DataInputException;
 import com.codegym.model.Customer;
 import com.codegym.model.Deposit;
 import com.codegym.model.dto.DepositDTO;
+import com.codegym.model.dto.TransferDTO;
 import com.codegym.service.customer.ICustomerService;
 import com.codegym.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,8 @@ public class DepositAPI {
     private ICustomerService customerService;
 
     @PostMapping
-    public ResponseEntity<?> deposit(@Validated @RequestBody DepositDTO depositDTO, BindingResult bindingResult){
+    public ResponseEntity<?> deposit(@Validated @RequestBody DepositDTO depositDTO, BindingResult bindingResult) {
+        new DepositDTO().validate(depositDTO, bindingResult);
         if (bindingResult.hasFieldErrors()) {
             return appUtils.mapErrorToResponse(bindingResult);
         }
@@ -45,8 +47,8 @@ public class DepositAPI {
 
         BigDecimal transactionAmount = new BigDecimal(depositDTO.getTransactionAmount());
         BigDecimal maxBalance = new BigDecimal(999999999999L);
-        if(balance.add(transactionAmount).compareTo(maxBalance) >0){
-            throw new DataInputException("Số tiền thêm vào khiến tài khoản vượt quá ngưỡng cho phép. Bạn chỉ có thể nạp thêm " + maxBalance.subtract(balance) + " VNĐ" );
+        if (balance.add(transactionAmount).compareTo(maxBalance) > 0) {
+            throw new DataInputException("Số tiền thêm vào khiến tài khoản vượt quá ngưỡng cho phép. Bạn chỉ có thể nạp thêm " + maxBalance.subtract(balance) + " VNĐ");
         }
 
         Deposit deposit = new Deposit();
