@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface ICustomerService extends IGeneralService<Customer> {
     List<CustomerDTO> getAllCustomerDTO();
 
-    Customer save(Customer customer, LocationRegion locationRegion);
+//    Customer save(Customer customer, LocationRegion locationRegion);
 
     void softDelete(long customerId);
 

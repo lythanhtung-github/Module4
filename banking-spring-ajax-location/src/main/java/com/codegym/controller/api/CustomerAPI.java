@@ -3,9 +3,7 @@ package com.codegym.controller.api;
 import com.codegym.exception.DataInputException;
 import com.codegym.exception.EmailExistsException;
 import com.codegym.model.Customer;
-import com.codegym.model.LocationRegion;
 import com.codegym.model.dto.CustomerDTO;
-import com.codegym.model.dto.LocationRegionDTO;
 import com.codegym.model.dto.RecipientDTO;
 import com.codegym.service.customer.ICustomerService;
 import com.codegym.utils.AppUtils;
@@ -28,7 +26,6 @@ public class CustomerAPI {
 
     @Autowired
     private ICustomerService customerService;
-
 
     @GetMapping
     public ResponseEntity<?> getAllByDeletedIsFalse() {
@@ -69,13 +66,11 @@ public class CustomerAPI {
         if (customerOptionalDTO.isPresent()) {
             throw new EmailExistsException("Email đã tồn tại trong hệ thống.");
         }
-        LocationRegionDTO locationRegionDTO = customerDTO.getLocationRegion();
-        LocationRegion locationRegion = locationRegionDTO.toLocationRegion();
 
         Customer customer = customerDTO.toCustomer();
         customer.setId(0L);
         customer.setBalance(BigDecimal.ZERO);
-        Customer newCustomer = customerService.save(customer, locationRegion);
+        Customer newCustomer = customerService.save(customer);
 
         return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
     }
@@ -133,7 +128,6 @@ public class CustomerAPI {
         }
 
         List<RecipientDTO> recipientDTOS = customerService.getAllRecipientDTO(senderId);
-
 
         return new ResponseEntity<>(recipientDTOS, HttpStatus.OK);
     }

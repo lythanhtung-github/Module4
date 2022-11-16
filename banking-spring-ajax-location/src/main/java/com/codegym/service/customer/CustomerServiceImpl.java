@@ -4,6 +4,7 @@ import com.codegym.model.*;
 import com.codegym.model.dto.CustomerDTO;
 import com.codegym.model.dto.RecipientDTO;
 import com.codegym.repository.*;
+import com.codegym.service.locationRegion.ILocationRegionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,9 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Autowired
     private LocationRegionRepository locationRegionRepository;
+
+    @Autowired
+    private ILocationRegionService locationRegionService;
 
     @Autowired
     private DepositRepository depositRepository;
@@ -41,14 +45,9 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public Customer save(Customer customer, LocationRegion locationRegion) {
-        LocationRegion newLocationRegion =  locationRegionRepository.save(locationRegion);
-        customer.setLocationRegion(newLocationRegion);
-        return customerRepository.save(customer);
-    }
-
-    @Override
     public Customer save(Customer customer) {
+        LocationRegion newLocationRegion = locationRegionService.save(customer.getLocationRegion());
+        customer.setLocationRegion(newLocationRegion);
         return customerRepository.save(customer);
     }
 
@@ -136,7 +135,6 @@ public class CustomerServiceImpl implements ICustomerService {
             return customer;
         }
     }
-
 
     @Override
     public Customer transfer(Transfer transfer) {
