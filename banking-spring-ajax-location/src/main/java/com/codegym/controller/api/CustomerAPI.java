@@ -8,7 +8,6 @@ import com.codegym.model.dto.CustomerDTO;
 import com.codegym.model.dto.LocationRegionDTO;
 import com.codegym.model.dto.RecipientDTO;
 import com.codegym.service.customer.ICustomerService;
-import com.codegym.service.locationRegion.ILocationRegionService;
 import com.codegym.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,9 +40,15 @@ public class CustomerAPI {
     }
 
     @GetMapping("/{customerId}")
-    public ResponseEntity<?> getById(@PathVariable long customerId) {
+    public ResponseEntity<?> getById(@PathVariable String customerId) {
+        long cid;
+        try {
+            cid = Long.parseLong(customerId);
+        }catch (NumberFormatException e){
+            throw new DataInputException("ID Khách hàng không hợp lệ.");
+        }
 
-        Optional<Customer> customerOptional = customerService.findById(customerId);
+        Optional<Customer> customerOptional = customerService.findById(cid);
 
         if (!customerOptional.isPresent()) {
             throw new DataInputException("ID Khách hàng không hợp lệ.");

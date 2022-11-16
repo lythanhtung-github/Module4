@@ -4,7 +4,6 @@ import com.codegym.exception.DataInputException;
 import com.codegym.model.Customer;
 import com.codegym.model.Deposit;
 import com.codegym.model.dto.DepositDTO;
-import com.codegym.model.dto.TransferDTO;
 import com.codegym.service.customer.ICustomerService;
 import com.codegym.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +35,7 @@ public class DepositAPI {
         if (bindingResult.hasFieldErrors()) {
             return appUtils.mapErrorToResponse(bindingResult);
         }
-        Long customerId = depositDTO.getCustomerId();
+        Long customerId = Long.parseLong(depositDTO.getCustomerId());
         Optional<Customer> customerOptional = customerService.findById(customerId);
         if (!customerOptional.isPresent()) {
             throw new DataInputException("ID khách hàng không hợp lệ");

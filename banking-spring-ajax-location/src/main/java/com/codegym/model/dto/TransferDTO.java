@@ -4,10 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,22 +19,24 @@ import javax.validation.constraints.Min;
 public class TransferDTO implements Validator {
     private long id;
 
-    @Min(value = 1, message = "Thông tin người gửi là bắt buộc")
-    private long senderId;
+    @NotEmpty(message = "Thông tin người gửi là bắt buộc")
+    @Pattern(regexp = "^\\d+$", message = "ID người gửi không hợp lệ")
+    private String senderId;
 
-    @Min(value = 1, message = "Thông tin người nhận là bắt buộc")
-    private long recipientId;
+    @NotEmpty(message = "Thông tin người nhận là bắt buộc")
+    @Pattern(regexp = "^\\d+$", message = "ID người nhận không hợp lệ")
+    private String recipientId;
 
 
     private String transferAmount;
 
     @Override
-    public boolean supports(Class<?> aClass) {
+    public boolean supports(@NotNull Class<?> aClass) {
         return TransferDTO.class.isAssignableFrom(aClass);
     }
 
     @Override
-    public void validate(Object target, Errors errors) {
+    public void validate(@NotNull Object target, @NotNull Errors errors) {
         TransferDTO transferDTO = (TransferDTO) target;
 
         String transferAmount = transferDTO.getTransferAmount();
@@ -39,6 +44,11 @@ public class TransferDTO implements Validator {
         if (transferAmount != null && transferAmount.length() > 0) {
             if (transferAmount.length() > 9){
                 errors.rejectValue("transferAmount", "transferAmount.max", "Số tiền chuyển khoản tối đa là 1.000.000.000");
+                return;
+            }
+
+            if (transferAmount.length() < 6){
+                errors.rejectValue("transactionAmount", "transactionAmount.min.length", "Số tiền chuyển khoản thấp nhất là 100.000 VNĐ");
                 return;
             }
 

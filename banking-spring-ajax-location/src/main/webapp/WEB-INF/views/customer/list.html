@@ -969,53 +969,60 @@
             let senderId = page.dialogs.elements.senderIdTransfer.val();
             let recipientId = page.dialogs.elements.recipientIdTransfer.val();
             let transferAmount = page.dialogs.elements.transferAmountTransfer.val();
-            let fees = 10;
-            let feesAmount = (+transferAmount * +fees) / 100;
-            let transactionAmount = +transferAmount + feesAmount;
-            let sender = new Customer();
-            let recipient = new Customer();
-            if (senderId === recipientId) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Người gửi và người nhận không thể trùng nhau',
-                })
+            if (isNaN(transferAmount)) {
+                page.dialogs.alertDanger.modalTransfer.removeClass("hide").addClass("show");
+                page.dialogs.alertDanger.modalTransfer.css("display", "block")
+                page.dialogs.alertDanger.modalTransfer.append("<label class='error'>Số tiền muốn chuyển phải là số</label>");
             } else {
-                page.commands.getCustomerById(senderId).then((data) => {
-                    sender = data;
-                    transfer.senderId = senderId;
-                    page.commands.getCustomerById(recipientId).then((data) => {
-                        recipient = data;
-                        transfer.recipientId = recipientId;
-                        transfer.transferAmount = transferAmount;
-                        transfer.fees = fees;
-                        transfer.feesAmount = feesAmount;
-                        transfer.transactionAmount = transactionAmount;
-                        if (transactionAmount < sender.balance) {
-                            doTransfer(transfer, sender, recipient);
-                        } else {
-                            page.dialogs.alertDanger.modalTransfer.removeClass("hide").addClass("show");
-                            page.dialogs.alertDanger.modalTransfer.css("display", "block")
-                            page.dialogs.alertDanger.modalTransfer.append("<label class='error'>Số tiền muốn chuyển lớn hơn số tiền có trong tài khoản</label>");
-                        }
+                let fees = 10;
+                let feesAmount = (+transferAmount * +fees) / 100;
+                let transactionAmount = +transferAmount + feesAmount;
+                let sender = new Customer();
+                let recipient = new Customer();
+                if (senderId === recipientId) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Người gửi và người nhận không thể trùng nhau',
+                    })
+                } else {
+                    page.commands.getCustomerById(senderId).then((data) => {
+                        sender = data;
+                        transfer.senderId = senderId;
+                        page.commands.getCustomerById(recipientId).then((data) => {
+                            recipient = data;
+                            transfer.recipientId = recipientId;
+                            transfer.transferAmount = transferAmount;
+                            transfer.fees = fees;
+                            transfer.feesAmount = feesAmount;
+                            transfer.transactionAmount = transactionAmount;
+                            if (transactionAmount < sender.balance) {
+                                doTransfer(transfer, sender, recipient);
+                            } else {
+                                page.dialogs.alertDanger.modalTransfer.removeClass("hide").addClass("show");
+                                page.dialogs.alertDanger.modalTransfer.css("display", "block")
+                                page.dialogs.alertDanger.modalTransfer.append("<label class='error'>Số tiền muốn chuyển lớn hơn số tiền có trong tài khoản</label>");
+                            }
+                        })
+                            .catch(() => {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'ID người nhận không hợp lệ',
+                                })
+                            });
                     })
                         .catch(() => {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Oops...',
-                                text: 'ID người nhận không hợp lệ',
+                                text: 'ID người gửi không hợp lệ',
                             })
                         });
-                })
-                    .catch(() => {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'ID người gửi không hợp lệ',
-                        })
-                    });
+                }
             }
         }
+
     })
 
     function doTransfer(transferInput, sender, recipient) {

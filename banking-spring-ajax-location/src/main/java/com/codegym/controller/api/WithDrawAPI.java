@@ -3,7 +3,6 @@ package com.codegym.controller.api;
 import com.codegym.exception.DataInputException;
 import com.codegym.model.Customer;
 import com.codegym.model.Withdraw;
-import com.codegym.model.dto.TransferDTO;
 import com.codegym.model.dto.WithdrawDTO;
 import com.codegym.service.customer.ICustomerService;
 import com.codegym.utils.AppUtils;
@@ -35,7 +34,7 @@ public class WithDrawAPI {
         if (bindingResult.hasFieldErrors()) {
             return appUtils.mapErrorToResponse(bindingResult);
         }
-        Long customerId = withdrawDTO.getCustomerId();
+        Long customerId =Long.parseLong(withdrawDTO.getCustomerId());
         Optional<Customer> customerOptional = customerService.findById(customerId);
         if (!customerOptional.isPresent()) {
             throw new DataInputException("ID khách hàng không hợp lệ");

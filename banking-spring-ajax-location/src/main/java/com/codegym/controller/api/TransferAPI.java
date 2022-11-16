@@ -44,14 +44,14 @@ public class TransferAPI {
             return appUtils.mapErrorToResponse(bindingResult);
         }
 
-        Optional<Customer> senderOptional = customerService.findById(transferDTO.getSenderId());
+        Optional<Customer> senderOptional = customerService.findById(Long.parseLong(transferDTO.getSenderId()));
         if (!senderOptional.isPresent()) {
             throw new DataInputException("Thông tin người gửi không hợp lệ");
         }
 
         Customer sender = senderOptional.get();
 
-        Optional<Customer> recipientOptional = customerService.findById(transferDTO.getRecipientId());
+        Optional<Customer> recipientOptional = customerService.findById(Long.parseLong(transferDTO.getRecipientId()));
         if (!recipientOptional.isPresent()) {
             throw new DataInputException("Thông tin người nhận không hợp lệ");
         }
@@ -86,7 +86,7 @@ public class TransferAPI {
 
                 Customer newSender = customerService.transfer(transfer);
 
-                Optional<Customer> newRecipientDTO = customerService.findById(transferDTO.getRecipientId());
+                Optional<Customer> newRecipientDTO = customerService.findById(Long.parseLong(transferDTO.getRecipientId()));
                 Customer newRecipient = newRecipientDTO.get();
                 Map<String, CustomerDTO> results = new HashMap<>();
                 results.put("sender", newSender.toCustomerDTO());
