@@ -24,6 +24,12 @@ thead {
     color: white;
 }
 
+tfoot {
+    font-weight: bold;
+    padding-top: 5px;
+    border-top: 2px solid black;
+}
+
 .modal-alert-danger {
     padding: 10px 35px;
     margin-bottom: 15px;
@@ -83,4 +89,21 @@ input:read-only {
 
 input:read-only:focus {
     background-color: #b0b5be;
+}
+
+table td span.selected {
+    border-left-color: #5cb85c;
+}
+
+table td span.unselected {
+    border-left-color: #dfdfdf;
+}
+
+#user-image{
+    width: 20px;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+    color: #ffffff;
+    background-color: #4caf50;
 }

@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
 @Controller
-@RequestMapping({"/customers",""})
+@RequestMapping("/customers")
 public class CustomerController {
     @Autowired
     private ICustomerService customerService;

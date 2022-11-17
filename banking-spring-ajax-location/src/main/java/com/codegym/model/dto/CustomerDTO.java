@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -35,6 +36,7 @@ public class CustomerDTO {
     @Pattern(regexp = "^\\d+$", message = "Số tiền gửi phải là số")
     private String balance;
 
+    @Valid
     private LocationRegionDTO locationRegion;
 
     public CustomerDTO(Long id, String fullName, String email, String phone, BigDecimal balance, LocationRegion locationRegion) {

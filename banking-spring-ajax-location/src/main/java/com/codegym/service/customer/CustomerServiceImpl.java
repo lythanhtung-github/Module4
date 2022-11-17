@@ -22,8 +22,6 @@ public class CustomerServiceImpl implements ICustomerService {
     @Autowired
     private LocationRegionRepository locationRegionRepository;
 
-    @Autowired
-    private ILocationRegionService locationRegionService;
 
     @Autowired
     private DepositRepository depositRepository;
@@ -46,8 +44,7 @@ public class CustomerServiceImpl implements ICustomerService {
 
     @Override
     public Customer save(Customer customer) {
-        LocationRegion newLocationRegion = locationRegionService.save(customer.getLocationRegion());
-        customer.setLocationRegion(newLocationRegion);
+        locationRegionRepository.save(customer.getLocationRegion());
         return customerRepository.save(customer);
     }
 

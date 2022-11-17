@@ -43,11 +43,9 @@
             <tfoot>
             <tr>
                 <td colspan="7" class="text-end fst-italic font-weight-bold">Total Fees Amount:</td>
-                <td colspan="2" class="text-start fw-bold font-monospace" style="font-size: 24px">
+                <td colspan="2" class="text-start font-monospace" style="font-size: 24px">
                     <span id="sumFeesAmount">
                     </span>
-                    <span> VNĐ</span>
-                </td>
                 </td>
             </tr>
             </tfoot>
@@ -112,7 +110,7 @@
             url: page.urls.getSumFeesAmount
         })
             .done((data) => {
-                page.elements.sumFeesAmount.html(data);
+                page.elements.sumFeesAmount.html(`${new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(data)}`);
             })
             .fail((jqXHR) => {
                 alert("Get all transfer histories error");
@@ -136,7 +134,7 @@
                     page.elements.tbTransferBody.append(page.commands.renderRowTransferHistory(item));
                 });
 
-                page.elements.sumFeesAmount.html(sumFeesAmount);
+                page.elements.sumFeesAmount.html(`${new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(sumFeesAmount)}`);
             })
             .fail((jqXHR) => {
                 alert("Get all transfer histories error");

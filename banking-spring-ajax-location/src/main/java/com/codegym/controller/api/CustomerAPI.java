@@ -68,7 +68,8 @@ public class CustomerAPI {
         }
 
         Customer customer = customerDTO.toCustomer();
-        customer.setId(0L);
+        customer.getLocationRegion().setId(null);
+        customer.setId(null);
         customer.setBalance(BigDecimal.ZERO);
         Customer newCustomer = customerService.save(customer);
 

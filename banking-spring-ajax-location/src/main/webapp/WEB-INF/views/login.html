@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <th:block th:replace="layout/head :: head"/>
+    <link rel="stylesheet" href="/assets/css/login-style.css">
+    <title>Đăng nhập</title>
+</head>
+
+<body>
+<div class="login-card-container">
+    <div class="login-card">
+        <div class="login-card-logo">
+            <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/0580cbe2-abde-4db5-a269-2b97cc547429/df1vn5k-07af9b5d-72ea-4d72-acac-3b9b37af129a.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzA1ODBjYmUyLWFiZGUtNGRiNS1hMjY5LTJiOTdjYzU0NzQyOVwvZGYxdm41ay0wN2FmOWI1ZC03MmVhLTRkNzItYWNhYy0zYjliMzdhZjEyOWEucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.T9CvTWtw2g33tFP3PzpTuC9iXFNGD8Z4ExbGKDoHoZU"
+                 alt="logo">
+        </div>
+        <div class="login-card-header">
+            <h1>Đăng nhập</h1>
+            <div>Vui lòng đăng nhập để sử dụng</div>
+        </div>
+        <form id="frmLogin" class="login-card-form">
+            <div class="form-item">
+                <span class="form-item-icon"><i class="fa-solid fa-user-pen"></i></span>
+                <input id="emailLogin" name="emailLogin" type="email" placeholder="Nhập email" required autofocus>
+            </div>
+            <div class="form-item">
+                <span class="form-item-icon"><i class="fa-solid fa-key"></i></span>
+                <input id = "passwordLogin" name = "passwordLogin" type="password" placeholder="Nhập mật khẩu" required>
+                <span class="show-password" onclick="showPassword1()"><i class="fa-solid fa-eye"></i></span>
+            </div>
+            <div class="form-item-other">
+                <div class="checkbox">
+                    <input type="checkbox" id="rememberMeCheckBox">
+                    <label for="rememberMeCheckBox">Nhớ tài khoản</label>
+                </div>
+                <a href="#">Quên mật khẩu</a>
+            </div>
+            <button id = "btnLogin" type="submit">Đăng nhập</button>
+        </form>
+        <div class="login-card-footer">
+            Bạn chưa có tài khoản? <a href="/register">Tạo tài khoản mới</a>.
+        </div>
+    </div>
+</div>
+</body>
+<th:block th:replace="layout/script :: script"/>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/login-script.js"></script>
+<script>
+
+</script>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <th:block th:replace="layout/head :: head"/>
+    <link rel="stylesheet" href="/assets/css/login-style.css">
+    <title>Đăng ký</title>
+</head>
+
+<body>
+<div class="register-card-container">
+    <div class="register-card">
+        <div class="login-card-logo">
+            <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/0580cbe2-abde-4db5-a269-2b97cc547429/df1vqpr-8297b560-08a0-4cbb-958c-63ec361bf08f.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzA1ODBjYmUyLWFiZGUtNGRiNS1hMjY5LTJiOTdjYzU0NzQyOVwvZGYxdnFwci04Mjk3YjU2MC0wOGEwLTRjYmItOTU4Yy02M2VjMzYxYmYwOGYucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.OfaKcsS-pIFrzCIxzkRL1lXl6JXphgAKkMG43vSnH10"
+                 alt="logo">
+        </div>
+        <div class="register-card-header">
+            <h1>Đăng ký</h1>
+        </div>
+        <form id="frmRegister" class="register-card-form">
+            <div class="form-item">
+                <span class="form-item-icon"><i class="fa-solid fa-face-rolling-eyes"></i></span>
+                <select id="roleSelectRegister" name="roleSelectRegister" class="form-select">
+                </select>
+            </div>
+            <div class="form-item">
+                <span class="form-item-icon"><i class="fa-solid fa-user-pen"></i></span>
+                <input id="emailRegister" name="emailRegister" type="text" placeholder="Nhập email" autofocus>
+            </div>
+
+            <div class="form-item">
+                <span class="form-item-icon"><i class="fa-solid fa-key"></i></span>
+                <input id="passwordRegister" name="passwordRegister" type="password" placeholder="Nhập mật khẩu">
+                <span class="show-password" onclick="showPassword2()"><i class="fa-solid fa-eye"></i></span>
+            </div>
+            <button id="btnRegister" type="button">Đăng ký</button>
+        </form>
+        <div class="register-card-footer">
+            Bạn đã có tài khoản? <a href="/login">Đăng nhập</a>.
+        </div>
+    </div>
+</div>
+</body>
+<th:block th:replace="layout/script :: script"/>
+<script src="/assets/js/app.js"></script>
+<script src="/assets/js/login-script.js"></script>
+<script>
+    let page = {
+        urls: {
+            // register: App.BASE_URL_AUTH + "/register",
+            // login: App.BASE_URL_AUTH + "/login",
+        },
+        elements: {},
+        commands: {}
+    }
+
+    page.elements.frmRegister = $("#frmRegister");
+    page.elements.emailRegister = $("#emailRegister");
+    page.elements.passwordRegister = $("#passwordRegister");
+    page.elements.roleSelectRegister = $("#roleSelectRegister");
+    page.elements.btnRegister = $("#btnRegister");
+
+
+    page.commands.getAllRole = () => {
+        return $.ajax({
+            headers: {
+                "accept": "application/json",
+                "content-type": "application/json"
+            },
+            type: "GET",
+            url: "http://localhost:8080/api/roles"
+        })
+            .done((data) => {
+
+                data.map(item => {
+                    let str = `<option value="${item.id}">${item.code}</option>`;
+                    page.elements.roleSelectRegister.append(str);
+                })
+            })
+            .fail((error) => {
+                console.log(error);
+            })
+    }
+
+    page.elements.btnRegister.on("click", () => {
+        page.commands.register();
+    })
+
+
+    page.commands.register = () => {
+        let user = {
+            username: page.elements.emailRegister.val(),
+            password: page.elements.passwordRegister.val(),
+            role: {
+                id: page.elements.roleSelectRegister.val(),
+                code: page.elements.roleSelectRegister.find("option:selected").text()
+            }
+        }
+
+        $.ajax({
+            type: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: "http://localhost:8080/api/auth/register",
+            data: JSON.stringify(user)
+        }).done((resp) => {
+            console.log('resp: ', resp)
+            App.IziToast.showSuccessAlert("Đăng ký thành công")
+
+            //     // setTimeout(function () {
+            //     //   page.elements.usnLogin.val(page.elements.usnReg.val());
+            //     //   page.elements.pwdLogin.val(page.elements.pwdReg.val());
+            //     //   page.commands.switchLoginForm();
+            //     // }, 1000);
+            //
+        }).fail(function (jqXHR) {
+            // page.elements.frmLogin[0].reset();
+
+            if (jqXHR.responseJSON) {
+                if (jqXHR.responseJSON.message) {
+                    App.IziToast.showErrorAlert(jqXHR.responseJSON.message);
+                } else {
+                    $.each(jqXHR.responseJSON, function (key, value) {
+                        App.IziToast.showErrorAlert(value);
+                    });
+                }
+            } else {
+                App.IziToast.showErrorAlert("Không thể tạo tài khoản, vui lòng kiểm tra lại");
+            }
+        });
+    }
+
+    page.commands.loadData = () => {
+        page.commands.getAllRole();
+
+    }
+
+    page.initializeEventControl = () => {
+
+    }
+
+    $(() => {
+        page.commands.loadData();
+        page.initializeEventControl();
+    });
+</script>
+</html>

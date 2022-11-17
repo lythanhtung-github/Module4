@@ -10,10 +10,21 @@
 <div class="container-fluid">
     <header>
         <div class="row col-sm-12">
-            <div class="col-sm-6">
+            <div class="col-sm-5">
                 <h1>List of customers</h1>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-7">
+                <div class="dropdown">
+
+                    <img id="user-image" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+                         src="/assets/image/logo-icon.png" alt="user-image">
+
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="#">Hello!</a></li>
+                        <li><a class="dropdown-item" href="#">Cài đặt</a></li>
+                        <li><a class="dropdown-item" href="/login">Đăng xuất</a></li>
+                    </ul>
+                </div>
                 <button id="btnShowCreateModal" class="btn btn-outline-light">
                     <i class="fa-solid fa-square-plus"></i>
                     Add new customer
@@ -436,7 +447,7 @@
             this.defaultShowErrors();
         },
         submitHandler: function () {
-            locationRegion.id = 0;
+            // locationRegion.id = null;
             locationRegion.provinceId = page.dialogs.elements.provinceCre.val();
             locationRegion.provinceName = page.dialogs.elements.provinceCre.find("option:selected").text();
             locationRegion.districtId = page.dialogs.elements.districtCre.val();
@@ -445,7 +456,7 @@
             locationRegion.wardName = page.dialogs.elements.wardCre.find("option:selected").text();
             locationRegion.address = page.dialogs.elements.addressCre.val();
 
-            customer.id = 0;
+            // customer.id = null;
             customer.fullName = page.dialogs.elements.fullNameCre.val();
             customer.email = page.dialogs.elements.emailCre.val();
             customer.phone = page.dialogs.elements.phoneCre.val();
@@ -473,11 +484,13 @@
                 page.commands.removeHandleShowModal();
                 page.commands.handleShowGroupModal();
                 page.dialogs.elements.modalCreateCustomer.modal("hide");
-                Swal.fire(
-                    'Thành công',
-                    "Thêm mới khách hàng <b>'" + obj.fullName + "'</b> thành công.",
-                    'success'
-                )
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: "Thêm mới khách hàng <b>'" + obj.fullName + "'</b> thành công.",
+                    showConfirmButton: false,
+                    timer: 1500
+                })
             })
             .fail((jqXHR) => {
                 let errors = jqXHR.responseJSON;
@@ -489,7 +502,7 @@
                         `;
                     })
                     page.dialogs.alertDanger.modalCreateCustomer.removeClass("hide").addClass("show");
-                    page.dialogs.alertDanger.modalCreateCustomer.css("display", "block")
+                    page.dialogs.alertDanger.modalCreateCustomer.css("display", "")
                     page.dialogs.alertDanger.modalCreateCustomer.append(str);
                 }
             })
@@ -616,11 +629,12 @@
                 page.commands.handleShowGroupModal();
 
                 page.dialogs.elements.modalUpdateCustomer.modal("hide");
-                Swal.fire(
-                    'Thành công',
-                    "Chỉnh sửa khách hàng <b>'" + obj.fullName + "'</b> thành công.",
-                    'success'
-                )
+                iziToast.success({
+                    title: 'OK',
+                    position: 'topRight',
+                    timeout: 2500,
+                    message: "Chỉnh sửa khách hàng <b>'" + obj.fullName + "'</b> thành công.",
+                });
             })
             .fail((jqXHR) => {
                 let errors = jqXHR.responseJSON;
@@ -673,11 +687,13 @@
         })
             .done(() => {
                 $("#tr_" + customerId).remove();
-                Swal.fire(
-                    'Deleted!',
-                    "Xóa thành công khách hàng <b>'" + customer.fullName + "'</b>",
-                    'success'
-                )
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: "Xóa khách hàng <b>'" + customer.fullName + "'</b> thành công",
+                    showConfirmButton: false,
+                    timer: 2500
+                })
             })
             .fail((jqXHR) => {
                 let errors = jqXHR.responseJSON;
@@ -720,6 +736,7 @@
         rules: {
             transactionAmountDeposit: {
                 required: true,
+                number: true,
                 min: 100000,
                 max: 10000000000
             }
@@ -727,6 +744,7 @@
         messages: {
             transactionAmountDeposit: {
                 required: "Vui lòng nhập số tiền",
+                number: "Số tiền phải là số",
                 min: "Giá trị nhỏ nhất là 100.000 VNĐ",
                 max: "Giá trị lớn nhất là 1.000.000.000 VNĐ"
             }
@@ -779,12 +797,8 @@
                 page.commands.handleShowGroupModal();
 
                 page.dialogs.elements.modalDeposit.modal("hide");
+                App.IziToast.showSuccessAlert("Nạp <b>'" + obj.transactionAmount + "'</b> VNĐ cho khách hàng <b>'" + customer.fullName + "'</b> thành công");
 
-                Swal.fire(
-                    'Thành công',
-                    "Nạp <b>'" + obj.transactionAmount + "'</b> VNĐ cho khách hàng <b>'" + customer.fullName + "'</b> thành công",
-                    'success'
-                )
             })
             .fail((jqXHR) => {
                 let errors = jqXHR.responseJSON;
@@ -796,7 +810,7 @@
                         `;
                     })
                     page.dialogs.alertDanger.modalDeposit.removeClass("hide").addClass("show");
-                    page.dialogs.alertDanger.modalDeposit.css("display", "block")
+                    page.dialogs.alertDanger.modalDeposit.css("display", "");
                     page.dialogs.alertDanger.modalDeposit.append(str);
                 }
             })
@@ -825,6 +839,7 @@
         rules: {
             transactionAmountWithdraw: {
                 required: true,
+                numer: true,
                 min: 100000,
                 max: 1000000000
             }
@@ -832,6 +847,7 @@
         messages: {
             transactionAmountWithdraw: {
                 required: "Vui lòng nhập số tiền",
+                number: "Số tiền phải là số",
                 min: "Giá trị nhỏ nhất là 100.000 VNĐ",
                 max: "Giá trị lớn nhất là 1.000.000.000 VNĐ"
             }
@@ -864,7 +880,6 @@
                 } else {
                     page.commands.doWithdraw(withdraw);
                 }
-
             })
         }
     })
@@ -941,6 +956,7 @@
         rules: {
             transferAmountTransfer: {
                 required: true,
+                number: true,
                 min: 100000,
                 max: 1000000000
             }
@@ -948,6 +964,7 @@
         messages: {
             transferAmountTransfer: {
                 required: '<label for="transferAmountTransfer">Vui lòng nhập số tiền</label>',
+                number: '<label for="transferAmountTransfer">Số tiền muốn chuyển phải là số</label>',
                 min: '<label for="transferAmountTransfer">Giá trị nhỏ nhất là 100.000 VNĐ</label>',
                 max: '<label for="transferAmountTransfer">Giá trị lớn nhất là 1.000.000.000 VNĐ</label>',
             }
@@ -1022,7 +1039,6 @@
                 }
             }
         }
-
     })
 
     function doTransfer(transferInput, sender, recipient) {

@@ -5,7 +5,87 @@ class App {
     static WITHDRAW_API = this.DOMAIN_SERVER + "/api/withdraws";
     static TRANSFER_API = this.DOMAIN_SERVER + "/api/transfers";
     static PROVINCE_URL = "https://vapi.vnappmob.com/api/province/";
+
+
+    static SweetAlert = class {
+        static showDeactivateConfirmDialog() {
+            return Swal.fire({
+                icon: 'warning',
+                text: 'Are you sure to deactivate the selected customer ?',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, please deactivate this client !',
+                cancelButtonText: 'Cancel',
+            })
+        }
+
+        static showSuccessAlert(t) {
+            Swal.fire({
+                icon: 'success',
+                title: t,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+
+        static showErrorAlert(t) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Warning',
+                text: t,
+            })
+        }
+
+        static showError401() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Access Denied',
+                text: 'Invalid credentials!',
+            })
+        }
+
+        static showError403() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Access Denied',
+                text: 'You are not authorized to perform this function!',
+            })
+        }
+    }
+
+    static IziToast = class {
+        static showSuccessAlert(m) {
+            iziToast.success({
+                title: 'OK',
+                position: 'topRight',
+                timeout: 2500,
+                message: m
+            });
+        }
+
+        static showErrorAlert(m) {
+            iziToast.error({
+                title: 'Error',
+                position: 'topRight',
+                timeout: 2500,
+                message: m
+            });
+        }
+    }
+
+    static Notify = class {
+        static showSuccessAlert(m) {
+            $.notify(m, "success");
+        }
+
+        static showErrorAlert(m) {
+            $.notify(m, "error");
+        }
+    }
 }
+
 
 class LocationRegion {
     constructor(id, provinceId, provinceName, districtId, districtName, wardId, wardName, address) {

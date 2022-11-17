@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
@@ -27,7 +26,6 @@ public class TransferDTO implements Validator {
     @Pattern(regexp = "^\\d+$", message = "ID người nhận không hợp lệ")
     private String recipientId;
 
-
     private String transferAmount;
 
     @Override
@@ -43,7 +41,7 @@ public class TransferDTO implements Validator {
 
         if (transferAmount != null && transferAmount.length() > 0) {
             if (transferAmount.length() > 9){
-                errors.rejectValue("transferAmount", "transferAmount.max", "Số tiền chuyển khoản tối đa là 1.000.000.000");
+                errors.rejectValue("transferAmount", "transferAmount.max", "Số tiền chuyển khoản tối đa là 1.000.000.000 VNĐ");
                 return;
             }
 
@@ -62,7 +60,6 @@ public class TransferDTO implements Validator {
             if (transactionAmountFloat % 10 > 0) {
                 errors.rejectValue("transferAmount", "transferAmount.decimal", "Số tiền chuyển khoản phải là số chẵn chia hết cho 10");
             }
-
         } else {
             errors.rejectValue("transferAmount",  "transferAmount.null", "Số tiền chuyển khoản là bắt buộc");
         }
