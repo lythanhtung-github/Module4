@@ -4,6 +4,8 @@ class App {
     static DEPOSIT_API = this.DOMAIN_SERVER + "/api/deposits";
     static WITHDRAW_API = this.DOMAIN_SERVER + "/api/withdraws";
     static TRANSFER_API = this.DOMAIN_SERVER + "/api/transfers";
+    static AUTH_URL = this.DOMAIN_SERVER + "/api/auth";
+    static ROLE_API = this.DOMAIN_SERVER + "/api/roles";
     static PROVINCE_URL = "https://vapi.vnappmob.com/api/province/";
 
 
@@ -53,13 +55,39 @@ class App {
                 text: 'You are not authorized to perform this function!',
             })
         }
+
+
+        static redirectPage(message){
+            let timerInterval
+            Swal.fire({
+                title: message,
+                html: 'Chuyển sang trang login sau <b></b> milliseconds.',
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading()
+                    const b = Swal.getHtmlContainer().querySelector('b')
+                    timerInterval = setInterval(() => {
+                        b.textContent = Swal.getTimerLeft()
+                    }, 100)
+                },
+                willClose: () => {
+                    clearInterval(timerInterval)
+                }
+            }).then((result) => {
+                /* Read more about handling dismissals below */
+                if (result.dismiss === Swal.DismissReason.timer) {
+                    console.log('I was closed by the timer')
+                }
+            })
+        }
     }
 
     static IziToast = class {
         static showSuccessAlert(m) {
             iziToast.success({
                 title: 'OK',
-                position: 'topRight',
+                position: 'topLeft',
                 timeout: 2500,
                 message: m
             });
@@ -68,11 +96,12 @@ class App {
         static showErrorAlert(m) {
             iziToast.error({
                 title: 'Error',
-                position: 'topRight',
+                position: 'topLeft',
                 timeout: 2500,
                 message: m
             });
         }
+
     }
 
     static Notify = class {
