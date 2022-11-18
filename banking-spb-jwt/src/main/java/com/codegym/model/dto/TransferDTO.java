@@ -1,16 +1,13 @@
 package com.codegym.model.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -29,12 +26,12 @@ public class TransferDTO implements Validator {
     private String transferAmount;
 
     @Override
-    public boolean supports(@NotNull Class<?> aClass) {
+    public boolean supports(Class<?> aClass) {
         return TransferDTO.class.isAssignableFrom(aClass);
     }
 
     @Override
-    public void validate(@NotNull Object target, @NotNull Errors errors) {
+    public void validate(Object target, Errors errors) {
         TransferDTO transferDTO = (TransferDTO) target;
 
         String transferAmount = transferDTO.getTransferAmount();

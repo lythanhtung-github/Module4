@@ -1,5 +1,6 @@
 package com.codegym.model;
 
+import com.codegym.model.dto.RoleDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,4 +29,10 @@ public class Role {
 
     @OneToMany(targetEntity = User.class)
     private List<User> users;
+
+    public RoleDTO toRoleDTO(){
+        return new RoleDTO()
+                .setId(id)
+                .setCode(code);
+    }
 }

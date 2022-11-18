@@ -2,10 +2,7 @@ package com.codegym.model.dto;
 
 import com.codegym.model.Customer;
 import com.codegym.model.LocationRegion;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.validation.Valid;
@@ -13,7 +10,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

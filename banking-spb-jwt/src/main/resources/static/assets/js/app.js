@@ -7,7 +7,8 @@ class App {
     static AUTH_URL = this.DOMAIN_SERVER + "/api/auth";
     static ROLE_API = this.DOMAIN_SERVER + "/api/roles";
     static PROVINCE_URL = "https://vapi.vnappmob.com/api/province/";
-
+    static ERROR_URL = this.DOMAIN_SERVER + "/error/";
+    static TRANSFER_URL = this.DOMAIN_SERVER + "/transfers";
 
     static SweetAlert = class {
         static showDeactivateConfirmDialog() {
@@ -52,15 +53,23 @@ class App {
             Swal.fire({
                 icon: 'error',
                 title: 'Access Denied',
-                text: 'You are not authorized to perform this function!',
+                text: 'Bạn không được phép thực hiện chức năng này!',
             })
         }
 
+        static showError500() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Internal Server Error',
+                text: 'Hệ thống Server đang có vấn đề hoặc không truy cập được.',
+            })
+        }
 
         static redirectPage(message1, message2, timer){
             let timerInterval
             Swal.fire({
-                title: message1,
+                icon: 'success',
+                title: "<br>" + message1,
                 html: message2,
                 timer: timer,
                 timerProgressBar: true,
@@ -84,7 +93,7 @@ class App {
     }
 
     static IziToast = class {
-        static showSuccessAlert(m) {
+        static showSuccessAlertLeft(m) {
             iziToast.success({
                 title: 'OK',
                 position: 'topLeft',
@@ -92,11 +101,27 @@ class App {
                 message: m
             });
         }
+        static showSuccessAlertRight(m) {
+            iziToast.success({
+                title: 'OK',
+                position: 'topRight',
+                timeout: 2500,
+                message: m
+            });
+        }
 
-        static showErrorAlert(m) {
+        static showErrorAlertLeft(m) {
             iziToast.error({
                 title: 'Error',
                 position: 'topLeft',
+                timeout: 2500,
+                message: m
+            });
+        }
+        static showErrorAlertRight(m) {
+            iziToast.error({
+                title: 'Error',
+                position: 'topRight',
                 timeout: 2500,
                 message: m
             });

@@ -14,7 +14,7 @@ import java.util.Date;
 @MappedSuperclass
 @Getter
 @Setter
-public abstract class BaseEntity {
+public abstract class  BaseEntity {
     @Column(columnDefinition = "boolean default false")
     private Boolean deleted = false;
 

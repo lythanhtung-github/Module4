@@ -80,7 +80,10 @@ public class AuthAPI {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserLoginDTO userLoginDTO) {
+    public ResponseEntity<?> login(@Valid @RequestBody UserLoginDTO userLoginDTO,  BindingResult bindingResult) {
+        if (bindingResult.hasErrors())
+            return appUtils.mapErrorToResponse(bindingResult);
+
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userLoginDTO.getUsername(), userLoginDTO.getPassword()));

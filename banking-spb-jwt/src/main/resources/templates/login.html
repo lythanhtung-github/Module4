@@ -75,14 +75,24 @@
             url: page.urls.login,
             data: JSON.stringify(user)
         }).done((resp) => {
-            App.SweetAlert.redirectPage("Đăng nhập thành công.","",1500);
+            App.SweetAlert.redirectPage("Đăng nhập thành công.","<b></b>",1000);
 
             setTimeout(function () {
                 window.location.href = "/";
-            }, 1500);
+            }, 1000);
 
-        }).fail(function () {
-            App.IziToast.showErrorAlert("Email hoặc mật khẩu không đúng. Vui lòng kiểm tra lại!");
+        }).fail(function (jqXHR) {
+            if (jqXHR.responseJSON) {
+                if (jqXHR.responseJSON.message) {
+                    App.IziToast.showErrorAlertLeft(jqXHR.responseJSON.message);
+                } else {
+                    $.each(jqXHR.responseJSON, function (key, value) {
+                        App.IziToast.showErrorAlertLeft(value);
+                    });
+                }
+            } else {
+                App.IziToast.showErrorAlertLeft("Email hoặc mật khẩu không đúng. Vui lòng kiểm tra lại!");
+            }
         });
     }
 

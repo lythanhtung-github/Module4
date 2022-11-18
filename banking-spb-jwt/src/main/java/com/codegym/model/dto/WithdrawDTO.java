@@ -28,12 +28,12 @@ public class WithdrawDTO implements Validator {
     private String transactionAmount;
 
     @Override
-    public boolean supports(@NotNull Class<?> aClass) {
+    public boolean supports(Class<?> aClass) {
         return WithdrawDTO.class.isAssignableFrom(aClass);
     }
 
     @Override
-    public void validate(@NotNull Object target, @NotNull Errors errors) {
+    public void validate(Object target, Errors errors) {
         WithdrawDTO withdrawDTO = (WithdrawDTO) target;
 
         String transactionAmount = withdrawDTO.getTransactionAmount();

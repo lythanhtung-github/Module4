@@ -1,9 +1,6 @@
 package com.codegym.model.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -11,7 +8,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -26,29 +23,29 @@ public class DepositDTO implements Validator {
     private String transactionAmount;
 
     @Override
-    public boolean supports(@NotNull Class<?> aClass) {
+    public boolean supports(Class<?> aClass) {
         return DepositDTO.class.isAssignableFrom(aClass);
     }
 
     @Override
-    public void validate(@NotNull Object target, @NotNull Errors errors) {
+    public void validate(Object target, Errors errors) {
         DepositDTO depositDTO = (DepositDTO) target;
 
         String transactionAmount = depositDTO.getTransactionAmount();
 
         if (transactionAmount != null && transactionAmount.length() > 0) {
             if (transactionAmount.length() > 9){
-                errors.rejectValue("transactionAmount", "transactionAmount.max", "Số tiền chuyển khoản tối đa là 1.000.000.000 VNĐ");
+                errors.rejectValue("transactionAmount", "transactionAmount.max","Số tiền chuyển khoản tối đa là 1.000.000.000 VNĐ");
                 return;
             }
 
             if (transactionAmount.length() < 6){
-                errors.rejectValue("transactionAmount", "transactionAmount.min.length", "Số tiền chuyển khoản thấp nhất là 100.000 VNĐ");
+                errors.rejectValue("transactionAmount", "transactionAmount.min.length","Số tiền chuyển khoản thấp nhất là 100.000 VNĐ");
                 return;
             }
 
             if (!transactionAmount.matches("(^$|[0-9]*$)")){
-                errors.rejectValue("transactionAmount", "transactionAmount.number", "Chỉ chấp nhận số tiền chuyển khoản là ký tự số");
+                errors.rejectValue("transactionAmount",  "transactionAmount.number","Chỉ chấp nhận số tiền chuyển khoản là ký tự số");
                 return;
             }
 
@@ -56,12 +53,10 @@ public class DepositDTO implements Validator {
 
             if (transactionAmountFloat % 10 > 0) {
                 errors.rejectValue("transactionAmount", "transactionAmount.decimal", "Số tiền chuyển khoản phải là số chẵn chia hết cho 10");
-                return;
             }
 
         } else {
             errors.rejectValue("transactionAmount",  "transactionAmount.null", "Số tiền chuyển khoản là bắt buộc");
-            return;
         }
     }
 }

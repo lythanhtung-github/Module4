@@ -19,17 +19,22 @@
                     <img id="user-image" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
                          src="/assets/image/logo-icon.png" alt="user-image">
 
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li><a class="dropdown-item" href="#">Hello!</a></li>
-                        <li><a class="dropdown-item" href="#">Cài đặt</a></li>
-                        <li><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
-                    </ul>
+                    <div class="dropdown-menu" aria-labelledby="user-image">
+                        <a class="dropdown-item" href="#">
+                            <i class="fa-solid fa-user"></i> <span th:text="${user.getRole().getCode()}" style="color: #000000"></span>
+                             <br>
+                            <span th:text="${user.fullName}" style="color: #b90434; font-weight: bold"></span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#"><i class="fa-solid fa-gear"></i> Cài đặt</a>
+                        <a class="dropdown-item" href="/logout"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a>
+                    </div>
                 </div>
                 <button id="btnShowCreateModal" class="btn btn-outline-light">
                     <i class="fa-solid fa-square-plus"></i>
                     Add new customer
                 </button>
-                <a class="btn btn-outline-light" href="/transfers">
+                <a id="showTransfers" class="btn btn-outline-light">
                     <i class="fa-solid fa-clock-rotate-left"></i>
                     Transfer histories
                 </a>
@@ -92,7 +97,9 @@
             transfer: App.TRANSFER_API,
             getAllProvinces: App.PROVINCE_URL,
             getAllDistrictsByProvinceId: App.PROVINCE_URL + "district/",
-            getAllWardsByDistrictId: App.PROVINCE_URL + "ward/"
+            getAllWardsByDistrictId: App.PROVINCE_URL + "ward/",
+            error_403: App.ERROR_URL + "403",
+            transfer_url: App.TRANSFER_URL
         },
         elements: {},
         loadData: {},
@@ -168,12 +175,26 @@
     page.dialogs.alertDanger.modalWithdraw = $("#modalWithdraw .modal-body .modal-alert-danger");
     page.dialogs.alertDanger.modalTransfer = $("#modalTransfer .modal-body .modal-alert-danger");
 
+    page.dialogs.elements.showTransfers = $("#showTransfers");
     let customer = new Customer();
     let locationRegion = new LocationRegion();
     let deposit = new Deposit();
     let withdraw = new Withdraw();
     let transfer = new Transfer();
 
+    page.commands.showTransfers = () => {
+        page.dialogs.elements.showTransfers.on("click", function () {
+            let req = new XMLHttpRequest();
+            req.open('GET', '/transfers', false);
+            req.send();
+            if (req.status === 200) {
+                window.location = page.urls.transfer_url;
+            }
+            if (req.status === 403) {
+                window.location = page.urls.error_403;
+            }
+        });
+    }
     // SHOW CUSTOMERS //
     page.commands.getAllCustomers = () => {
         $.ajax({
@@ -434,7 +455,7 @@
             }
         },
         errorLabelContainer: "#modalCreateCustomer .modal-body .modal-alert-danger",
-        errorPlacement: function (error, element) {
+        errorPlacement: function (error) {
             error.appendTo("#modalCreateCustomer .modal-body .modal-alert-danger");
         },
         showErrors: function () {
@@ -447,7 +468,6 @@
             this.defaultShowErrors();
         },
         submitHandler: function () {
-            // locationRegion.id = null;
             locationRegion.provinceId = page.dialogs.elements.provinceCre.val();
             locationRegion.provinceName = page.dialogs.elements.provinceCre.find("option:selected").text();
             locationRegion.districtId = page.dialogs.elements.districtCre.val();
@@ -456,7 +476,6 @@
             locationRegion.wardName = page.dialogs.elements.wardCre.find("option:selected").text();
             locationRegion.address = page.dialogs.elements.addressCre.val();
 
-            // customer.id = null;
             customer.fullName = page.dialogs.elements.fullNameCre.val();
             customer.email = page.dialogs.elements.emailCre.val();
             customer.phone = page.dialogs.elements.phoneCre.val();
@@ -484,13 +503,7 @@
                 page.commands.removeHandleShowModal();
                 page.commands.handleShowGroupModal();
                 page.dialogs.elements.modalCreateCustomer.modal("hide");
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: "Thêm mới khách hàng <b>'" + obj.fullName + "'</b> thành công.",
-                    showConfirmButton: false,
-                    timer: 1500
-                })
+                App.IziToast.showSuccessAlertLeft("Thêm mới khách hàng <b>'" + obj.fullName + "'</b> thành công.");
             })
             .fail((jqXHR) => {
                 let errors = jqXHR.responseJSON;
@@ -629,27 +642,34 @@
                 page.commands.handleShowGroupModal();
 
                 page.dialogs.elements.modalUpdateCustomer.modal("hide");
-                iziToast.success({
-                    title: 'OK',
-                    position: 'topRight',
-                    timeout: 2500,
-                    message: "Chỉnh sửa khách hàng <b>'" + obj.fullName + "'</b> thành công.",
-                });
-            })
-            .fail((jqXHR) => {
-                let errors = jqXHR.responseJSON;
-                if (errors) {
-                    let str = "";
-                    $.each(errors, (k, v) => {
-                        str += `
-                            <label class="error" for="${k + 'Up'}">${v}</label>
-                        `;
-                    })
-                    page.dialogs.alertDanger.modalUpdateCustomer.removeClass("hide").addClass("show");
-                    page.dialogs.alertDanger.modalUpdateCustomer.css("display", "block")
-                    page.dialogs.alertDanger.modalUpdateCustomer.append(str);
+                App.IziToast.showSuccessAlertLeft("Chỉnh sửa khách hàng <b>'" + obj.fullName + "'</b> thành công.")
+            }).fail((jqXHR) => {
+            let str = ``;
+
+            if (jqXHR.status === 401) {
+                App.SweetAlert.showError401();
+            } else {
+                if (jqXHR.status === 403) {
+                    App.SweetAlert.showError403();
+                } else {
+                    if (jqXHR.responseJSON) {
+                        if (jqXHR.responseJSON.message) {
+                            str += `<label id="message-error" class="error" for="message">${jqXHR.responseJSON.message}</label>`;
+                        } else {
+                            $.each(jqXHR.responseJSON, function (key, value) {
+                                str += `<label id="${key}Up-error" class="error" for="${key}Up">${value}</label>`;
+                                $("#" + key + "Up").addClass("error");
+                            });
+                            page.dialogs.alertDanger.modalUpdateCustomer.removeClass("hide").addClass("show");
+                            page.dialogs.alertDanger.modalUpdateCustomer.css("display", "block")
+                            page.dialogs.alertDanger.modalUpdateCustomer.append(str);
+                        }
+                    } else {
+                        App.SweetAlert.showError500();
+                    }
                 }
-            })
+            }
+        })
     }
     //END UPDATE//
 
@@ -687,29 +707,18 @@
         })
             .done(() => {
                 $("#tr_" + customerId).remove();
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: "Xóa khách hàng <b>'" + customer.fullName + "'</b> thành công",
-                    showConfirmButton: false,
-                    timer: 2500
-                })
+                App.IziToast.showSuccessAlertLeft("Xóa khách hàng <b>'" + customer.fullName + "'</b> thành công");
             })
             .fail((jqXHR) => {
-                let errors = jqXHR.responseJSON;
-                let strError = "";
-                if (errors) {
-                    $.each(errors, (k, v) => {
-                        strError += `
-                            ${v}
-                        `;
-                    })
+                if (jqXHR.status === 401) {
+                    App.SweetAlert.showError401();
+                } else {
+                    if (jqXHR.status === 403) {
+                        App.SweetAlert.showError403();
+                    } else {
+                        App.SweetAlert.showErrorAlert(jqXHR.responseJSON.message);
+                    }
                 }
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: strError,
-                })
             })
     }
     //--- END DELETE ---//
@@ -797,7 +806,7 @@
                 page.commands.handleShowGroupModal();
 
                 page.dialogs.elements.modalDeposit.modal("hide");
-                App.IziToast.showSuccessAlert("Nạp <b>'" + obj.transactionAmount + "'</b> VNĐ cho khách hàng <b>'" + customer.fullName + "'</b> thành công");
+                App.IziToast.showSuccessAlertLeft("Nạp <b>'" + obj.transactionAmount + "'</b> VNĐ cho khách hàng <b>'" + customer.fullName + "'</b> thành công");
 
             })
             .fail((jqXHR) => {
@@ -839,9 +848,9 @@
         rules: {
             transactionAmountWithdraw: {
                 required: true,
-                numer: true,
+                number: true,
                 min: 100000,
-                max: 1000000000
+                max: 10000000000
             }
         },
         messages: {
@@ -909,11 +918,7 @@
 
                 page.dialogs.elements.modalWithdraw.modal("hide");
 
-                Swal.fire(
-                    'Thành công',
-                    "Rút <b>'" + obj.transactionAmount + "'</b> VNĐ của khách hàng <b>'" + customer.fullName + "'</b> thành công",
-                    'success'
-                )
+                App.IziToast.showSuccessAlertLeft("Rút <b>'" + obj.transactionAmount + "'</b> VNĐ của khách hàng <b>'" + customer.fullName + "'</b> thành công");
             })
             .fail((jqXHR) => {
                 let errors = jqXHR.responseJSON;
@@ -1070,11 +1075,7 @@
 
                 page.dialogs.alertDanger.modalTransfer.modal("hide");
 
-                Swal.fire(
-                    'Thành công',
-                    "Chuyển <b>'" + transferInput.transferAmount + "'</b> VNĐ từ khách hàng <b>'" + sender.fullName + "'</b> đến khách hàng <b>'" + recipient.fullName + "'</b> thành công!",
-                    'success'
-                )
+                App.IziToast.showSuccessAlertLeft("Chuyển <b>'" + transferInput.transferAmount + "'</b> VNĐ từ khách hàng <b>'" + sender.fullName + "'</b> đến khách hàng <b>'" + recipient.fullName + "'</b> thành công!");
             })
             .fail((jqXHR) => {
                 let errors = jqXHR.responseJSON;
@@ -1238,6 +1239,8 @@
 
     page.commands.loadData = () => {
         page.commands.getAllCustomers();
+
+        page.commands.showTransfers();
 
         page.commands.getAllProvinces().then(() => {
             let provinceId = page.dialogs.elements.provinceCre.val();

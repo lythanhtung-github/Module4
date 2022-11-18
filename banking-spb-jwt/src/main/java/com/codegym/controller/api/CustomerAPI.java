@@ -10,6 +10,7 @@ import com.codegym.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -77,6 +78,7 @@ public class CustomerAPI {
     }
 
     @PatchMapping("/{customerId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> update(@PathVariable Long customerId, @Validated @RequestBody CustomerDTO customerDTO, BindingResult bindingResult) {
 
         if (bindingResult.hasFieldErrors()) {
@@ -103,6 +105,7 @@ public class CustomerAPI {
     }
 
     @DeleteMapping("/delete/{customerId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable Long customerId) {
 
         Optional<Customer> customerOptional = customerService.findById(customerId);

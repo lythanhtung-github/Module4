@@ -1,6 +1,7 @@
 package com.codegym.model;
 
 
+import com.codegym.model.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,4 +35,13 @@ public class User extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
     private Role role;
+
+    public UserDTO toUserDTO(){
+        return new UserDTO()
+                .setId(id)
+                .setFullName(fullName)
+                .setUsername(username)
+                .setPassword(password)
+                .setRole(role.toRoleDTO());
+    }
 }

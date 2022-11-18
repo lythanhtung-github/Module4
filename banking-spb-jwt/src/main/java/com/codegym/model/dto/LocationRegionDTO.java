@@ -1,14 +1,11 @@
 package com.codegym.model.dto;
 
 import com.codegym.model.LocationRegion;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotEmpty;
-
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
