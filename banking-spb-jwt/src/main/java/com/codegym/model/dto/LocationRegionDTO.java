@@ -5,7 +5,6 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotEmpty;
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

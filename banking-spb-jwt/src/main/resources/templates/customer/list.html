@@ -34,7 +34,7 @@
                     <i class="fa-solid fa-square-plus"></i>
                     Add new customer
                 </button>
-                <a id="showTransfers" class="btn btn-outline-light">
+                <a id="showTransfers" href="/transfers" class="btn btn-outline-light">
                     <i class="fa-solid fa-clock-rotate-left"></i>
                     Transfer histories
                 </a>
@@ -182,19 +182,19 @@
     let withdraw = new Withdraw();
     let transfer = new Transfer();
 
-    page.commands.showTransfers = () => {
-        page.dialogs.elements.showTransfers.on("click", function () {
-            let req = new XMLHttpRequest();
-            req.open('GET', '/transfers', false);
-            req.send();
-            if (req.status === 200) {
-                window.location = page.urls.transfer_url;
-            }
-            if (req.status === 403) {
-                window.location = page.urls.error_403;
-            }
-        });
-    }
+    // page.commands.showTransfers = () => {
+    //     page.dialogs.elements.showTransfers.on("click", function () {
+    //         let req = new XMLHttpRequest();
+    //         req.open('GET', '/transfers', false);
+    //         req.send();
+    //         if (req.status === 200) {
+    //             window.location = page.urls.transfer_url;
+    //         }
+    //         if (req.status === 403) {
+    //             window.location = page.urls.error_403;
+    //         }
+    //     });
+    // }
     // SHOW CUSTOMERS //
     page.commands.getAllCustomers = () => {
         $.ajax({
@@ -1240,7 +1240,7 @@
     page.commands.loadData = () => {
         page.commands.getAllCustomers();
 
-        page.commands.showTransfers();
+        // page.commands.showTransfers();
 
         page.commands.getAllProvinces().then(() => {
             let provinceId = page.dialogs.elements.provinceCre.val();

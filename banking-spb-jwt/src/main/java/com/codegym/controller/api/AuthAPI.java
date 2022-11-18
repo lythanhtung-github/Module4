@@ -110,7 +110,7 @@ public class AuthAPI {
                     .domain("localhost")
                     .build();
 
-            System.out.println(jwtResponse);
+//            System.out.println(jwtResponse);
 
             return ResponseEntity
                     .ok()

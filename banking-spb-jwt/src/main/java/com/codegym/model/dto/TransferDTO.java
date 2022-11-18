@@ -5,9 +5,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-@Data
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
