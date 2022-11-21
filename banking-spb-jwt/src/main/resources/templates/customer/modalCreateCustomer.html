@@ -11,43 +11,74 @@
                 </div>
                 <div class="modal-body">
                     <div class="modal-alert-danger hide"></div>
+
                     <form id="frmCreateCustomer">
-                        <div class="row col-lg-12 mt-3">
-                            <div class="col-lg-4 mt-3">
-                                <label for="fullNameCre">Full name</label>
-                                <input type="text" class="form-control" id="fullNameCre" name="fullNameCre">
-                            </div>
-                            <div class="col-lg-4 mt-3">
-                                <label for="emailCre">Email</label>
-                                <input type="email" class="form-control" id="emailCre" name="emailCre">
-                            </div>
-                            <div class="col-lg-4 mt-3">
-                                <label for="phoneCre">Phone</label>
-                                <input type="tel" class="form-control" id="phoneCre" name="phoneCre">
+
+                        <div class="row">
+                            <div class="col-lg-7 fl">
+                                <div class="row col-lg-12 mt-3">
+                                    <div class="col-lg-4 mt-3">
+                                        <label for="fullNameCre">Full name</label>
+                                        <input type="text" class="form-control" id="fullNameCre" name="fullNameCre">
+                                    </div>
+                                    <div class="col-lg-4 mt-3">
+                                        <label for="emailCre">Email</label>
+                                        <input type="email" class="form-control" id="emailCre" name="emailCre">
+                                    </div>
+                                    <div class="col-lg-4 mt-3">
+                                        <label for="phoneCre">Phone</label>
+                                        <input type="tel" class="form-control" id="phoneCre" name="phoneCre">
+                                    </div>
+                                </div>
+                                <div class="row col-lg-12 mt-3">
+                                    <div class="col-lg-3">
+                                        <label>Province</label>
+                                        <select class="form-select" id="provinceIdCre" name="provinceIdCre">
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <label>District</label>
+                                        <select class="form-select" id="districtIdCre" name="districtIdCre">
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <label>Ward</label>
+                                        <select class="form-select" id="wardIdCre" name="warIdCre">
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <label>Address</label>
+                                        <input type="text" class="form-control" id="addressCre" name="addressCre">
+                                    </div>
+                                </div>
                             </div>
 
+                            <div class="col-lg-5 fl">
+                                <section>
+                                    <div class="wrapper">
+                                        <div class="image-preview">
+                                            <canvas id="canvas"></canvas>
+                                        </div>
+                                        <div class="content" style="opacity: 1;">
+                                            <div class="icon">
+                                                <i class="fas fa-cloud-upload-alt"></i>
+                                            </div>
+                                            <div class="text">
+                                                No file chosen, yet!
+                                            </div>
+                                            <div class="text">
+                                                Max file size = 2MB
+                                            </div>
+                                        </div>
+                                        <div class="file-name">
+                                            Change image
+                                        </div>
+                                    </div>
+                                    <input type="file" id="imageFile" accept="image/jpeg, image/png" hidden="">
+                                </section>
+                            </div>
                         </div>
-                        <div class="row col-lg-12 mt-3">
-                            <div class="col-lg-3">
-                                <label>Province</label>
-                                <select class="form-select" id="provinceIdCre" name="provinceIdCre">
-                                </select>
-                            </div>
-                            <div class="col-lg-3">
-                                <label>District</label>
-                                <select class="form-select" id="districtIdCre" name="districtIdCre">
-                                </select>
-                            </div>
-                            <div class="col-lg-3">
-                                <label>Ward</label>
-                                <select class="form-select" id="wardIdCre" name="warIdCre">
-                                </select>
-                            </div>
-                            <div class="col-lg-3">
-                                <label>Address</label>
-                                <input type="text" class="form-control" id="addressCre" name="addressCre">
-                            </div>
-                        </div>
+
                     </form>
                 </div>
                 <div class="modal-footer">

@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "location_region")
-public class LocationRegion extends BaseEntity {
+    public class LocationRegion extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -3,11 +3,12 @@
 
 <head>
     <th:block th:replace="layout/head :: head"/>
+    <link rel="stylesheet" href="/assets/css/preview-image.css">
     <title>BANKING - AJAX</title>
 </head>
 
 <body>
-<div class="container-fluid">
+<div class="main-container">
     <header>
         <div class="row col-sm-12">
             <div class="col-sm-5">
@@ -15,14 +16,14 @@
             </div>
             <div class="col-sm-7">
                 <div class="dropdown">
-
                     <img id="user-image" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
                          src="/assets/image/logo-icon.png" alt="user-image">
 
                     <div class="dropdown-menu" aria-labelledby="user-image">
                         <a class="dropdown-item" href="#">
-                            <i class="fa-solid fa-user"></i> <span th:text="${user.getRole().getCode()}" style="color: #000000"></span>
-                             <br>
+                            <i class="fa-solid fa-user"></i> <span th:text="${user.getRole().getCode()}"
+                                                                   style="color: #000000"></span>
+                            <br>
                             <span th:text="${user.fullName}" style="color: #b90434; font-weight: bold"></span>
                         </a>
                         <div class="dropdown-divider"></div>
@@ -64,7 +65,7 @@
         </table>
     </div>
 </div>
-
+<div class="loader hide"></div>
 <!-- Modal Create Customer -->
 <th:block th:replace="customer/modalCreateCustomer :: modalCreateCustomer"/>
 
@@ -113,6 +114,8 @@
         initializeEventControl: {}
     }
 
+    page.elements.loader = $(".loader");
+
     page.elements.btnShowCreateModal = $("#btnShowCreateModal");
     page.elements.tbCustomer = $("#tbCustomer");
     page.elements.tbCustomerBody = $("#tbCustomer tbody");
@@ -126,6 +129,7 @@
     page.dialogs.elements.districtCre = $("#districtIdCre");
     page.dialogs.elements.wardCre = $("#wardIdCre");
     page.dialogs.elements.addressCre = $("#addressCre");
+
     page.dialogs.elements.btnCreate = $("#btnCreate");
 
     page.dialogs.elements.modalUpdateCustomer = $("#modalUpdateCustomer");
@@ -176,26 +180,22 @@
     page.dialogs.alertDanger.modalTransfer = $("#modalTransfer .modal-body .modal-alert-danger");
 
     page.dialogs.elements.showTransfers = $("#showTransfers");
+
+    page.dialogs.elements.wrapper = $("#frmCreateCustomer section .wrapper");
+    page.dialogs.elements.imageFile = $("#imageFile");
+    page.dialogs.elements.wrapperContent = $("#frmCreateCustomer section .wrapper .content");
+    page.dialogs.elements.imagePreview = $("#frmCreateCustomer section .image-preview canvas");
+    page.dialogs.elements.canvas = $("#canvas");
+    page.dialogs.elements.context = page.dialogs.elements.canvas[0].getContext('2d');
+    page.dialogs.elements.imagePreview.css("display", "none");
+    page.dialogs.elements.divImagePreview = $("div.image-preview, div.file-name");
+
     let customer = new Customer();
     let locationRegion = new LocationRegion();
     let deposit = new Deposit();
     let withdraw = new Withdraw();
     let transfer = new Transfer();
 
-    // page.commands.showTransfers = () => {
-    //     page.dialogs.elements.showTransfers.on("click", function () {
-    //         let req = new XMLHttpRequest();
-    //         req.open('GET', '/transfers', false);
-    //         req.send();
-    //         if (req.status === 200) {
-    //             window.location = page.urls.transfer_url;
-    //         }
-    //         if (req.status === 403) {
-    //             window.location = page.urls.error_403;
-    //         }
-    //     });
-    // }
-    // SHOW CUSTOMERS //
     page.commands.getAllCustomers = () => {
         $.ajax({
             headers: {
@@ -292,6 +292,50 @@
             `;
     }
     // END SHOW //
+
+
+    //-Load image-//
+    page.dialogs.commands.loadImageToCanvas = (imageFile) => {
+        page.dialogs.elements.imagePreview.css("display", "");
+        page.dialogs.elements.wrapper.addClass("active");
+        page.dialogs.elements.wrapperContent.css("opacity", 0);
+
+        let imageObj = new Image();
+
+        imageObj.onload = function () {
+            page.dialogs.elements.context.canvas.width = imageObj.width;
+            page.dialogs.elements.context.canvas.height = imageObj.height;
+            page.dialogs.elements.context.drawImage(imageObj, 0, 0, imageObj.width, imageObj.height);
+        };
+
+        imageObj.src = URL.createObjectURL(imageFile)
+    }
+
+    page.dialogs.commands.changeImagePreview = () => {
+        let imageFile = page.dialogs.elements.imageFile[0].files[0];
+
+        if (imageFile) {
+            let reader = new FileReader();
+
+            reader.readAsDataURL(imageFile);
+
+            reader.onload = function (e) {
+                if (e.target.readyState === FileReader.DONE) {
+                    page.dialogs.commands.loadImageToCanvas(imageFile);
+                }
+            }
+        } else {
+            page.dialogs.elements.clearImagePreview();
+        }
+    }
+
+    page.dialogs.elements.clearImagePreview = () => {
+        page.dialogs.elements.imageFile.val("");
+        page.dialogs.elements.imagePreview.css("display", "none");
+        page.dialogs.elements.wrapper.removeClass("active");
+        page.dialogs.elements.wrapperContent.css("opacity", 1);
+    }
+    //--//
 
     //--------//
     page.commands.getAllProvinces = () => {
@@ -481,29 +525,44 @@
             customer.phone = page.dialogs.elements.phoneCre.val();
             customer.balance = 0;
             customer.locationRegion = locationRegion;
-            page.commands.createCustomer(customer);
+
+            let formData = new FormData();
+            formData.append("fullName", customer.fullName);
+            formData.append("email", customer.email);
+            formData.append("phone", customer.phone);
+            formData.append("balance", customer.balance);
+            formData.append("provinceId", locationRegion.provinceId);
+            formData.append("provinceName", locationRegion.provinceName);
+            formData.append("districtId", locationRegion.districtId);
+            formData.append("districtName", locationRegion.districtName);
+            formData.append("wardId", locationRegion.wardId);
+            formData.append("wardName", locationRegion.wardName);
+            formData.append("address", locationRegion.address);
+            formData.append("file", page.dialogs.elements.imageFile[0].files[0]);
+            page.commands.createCustomer(formData);
+
         }
     })
 
-    page.commands.createCustomer = (obj) => {
+    page.commands.createCustomer = (formData) => {
+        page.commands.showLoading();
         $.ajax({
-            headers: {
-                "accept": "application/json",
-                "content-type": "application/json"
-            },
             type: "POST",
+            contentType: false,
+            cache: false,
+            processData: false,
             url: page.urls.createCustomer,
-            data: JSON.stringify(obj)
+            data: formData
         })
             .done((data) => {
-                customer = data;
-                locationRegion = customer.locationRegion;
-                let str = page.commands.renderCustomer(customer, locationRegion);
-                page.elements.tbCustomerBody.prepend(str);
-                page.commands.removeHandleShowModal();
-                page.commands.handleShowGroupModal();
+                // customer = data;
+                // locationRegion = customer.locationRegion;
+                // let str = page.commands.renderCustomer(customer, locationRegion);
+                // page.elements.tbCustomerBody.prepend(str);
+                // page.commands.removeHandleShowModal();
+                // page.commands.handleShowGroupModal();
                 page.dialogs.elements.modalCreateCustomer.modal("hide");
-                App.IziToast.showSuccessAlertLeft("Thêm mới khách hàng <b>'" + obj.fullName + "'</b> thành công.");
+                App.IziToast.showSuccessAlertLeft("Thêm mới khách hàng <b>'" + data.fullName + "'</b> thành công.");
             })
             .fail((jqXHR) => {
                 let errors = jqXHR.responseJSON;
@@ -518,9 +577,31 @@
                     page.dialogs.alertDanger.modalCreateCustomer.css("display", "")
                     page.dialogs.alertDanger.modalCreateCustomer.append(str);
                 }
-            })
+            }).always(function () {
+            page.commands.closeLoading();
+        });
     }
     //END CREATE//
+
+    page.commands.showLoading = () =>{
+        page.elements.loader.removeClass("hide");
+        page.dialogs.elements.btnCreate.prop('disabled', true);
+        page.dialogs.elements.btnUpdate.prop('disabled', true);
+        page.dialogs.elements.btnDeposit.prop('disabled', true);
+        page.dialogs.elements.btnWithdraw.prop('disabled', true);
+        page.dialogs.elements.btnTransfer.prop('disabled', true);
+    }
+
+    page.commands.closeLoading = () =>{
+        page.elements.loader.addClass("hide");
+        page.dialogs.elements.btnCreate.prop('disabled', false);
+        page.dialogs.elements.btnUpdate.prop('disabled', false);
+        page.dialogs.elements.btnDeposit.prop('disabled', false);
+        page.dialogs.elements.btnWithdraw.prop('disabled', false);
+        page.dialogs.elements.btnTransfer.prop('disabled', false);
+    }
+
+
 
     // UPDATE CUSTOMER //
     page.commands.handleShowUpdateModal = () => {
@@ -645,11 +726,12 @@
                 App.IziToast.showSuccessAlertLeft("Chỉnh sửa khách hàng <b>'" + obj.fullName + "'</b> thành công.")
             }).fail((jqXHR) => {
             let str = ``;
-
+            console.log(jqXHR.status);
             if (jqXHR.status === 401) {
                 App.SweetAlert.showError401();
             } else {
                 if (jqXHR.status === 403) {
+
                     App.SweetAlert.showError403();
                 } else {
                     if (jqXHR.responseJSON) {
@@ -710,6 +792,7 @@
                 App.IziToast.showSuccessAlertLeft("Xóa khách hàng <b>'" + customer.fullName + "'</b> thành công");
             })
             .fail((jqXHR) => {
+                console.log("jq: ", jqXHR)
                 if (jqXHR.status === 401) {
                     App.SweetAlert.showError401();
                 } else {
@@ -717,6 +800,7 @@
                         App.SweetAlert.showError403();
                     } else {
                         App.SweetAlert.showErrorAlert(jqXHR.responseJSON.message);
+                        // App.SweetAlert.showErrorAlert(jqXHR.responseJSON);
                     }
                 }
             })
@@ -1200,6 +1284,7 @@
         page.dialogs.elements.frmCreateCustomer.find("input.error").removeClass("error");
         page.dialogs.elements.frmCreateCustomer[0].reset();
         page.dialogs.elements.frmCreateCustomer.validate().resetForm();
+        page.dialogs.elements.clearImagePreview();
     }
 
     page.dialogs.commands.handleCloseUpdateModal = () => {
@@ -1240,8 +1325,6 @@
     page.commands.loadData = () => {
         page.commands.getAllCustomers();
 
-        // page.commands.showTransfers();
-
         page.commands.getAllProvinces().then(() => {
             let provinceId = page.dialogs.elements.provinceCre.val();
 
@@ -1275,6 +1358,14 @@
 
         page.dialogs.elements.modalTransfer.on("hidden.bs.modal", function () {
             page.dialogs.commands.handleCloseTransferModal();
+        });
+
+        page.dialogs.elements.divImagePreview.on("click", function () {
+            page.dialogs.elements.imageFile.trigger("click");
+        });
+
+        page.dialogs.elements.imageFile.on("change", function () {
+            page.dialogs.commands.changeImagePreview();
         });
     }
 

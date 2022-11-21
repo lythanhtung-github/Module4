@@ -3,6 +3,9 @@ package com.codegym.controller.api;
 import com.codegym.exception.DataInputException;
 import com.codegym.exception.EmailExistsException;
 import com.codegym.model.Customer;
+import com.codegym.model.CustomerAvatar;
+import com.codegym.model.LocationRegion;
+import com.codegym.model.dto.CustomerAvatarCreateDTO;
 import com.codegym.model.dto.CustomerDTO;
 import com.codegym.model.dto.RecipientDTO;
 import com.codegym.service.customer.ICustomerService;
@@ -14,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -42,7 +46,7 @@ public class CustomerAPI {
         long cid;
         try {
             cid = Long.parseLong(customerId);
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             throw new DataInputException("ID Khách hàng không hợp lệ.");
         }
 
@@ -55,26 +59,53 @@ public class CustomerAPI {
         return new ResponseEntity<>(customerOptional.get().toCustomerDTO(), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<?> create(@Validated @RequestBody CustomerDTO customerDTO, BindingResult bindingResult) {
+//    @PostMapping
+//    public ResponseEntity<?> create(@Validated @RequestBody CustomerDTO customerDTO, BindingResult bindingResult) {
+//
+//        if (bindingResult.hasFieldErrors()) {
+//            return appUtils.mapErrorToResponse(bindingResult);
+//        }
+//
+//        Optional<CustomerDTO> customerOptionalDTO = customerService.getByEmailDTO(customerDTO.getEmail());
+//
+//        if (customerOptionalDTO.isPresent()) {
+//            throw new EmailExistsException("Email đã tồn tại trong hệ thống.");
+//        }
+//
+//        Customer customer = customerDTO.toCustomer();
+//        customer.getLocationRegion().setId(null);
+//        customer.setId(null);
+//        customer.setBalance(BigDecimal.ZERO);
+//        Customer newCustomer = customerService.save(customer);
+//
+//        return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
+//    }
 
+    @PostMapping
+    public ResponseEntity<?> create(@Validated CustomerAvatarCreateDTO customerAvatarCreateDTO, BindingResult bindingResult) {
+        MultipartFile imageFile = customerAvatarCreateDTO.getFile();
+
+        if (imageFile == null) {
+            throw new DataInputException("Vui lòng chọn hình ảnh.");
+        }
         if (bindingResult.hasFieldErrors()) {
             return appUtils.mapErrorToResponse(bindingResult);
         }
 
-        Optional<CustomerDTO> customerOptionalDTO = customerService.getByEmailDTO(customerDTO.getEmail());
+        Optional<Customer> customerOptional = customerService.findByEmail(customerAvatarCreateDTO.getEmail());
 
-        if (customerOptionalDTO.isPresent()) {
+        if (customerOptional.isPresent()) {
             throw new EmailExistsException("Email đã tồn tại trong hệ thống.");
         }
 
-        Customer customer = customerDTO.toCustomer();
-        customer.getLocationRegion().setId(null);
-        customer.setId(null);
-        customer.setBalance(BigDecimal.ZERO);
-        Customer newCustomer = customerService.save(customer);
+        LocationRegion locationRegion = customerAvatarCreateDTO.toLocationRegion();
+        locationRegion.setId(null);
+        customerAvatarCreateDTO.setId(null);
+        customerAvatarCreateDTO.setBalance(BigDecimal.ZERO);
 
-        return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
+        CustomerAvatar newCustomerAvatar = customerService.saveWithAvatar(customerAvatarCreateDTO, locationRegion);
+
+        return new ResponseEntity<>(newCustomerAvatar, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{customerId}")

@@ -65,8 +65,8 @@ class App {
             })
         }
 
-        static redirectPage(message1, message2, timer){
-            let timerInterval
+        static redirectPage(message1, message2, timer, url){
+            let timerInterval;
             Swal.fire({
                 icon: 'success',
                 title: "<br>" + message1,
@@ -81,7 +81,8 @@ class App {
                     }, 100)
                 },
                 willClose: () => {
-                    clearInterval(timerInterval)
+                    clearInterval(timerInterval);
+                    window.location.href = url;
                 }
             }).then((result) => {
                 /* Read more about handling dismissals below */
@@ -90,6 +91,7 @@ class App {
                 }
             })
         }
+
     }
 
     static IziToast = class {

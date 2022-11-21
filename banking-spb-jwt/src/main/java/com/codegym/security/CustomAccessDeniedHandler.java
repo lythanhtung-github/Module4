@@ -13,8 +13,9 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        response.getWriter().write("Access Denied!");
-//        response.sendRedirect("/error404");
+//        response.getWriter().write("Access Denied!");
+        response.setStatus(403);
+//        response.sendRedirect("/error/403");
     }
 
 }
