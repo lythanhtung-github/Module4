@@ -49,6 +49,7 @@
             <tr>
                 <th class="text-center">#</th>
                 <th class="text-center">Full name</th>
+                <th class="text-center">Image</th>
                 <th class="text-center">Email</th>
                 <th class="text-center">Phone</th>
                 <th class="text-center">Balance</th>
@@ -195,6 +196,7 @@
     let deposit = new Deposit();
     let withdraw = new Withdraw();
     let transfer = new Transfer();
+    let customerAvatar = new CustomerAvatar();
 
     page.commands.getAllCustomers = () => {
         $.ajax({
@@ -207,8 +209,10 @@
         })
             .done((data) => {
                 $.each(data, (i, item) => {
-                    locationRegion = item.locationRegion;
-                    page.elements.tbCustomerBody.prepend(page.commands.renderCustomer(item, locationRegion));
+                    customerAvatar = item;
+                    customer = customerAvatar.customer;
+                    locationRegion = customer.locationRegion;
+                    page.elements.tbCustomerBody.prepend(page.commands.renderCustomer(customerAvatar, customer, locationRegion));
                 });
 
                 page.commands.enableTooltip();
@@ -222,22 +226,26 @@
             })
     }
 
-    page.commands.renderCustomer = (obj, locationRegion) => {
+    page.commands.renderCustomer = (obj, customer ,locationRegion) => {
+        let image_thumbnail = App.BASE_URL_CLOUD_IMAGE + "/" + App.BASE_SCALE_IMAGE + "/" + obj.fileFolder + "/" + obj.fileName;
         return `
-                <tr id="tr_${obj.id}">
-                    <td>${obj.id}</td>
-                    <td>${obj.fullName}</td>
-                    <td>${obj.email}</td>
-                    <td>${obj.phone}</td>
+                <tr id="tr_${customer.id}">
+                    <td>${customer.id}</td>
+                    <td>
+                        <img src=${image_thumbnail} alt="${obj.id}">
+                    </td>
+                    <td>${customer.fullName}</td>
+                    <td>${customer.email}</td>
+                    <td>${customer.phone}</td>
                     <td class="text-end">
-                            ${new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(obj.balance)}
+                            ${new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(customer.balance)}
                     </td>
                      <td>${locationRegion.provinceName}</td>
                     <td>${locationRegion.districtName}</td>
                     <td>${locationRegion.wardName}</td>
                     <td>${locationRegion.address}</td>
                     <td class="text-center">
-                        <button data-id="${obj.id}"
+                        <button data-id="${customer.id}"
                                 class="btn btn btn-outline-dark update"
                                 title="Edit"
                                 data-toggle="tooltip"
@@ -249,7 +257,7 @@
                         </button>
                     </td>
                     <td>
-                        <button data-id="${obj.id}"
+                        <button data-id="${customer.id}"
                                 class="btn btn-outline-success deposit"
                                 title="Deposit"
                                 data-toggle="tooltip"
@@ -259,7 +267,7 @@
                         </button>
                     </td>
                     <td>
-                        <button data-id="${obj.id}"
+                        <button data-id="${customer.id}"
                                 class="btn btn-outline-warning withdraw"
                                 title="Withdraw"
                                 data-toggle="tooltip"
@@ -269,7 +277,7 @@
                         </button>
                     </td>
                     <td>
-                        <button data-id="${obj.id}"
+                        <button data-id="${customer.id}"
                                 class="btn btn-outline-info transfer"
                                 title="Transfer"
                                 data-toggle="tooltip"
@@ -279,7 +287,7 @@
                         </button>
                     </td>
                     <td>
-                          <button data-id="${obj.id}"
+                          <button data-id="${customer.id}"
                                 class="btn btn-outline-danger delete"
                                 title="Suspended"
                                 data-toggle="tooltip"
@@ -539,8 +547,8 @@
             formData.append("wardName", locationRegion.wardName);
             formData.append("address", locationRegion.address);
             formData.append("file", page.dialogs.elements.imageFile[0].files[0]);
-            page.commands.createCustomer(formData);
 
+            page.commands.createCustomer(formData);
         }
     })
 
@@ -555,12 +563,13 @@
             data: formData
         })
             .done((data) => {
-                // customer = data;
-                // locationRegion = customer.locationRegion;
-                // let str = page.commands.renderCustomer(customer, locationRegion);
-                // page.elements.tbCustomerBody.prepend(str);
-                // page.commands.removeHandleShowModal();
-                // page.commands.handleShowGroupModal();
+                customerAvatar = data;
+                customer = customerAvatar.customer;
+                locationRegion = customer.locationRegion;
+                let str = page.commands.renderCustomer(customerAvatar, customer, locationRegion);
+                page.elements.tbCustomerBody.prepend(str);
+                page.commands.removeHandleShowModal();
+                page.commands.handleShowGroupModal();
                 page.dialogs.elements.modalCreateCustomer.modal("hide");
                 App.IziToast.showSuccessAlertLeft("Thêm mới khách hàng <b>'" + data.fullName + "'</b> thành công.");
             })
@@ -583,7 +592,7 @@
     }
     //END CREATE//
 
-    page.commands.showLoading = () =>{
+    page.commands.showLoading = () => {
         page.elements.loader.removeClass("hide");
         page.dialogs.elements.btnCreate.prop('disabled', true);
         page.dialogs.elements.btnUpdate.prop('disabled', true);
@@ -592,7 +601,7 @@
         page.dialogs.elements.btnTransfer.prop('disabled', true);
     }
 
-    page.commands.closeLoading = () =>{
+    page.commands.closeLoading = () => {
         page.elements.loader.addClass("hide");
         page.dialogs.elements.btnCreate.prop('disabled', false);
         page.dialogs.elements.btnUpdate.prop('disabled', false);
@@ -600,7 +609,6 @@
         page.dialogs.elements.btnWithdraw.prop('disabled', false);
         page.dialogs.elements.btnTransfer.prop('disabled', false);
     }
-
 
 
     // UPDATE CUSTOMER //

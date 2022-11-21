@@ -10,6 +10,9 @@ class App {
     static ERROR_URL = this.DOMAIN_SERVER + "/error/";
     static TRANSFER_URL = this.DOMAIN_SERVER + "/transfers";
 
+    static BASE_URL_CLOUD_IMAGE = "https://res.cloudinary.com/dg4kw5uuy/image/upload";
+    static BASE_SCALE_IMAGE = "c_limit,w_100,h_80,q_100";
+
     static SweetAlert = class {
         static showDeactivateConfirmDialog() {
             return Swal.fire({
@@ -192,5 +195,18 @@ class Transfer {
         this.feesAmount = feesAmount;
         this.transactionAmount = transactionAmount;
         this.recipientId = recipientId;
+    }
+}
+
+class CustomerAvatar{
+    constructor(id, fileName, fileFolder, fileUrl, fileType, cloudId, ts, customer) {
+        this.id = id;
+        this.fileName = fileName;
+        this.fileFolder = fileFolder;
+        this.fileUrl = fileUrl;
+        this.fileType = fileType;
+        this.cloudId = cloudId;
+        this.ts = ts;
+        this.customer = customer;
     }
 }

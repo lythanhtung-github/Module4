@@ -1,6 +1,7 @@
 package com.codegym.service.customerAvatar;
 
 import com.codegym.model.CustomerAvatar;
+import com.codegym.model.dto.CustomerAvatarDTO;
 import com.codegym.repository.CustomerAvatarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,5 +38,10 @@ public class CustomerAvatarServiceImpl implements ICustomerAvatarService {
     @Override
     public void remove(Long id) {
 
+    }
+
+    @Override
+    public List<CustomerAvatarDTO> getAllCustomerAvatarDTO() {
+        return customerAvatarRepository.getAllCustomerAvatarDTO();
     }
 }

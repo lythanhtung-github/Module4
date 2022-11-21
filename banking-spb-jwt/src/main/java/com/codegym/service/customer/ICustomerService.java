@@ -2,6 +2,7 @@ package com.codegym.service.customer;
 
 import com.codegym.model.*;
 import com.codegym.model.dto.CustomerAvatarCreateDTO;
+import com.codegym.model.dto.CustomerAvatarDTO;
 import com.codegym.model.dto.CustomerDTO;
 import com.codegym.model.dto.RecipientDTO;
 import com.codegym.service.IGeneralService;
@@ -14,6 +15,8 @@ public interface ICustomerService extends IGeneralService<Customer> {
     List<CustomerDTO> getAllCustomerDTO();
 
 //    Customer save(Customer customer, LocationRegion locationRegion);
+
+    List<CustomerAvatarDTO> getAllCustomerAvatarDTO();
 
     void softDelete(long customerId);
 

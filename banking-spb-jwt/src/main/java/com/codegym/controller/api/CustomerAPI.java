@@ -6,6 +6,7 @@ import com.codegym.model.Customer;
 import com.codegym.model.CustomerAvatar;
 import com.codegym.model.LocationRegion;
 import com.codegym.model.dto.CustomerAvatarCreateDTO;
+import com.codegym.model.dto.CustomerAvatarDTO;
 import com.codegym.model.dto.CustomerDTO;
 import com.codegym.model.dto.RecipientDTO;
 import com.codegym.service.customer.ICustomerService;
@@ -34,11 +35,11 @@ public class CustomerAPI {
 
     @GetMapping
     public ResponseEntity<?> getAllByDeletedIsFalse() {
-        List<CustomerDTO> customers = customerService.getAllCustomerDTO();
-        if (customers.size() == 0) {
+        List<CustomerAvatarDTO> customerAvatarDTOS = customerService.getAllCustomerAvatarDTO();
+        if (customerAvatarDTOS.size() == 0) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(customers, HttpStatus.OK);
+        return new ResponseEntity<>(customerAvatarDTOS, HttpStatus.OK);
     }
 
     @GetMapping("/{customerId}")
@@ -105,7 +106,7 @@ public class CustomerAPI {
 
         CustomerAvatar newCustomerAvatar = customerService.saveWithAvatar(customerAvatarCreateDTO, locationRegion);
 
-        return new ResponseEntity<>(newCustomerAvatar, HttpStatus.CREATED);
+        return new ResponseEntity<>(newCustomerAvatar.toCustomerAvatarDTO(), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{customerId}")

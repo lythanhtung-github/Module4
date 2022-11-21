@@ -1,5 +1,6 @@
 package com.codegym.model;
 
+import com.codegym.model.dto.CustomerAvatarDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,4 +45,15 @@ public class CustomerAvatar {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    public CustomerAvatarDTO toCustomerAvatarDTO(){
+        return new CustomerAvatarDTO()
+                .setId(id)
+                .setFileName(fileName)
+                .setFileFolder(fileFolder)
+                .setFileUrl(fileUrl)
+                .setFileType(fileType)
+                .setCloudId(cloudId)
+                .setTs(ts)
+                .setCustomer(customer.toCustomerDTO());
+    }
 }

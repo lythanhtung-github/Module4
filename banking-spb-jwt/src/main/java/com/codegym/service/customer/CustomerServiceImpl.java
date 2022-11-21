@@ -3,6 +3,7 @@ package com.codegym.service.customer;
 import com.codegym.exception.DataInputException;
 import com.codegym.model.*;
 import com.codegym.model.dto.CustomerAvatarCreateDTO;
+import com.codegym.model.dto.CustomerAvatarDTO;
 import com.codegym.model.dto.CustomerDTO;
 import com.codegym.model.dto.RecipientDTO;
 import com.codegym.model.enums.FileType;
@@ -13,7 +14,6 @@ import com.codegym.utils.UploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -52,6 +52,11 @@ public class CustomerServiceImpl implements ICustomerService {
     @Override
     public List<CustomerDTO> getAllCustomerDTO() {
         return customerRepository.getAllCustomerDTO();
+    }
+
+    @Override
+    public List<CustomerAvatarDTO> getAllCustomerAvatarDTO() {
+        return customerAvatarService.getAllCustomerAvatarDTO();
     }
 
     @Override
