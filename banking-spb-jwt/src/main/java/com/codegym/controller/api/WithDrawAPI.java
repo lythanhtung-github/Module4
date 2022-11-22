@@ -3,8 +3,10 @@ package com.codegym.controller.api;
 import com.codegym.exception.DataInputException;
 import com.codegym.model.Customer;
 import com.codegym.model.Withdraw;
+import com.codegym.model.dto.CustomerAvatarDTO;
 import com.codegym.model.dto.WithdrawDTO;
 import com.codegym.service.customer.ICustomerService;
+import com.codegym.service.customerAvatar.ICustomerAvatarService;
 import com.codegym.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +29,9 @@ public class WithDrawAPI {
 
     @Autowired
     private AppUtils appUtils;
+
+    @Autowired
+    private ICustomerAvatarService customerAvatarService;
 
     @PostMapping
     public ResponseEntity<?> withdraw(@Validated @RequestBody WithdrawDTO withdrawDTO, BindingResult bindingResult) {
@@ -59,6 +64,7 @@ public class WithDrawAPI {
         withdraw.setCustomer(customer);
 
         Customer newCustomer = customerService.withdraw(customer, withdraw);
-        return new ResponseEntity<>(newCustomer.toCustomerDTO(), HttpStatus.CREATED);
+        CustomerAvatarDTO customerAvatarDTO = customerAvatarService.getCustomerAvatarById(newCustomer.getId());
+        return new ResponseEntity<>(customerAvatarDTO, HttpStatus.CREATED);
     }
 }

@@ -2,10 +2,7 @@ package com.codegym.service.customer;
 
 import com.codegym.exception.DataInputException;
 import com.codegym.model.*;
-import com.codegym.model.dto.CustomerAvatarCreateDTO;
-import com.codegym.model.dto.CustomerAvatarDTO;
-import com.codegym.model.dto.CustomerDTO;
-import com.codegym.model.dto.RecipientDTO;
+import com.codegym.model.dto.*;
 import com.codegym.model.enums.FileType;
 import com.codegym.repository.*;
 import com.codegym.service.customerAvatar.ICustomerAvatarService;
@@ -14,6 +11,7 @@ import com.codegym.utils.UploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -168,7 +166,7 @@ public class CustomerServiceImpl implements ICustomerService {
     }
 
     @Override
-    public CustomerAvatar saveWithAvatar(CustomerAvatarCreateDTO customerAvatarCreateDTO, LocationRegion locationRegion) {
+    public CustomerAvatar createWithAvatar(CustomerAvatarCreateDTO customerAvatarCreateDTO, LocationRegion locationRegion) {
 
         locationRegion = locationRegionRepository.save(locationRegion);
         Customer customer = customerAvatarCreateDTO.toCustomer(locationRegion);
@@ -184,14 +182,14 @@ public class CustomerServiceImpl implements ICustomerService {
 
         CustomerAvatar newCustomerAvatar = new CustomerAvatar();
         if (fileType.equals(FileType.IMAGE.getValue())) {
-            newCustomerAvatar = uploadAndSaveCustomerImage(customerAvatarCreateDTO, customerAvatar, customer);
+            newCustomerAvatar = uploadAndSaveCustomerImage(customerAvatarCreateDTO.getFile(), customerAvatar, customer);
         }
         return newCustomerAvatar;
     }
 
-    private CustomerAvatar uploadAndSaveCustomerImage(CustomerAvatarCreateDTO customerAvatarCreateDTO, CustomerAvatar customerAvatar, Customer customer) {
+    private CustomerAvatar uploadAndSaveCustomerImage(MultipartFile file, CustomerAvatar customerAvatar, Customer customer) {
         try {
-            Map uploadResult = uploadService.uploadImage(customerAvatarCreateDTO.getFile(), uploadUtil.buildImageUploadParams(customerAvatar));
+            Map uploadResult = uploadService.uploadImage(file, uploadUtil.buildImageUploadParams(customerAvatar));
             String fileUrl = (String) uploadResult.get("secure_url");
             String fileFormat = (String) uploadResult.get("format");
 
@@ -205,5 +203,27 @@ public class CustomerServiceImpl implements ICustomerService {
             e.printStackTrace();
             throw new DataInputException("Upload hình ảnh thất bại");
         }
+    }
+
+    @Override
+    public CustomerAvatar saveWithAvatar(CustomerUpdateDTO customerUpdateDTO, MultipartFile file, LocationRegion locationRegion) {
+
+        locationRegion = locationRegionRepository.save(locationRegion);
+        Customer customer = customerUpdateDTO.toCustomer(locationRegion);
+        customer = customerRepository.save(customer);
+
+        String fileType = file.getContentType();
+        assert fileType != null;
+        fileType = fileType.substring(0, 5);
+
+        CustomerAvatar customerAvatar = new CustomerAvatar();
+        customerAvatar.setCustomer(customer).setFileType(fileType);
+        customerAvatar = customerAvatarService.save(customerAvatar);
+
+        CustomerAvatar newCustomerAvatar = new CustomerAvatar();
+        if (fileType.equals(FileType.IMAGE.getValue())) {
+            newCustomerAvatar = uploadAndSaveCustomerImage(file, customerAvatar, customer);
+        }
+        return newCustomerAvatar;
     }
 }

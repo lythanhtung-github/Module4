@@ -6,8 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -17,7 +20,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CustomerAvatarCreateDTO {
+public class CustomerUpdateDTO {
     private Long id;
 
     @NotEmpty(message = "Vui lòng nhập tên khách hàng")
@@ -31,8 +34,6 @@ public class CustomerAvatarCreateDTO {
     private String phone;
 
     private BigDecimal balance;
-
-    MultipartFile file;
 
     private String fileType;
 
@@ -67,5 +68,4 @@ public class CustomerAvatarCreateDTO {
                 .setBalance(balance)
                 .setLocationRegion(locationRegion);
     }
-
 }

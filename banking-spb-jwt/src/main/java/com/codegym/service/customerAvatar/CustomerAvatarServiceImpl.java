@@ -37,7 +37,6 @@ public class CustomerAvatarServiceImpl implements ICustomerAvatarService {
 
     @Override
     public void remove(Long id) {
-
     }
 
     @Override

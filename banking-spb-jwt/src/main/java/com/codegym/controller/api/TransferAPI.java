@@ -3,11 +3,9 @@ package com.codegym.controller.api;
 import com.codegym.exception.DataInputException;
 import com.codegym.model.Customer;
 import com.codegym.model.Transfer;
-import com.codegym.model.dto.CustomerDTO;
-import com.codegym.model.dto.TransferDTO;
-import com.codegym.model.dto.TransferHistoryDTO;
-import com.codegym.model.dto.TransferHistoryWithSumFeesAmountDTO;
+import com.codegym.model.dto.*;
 import com.codegym.service.customer.ICustomerService;
+import com.codegym.service.customerAvatar.ICustomerAvatarService;
 import com.codegym.service.transfer.ITransferService;
 import com.codegym.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +34,8 @@ public class TransferAPI {
     @Autowired
     private ICustomerService customerService;
 
+    @Autowired
+    private ICustomerAvatarService customerAvatarService;
 
     @PostMapping
     public ResponseEntity<?> transfer(@Validated @RequestBody TransferDTO transferDTO, BindingResult bindingResult) {
@@ -88,9 +88,14 @@ public class TransferAPI {
 
                 Optional<Customer> newRecipientDTO = customerService.findById(Long.parseLong(transferDTO.getRecipientId()));
                 Customer newRecipient = newRecipientDTO.get();
-                Map<String, CustomerDTO> results = new HashMap<>();
-                results.put("sender", newSender.toCustomerDTO());
-                results.put("recipient", newRecipient.toCustomerDTO());
+
+                Map<String, CustomerAvatarDTO> results = new HashMap<>();
+
+                CustomerAvatarDTO senderAvatarDTO = customerAvatarService.getCustomerAvatarById(newSender.getId());
+                CustomerAvatarDTO recipientAvatarDTO = customerAvatarService.getCustomerAvatarById(newRecipient.getId());
+
+                results.put("senderAvatar", senderAvatarDTO);
+                results.put("recipientAvatar", recipientAvatarDTO);
 
                 return new ResponseEntity<>(results, HttpStatus.CREATED);
             } catch (Exception e) {

@@ -1,10 +1,7 @@
 package com.codegym.service.customer;
 
 import com.codegym.model.*;
-import com.codegym.model.dto.CustomerAvatarCreateDTO;
-import com.codegym.model.dto.CustomerAvatarDTO;
-import com.codegym.model.dto.CustomerDTO;
-import com.codegym.model.dto.RecipientDTO;
+import com.codegym.model.dto.*;
 import com.codegym.service.IGeneralService;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,5 +33,8 @@ public interface ICustomerService extends IGeneralService<Customer> {
 
     Customer transfer(Transfer transfer);
 
-    CustomerAvatar saveWithAvatar(CustomerAvatarCreateDTO customerAvatarCreateDTO, LocationRegion locationRegion);
+    CustomerAvatar createWithAvatar(CustomerAvatarCreateDTO customerAvatarCreateDTO, LocationRegion locationRegion);
+
+
+    CustomerAvatar saveWithAvatar(CustomerUpdateDTO customerUpdateDTO, MultipartFile file, LocationRegion locationRegion);
 }

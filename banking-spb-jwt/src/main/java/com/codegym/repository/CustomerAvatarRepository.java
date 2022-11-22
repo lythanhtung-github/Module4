@@ -21,7 +21,9 @@ public interface CustomerAvatarRepository extends JpaRepository<CustomerAvatar, 
             "ca.cloudId, " +
             "ca.ts, " +
             "ca.customer" +
-            ") FROM CustomerAvatar AS ca JOIN Customer AS c ON ca.customer.id = c.id " +
+            ") FROM CustomerAvatar AS ca " +
+            "JOIN Customer AS c " +
+            "ON ca.customer.id = c.id " +
             " WHERE c.deleted = false "
     )
     List<CustomerAvatarDTO> getAllCustomerAvatarDTO();
@@ -35,7 +37,9 @@ public interface CustomerAvatarRepository extends JpaRepository<CustomerAvatar, 
             "ca.cloudId, " +
             "ca.ts, " +
             "ca.customer " +
-            ") FROM CustomerAvatar AS ca JOIN Customer AS c ON ca.customer.id = c.id " +
+            ") FROM CustomerAvatar AS ca " +
+            "JOIN Customer AS c " +
+            "ON ca.customer.id = c.id " +
             "WHERE c.deleted = false " +
             "AND c.id = :customerId"
     )

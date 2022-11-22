@@ -5,11 +5,9 @@ import com.codegym.exception.EmailExistsException;
 import com.codegym.model.Customer;
 import com.codegym.model.CustomerAvatar;
 import com.codegym.model.LocationRegion;
-import com.codegym.model.dto.CustomerAvatarCreateDTO;
-import com.codegym.model.dto.CustomerAvatarDTO;
-import com.codegym.model.dto.CustomerDTO;
-import com.codegym.model.dto.RecipientDTO;
+import com.codegym.model.dto.*;
 import com.codegym.service.customer.ICustomerService;
+import com.codegym.service.customerAvatar.ICustomerAvatarService;
 import com.codegym.utils.AppUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,6 +30,9 @@ public class CustomerAPI {
 
     @Autowired
     private ICustomerService customerService;
+
+    @Autowired
+    private ICustomerAvatarService customerAvatarService;
 
     @GetMapping
     public ResponseEntity<?> getAllByDeletedIsFalse() {
@@ -84,6 +85,7 @@ public class CustomerAPI {
 
     @PostMapping
     public ResponseEntity<?> create(@Validated CustomerAvatarCreateDTO customerAvatarCreateDTO, BindingResult bindingResult) {
+
         MultipartFile imageFile = customerAvatarCreateDTO.getFile();
 
         if (imageFile == null) {
@@ -104,36 +106,35 @@ public class CustomerAPI {
         customerAvatarCreateDTO.setId(null);
         customerAvatarCreateDTO.setBalance(BigDecimal.ZERO);
 
-        CustomerAvatar newCustomerAvatar = customerService.saveWithAvatar(customerAvatarCreateDTO, locationRegion);
+        CustomerAvatar newCustomerAvatar = customerService.createWithAvatar(customerAvatarCreateDTO, locationRegion);
 
         return new ResponseEntity<>(newCustomerAvatar.toCustomerAvatarDTO(), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{customerId}")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<?> update(@PathVariable Long customerId, @Validated @RequestBody CustomerDTO customerDTO, BindingResult bindingResult) {
-
-        if (bindingResult.hasFieldErrors()) {
-            return appUtils.mapErrorToResponse(bindingResult);
-        }
+    public ResponseEntity<?> update(@PathVariable Long customerId, MultipartFile file, @Validated CustomerUpdateDTO customerUpdateDTO, BindingResult bindingResult) {
 
         Optional<Customer> customerOptional = customerService.findById(customerId);
-        Customer customer = customerDTO.toCustomer();
         if (!customerOptional.isPresent()) {
             throw new DataInputException("ID khách hàng không tồn tại.");
         }
+        LocationRegion locationRegion = customerUpdateDTO.toLocationRegion();
+        Customer customer = customerUpdateDTO.toCustomer(locationRegion);
 
-        Optional<Customer> emailOptional = customerService.findByEmailAndIdIsNot(customer.getEmail(), customerId);
-
-        if (emailOptional.isPresent()) {
-            throw new EmailExistsException("Email đã tồn tại trong hệ thống.");
+        CustomerAvatarDTO customerAvatarDTO = new CustomerAvatarDTO();
+        if (bindingResult.hasFieldErrors()) {
+            return appUtils.mapErrorToResponse(bindingResult);
+        }
+        if (file == null) {
+            customerService.save(customer);
+            customerAvatarDTO = customerAvatarService.getCustomerAvatarById(customerId);
+        } else {
+           CustomerAvatar customerAvatar =  customerService.saveWithAvatar(customerUpdateDTO, file, locationRegion);
+           customerAvatarDTO = customerAvatar.toCustomerAvatarDTO();
         }
 
-        customer.setId(customerId);
-        customer.setBalance(customerOptional.get().getBalance());
-        Customer newCustomer = customerService.save(customer);
-
-        return new ResponseEntity<>(newCustomer, HttpStatus.OK);
+        return new ResponseEntity<>(customerAvatarDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{customerId}")

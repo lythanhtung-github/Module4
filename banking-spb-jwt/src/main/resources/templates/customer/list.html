@@ -207,6 +207,8 @@
     let withdraw = new Withdraw();
     let transfer = new Transfer();
     let customerAvatar = new CustomerAvatar();
+    let senderAvatar = new CustomerAvatar();
+    let recipientAvatar = new CustomerAvatar();
 
     page.commands.getAllCustomers = () => {
         $.ajax({
@@ -237,7 +239,7 @@
     }
 
     page.commands.renderCustomer = (obj, customer, locationRegion) => {
-        let image_thumbnail = App.BASE_URL_CLOUD_IMAGE + "/" + App.BASE_SCALE_IMAGE + "/" + obj.fileFolder + "/" + obj.fileName;
+        let image_thumbnail = App.BASE_URL_CLOUD_IMAGE + "/" + App.SCALE_IMAGE_W100_H80_Q100 + "/" + obj.fileFolder + "/" + obj.fileName;
         return `
                 <tr id="tr_${customer.id}">
                     <td>${customer.id}</td>
@@ -259,6 +261,9 @@
                     <td>${locationRegion.address}</td>
                     <td class="text-center">
                         <button data-id="${customer.id}"
+                                data-avatar-id = "${obj.id}"
+                                data-avatar-file-folder = "${obj.fileFolder}"
+                                data-avatar-file-name = "${obj.fileName}"
                                 class="btn btn btn-outline-dark update"
                                 title="Edit"
                                 data-toggle="tooltip"
@@ -316,7 +321,6 @@
 
     //-Load image Update-//
     page.dialogs.commands.loadImageToCanvasUp = (imageFile, fileType, imageUrl) => {
-        console.log(imageFile);
         page.dialogs.elements.imagePreviewUp.css("display", "");
         page.dialogs.elements.wrapperUp.addClass("active");
         page.dialogs.elements.wrapperContentUp.css("opacity", 0);
@@ -360,7 +364,6 @@
         page.dialogs.elements.wrapperContentUp.css("opacity", 1);
     }
     //--//
-
 
     //-Load image Create-//
     page.dialogs.commands.loadImageToCanvasCre = (imageFile) => {
@@ -681,8 +684,13 @@
     page.commands.handleShowUpdateModal = () => {
         $(".update").on("click", function () {
             let id = $(this).data("id");
+            let avatarFileFolder = $(this).data("avatar-file-folder");
+            let avatarFileName = $(this).data("avatar-file-name");
             page.commands.getCustomerById(id).done((data) => {
-                page.commands.showLoading();
+
+                let avatarUrl = App.BASE_URL_CLOUD_IMAGE + "/" + App.SCALE_IMAGE_W600_H650_Q100 + "/" + avatarFileFolder + "/" + avatarFileName;
+                page.dialogs.commands.loadImageToCanvasUp(null, "", avatarUrl);
+
                 customer = data;
                 locationRegion = customer.locationRegion;
                 page.dialogs.elements.customerIdUp.val(id);
@@ -700,9 +708,6 @@
                         page.dialogs.elements.modalUpdateCustomer.modal('show');
                     })
                 })
-                page.commands.getCustomerAvatarByCustomerId(id);
-                page.dialogs.commands.loadImageToCanvasUp(null, "", customerAvatar.fileUrl);
-                page.commands.closeLoading();
             })
         })
     }
@@ -765,6 +770,7 @@
             customer.email = page.dialogs.elements.emailUp.val();
             customer.phone = page.dialogs.elements.phoneUp.val();
 
+
             locationRegion.id = page.dialogs.elements.locationRegionIdUp.val();
             locationRegion.provinceId = page.dialogs.elements.provinceUp.val();
             locationRegion.provinceName = page.dialogs.elements.provinceUp.find("option:selected").text();
@@ -774,34 +780,51 @@
             locationRegion.wardName = page.dialogs.elements.wardUp.find("option:selected").text();
             locationRegion.address = page.dialogs.elements.addressUp.val();
 
-            customer.locationRegion = locationRegion;
-            page.commands.doUpdateCustomer(customer);
+            let formData = new FormData();
+            formData.append("id", customer.id);
+            formData.append("fullName", customer.fullName);
+            formData.append("email", customer.email);
+            formData.append("phone", customer.phone);
+            formData.append("balance", customer.balance);
+
+            formData.append("locationId", locationRegion.id);
+            formData.append("provinceId", locationRegion.provinceId);
+            formData.append("provinceName", locationRegion.provinceName);
+            formData.append("districtId", locationRegion.districtId);
+            formData.append("districtName", locationRegion.districtName);
+            formData.append("wardId", locationRegion.wardId);
+            formData.append("wardName", locationRegion.wardName);
+            formData.append("address", locationRegion.address);
+
+            formData.append("file", page.dialogs.elements.imageFileUp[0].files[0]);
+            page.commands.doUpdateCustomer(formData);
         }
     })
 
-    page.commands.doUpdateCustomer = (obj) => {
+    page.commands.doUpdateCustomer = (formData) => {
+        page.commands.showLoading();
         $.ajax({
-            headers: {
-                "accept": "application/json",
-                "content-type": "application/json"
-            },
             type: "PATCH",
-            url: page.urls.updateCustomer + "/" + obj.id,
-            data: JSON.stringify(obj)
+            contentType: false,
+            cache: false,
+            processData: false,
+            url: page.urls.updateCustomer + "/" + customer.id,
+            data: formData
         })
             .done((data) => {
-                customer = data;
+                customerAvatar = data;
+                customer = customerAvatar.customer;
                 locationRegion = customer.locationRegion;
-                let str = page.commands.renderCustomer(customer, locationRegion);
-                let updateRow = $("#tr_" + obj.id);
+                let str = page.commands.renderCustomer(customerAvatar, customer, locationRegion);
+                let updateRow = $("#tr_" + customer.id);
                 updateRow.replaceWith(str);
 
                 page.commands.enableTooltip();
                 page.commands.removeHandleShowModal();
                 page.commands.handleShowGroupModal();
-
                 page.dialogs.elements.modalUpdateCustomer.modal("hide");
-                App.IziToast.showSuccessAlertLeft("Chỉnh sửa khách hàng <b>'" + obj.fullName + "'</b> thành công.")
+
+                App.IziToast.showSuccessAlertLeft("Chỉnh sửa khách hàng <b>'" + customer.fullName + "'</b> thành công.")
             }).fail((jqXHR) => {
             let str = ``;
             console.log(jqXHR.status);
@@ -829,6 +852,8 @@
                     }
                 }
             }
+        }).always(function () {
+            page.commands.closeLoading();
         })
     }
     //END UPDATE//
@@ -955,9 +980,10 @@
             data: JSON.stringify(obj)
         })
             .done((data) => {
-                customer = data;
+                customerAvatar = data;
+                customer = customerAvatar.customer;
                 locationRegion = customer.locationRegion;
-                let str = page.commands.renderCustomer(customer, locationRegion);
+                let str = page.commands.renderCustomer(customerAvatar, customer, locationRegion);
                 let updateRow = $("#tr_" + customer.id);
                 updateRow.replaceWith(str);
 
@@ -1066,9 +1092,10 @@
             data: JSON.stringify(obj)
         })
             .done((data) => {
-                customer = data;
+                customerAvatar = data;
+                customer = customerAvatar.customer;
                 locationRegion = customer.locationRegion;
-                let str = page.commands.renderCustomer(customer, locationRegion);
+                let str = page.commands.renderCustomer(customerAvatar, customer, locationRegion);
                 let updateRow = $("#tr_" + customer.id);
                 updateRow.replaceWith(str);
 
@@ -1219,15 +1246,19 @@
             data: JSON.stringify(transferInput)
         })
             .done((data) => {
-                sender = data.sender;
-                recipient = data.recipient;
-                page.dialogs.elements.senderBalanceTransfer.val(sender.balance);
-
+                senderAvatar = data.senderAvatar;
+                sender = senderAvatar.customer;
+                let strSender = page.commands.renderCustomer(senderAvatar, sender, sender.locationRegion);
                 let senderCurrentRow = $("#tr_" + sender.id);
-                senderCurrentRow.replaceWith(page.commands.renderCustomer(sender, sender.locationRegion));
+                senderCurrentRow.replaceWith(strSender);
 
+                recipientAvatar = data.recipientAvatar;
+                recipient = recipientAvatar.customer;
+                let strRecipient = page.commands.renderCustomer(recipientAvatar, recipient, recipient.locationRegion);
                 let recipientCurrentRow = $("#tr_" + recipient.id);
-                recipientCurrentRow.replaceWith(page.commands.renderCustomer(recipient, recipient.locationRegion))
+                recipientCurrentRow.replaceWith(strRecipient);
+
+                page.dialogs.elements.senderBalanceTransfer.val(sender.balance);
 
                 page.commands.enableTooltip();
 

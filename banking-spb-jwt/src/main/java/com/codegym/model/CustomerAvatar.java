@@ -37,7 +37,6 @@ public class CustomerAvatar {
     @Column(name = "cloud_id")
     private String cloudId;
 
-
     @Column(columnDefinition = "BIGINT(20) DEFAULT 0")
     private Long ts = new Date().getTime();
 
