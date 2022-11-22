@@ -44,4 +44,9 @@ public class CustomerAvatarServiceImpl implements ICustomerAvatarService {
     public List<CustomerAvatarDTO> getAllCustomerAvatarDTO() {
         return customerAvatarRepository.getAllCustomerAvatarDTO();
     }
+
+    @Override
+    public CustomerAvatarDTO getCustomerAvatarById(long customerId){
+        return customerAvatarRepository.getCustomerAvatarById(customerId);
+    }
 }

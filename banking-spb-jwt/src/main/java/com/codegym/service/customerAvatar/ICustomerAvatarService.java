@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface ICustomerAvatarService extends IGeneralService<CustomerAvatar> {
     List<CustomerAvatarDTO> getAllCustomerAvatarDTO();
+
+    CustomerAvatarDTO getCustomerAvatarById(long customerId);
 }

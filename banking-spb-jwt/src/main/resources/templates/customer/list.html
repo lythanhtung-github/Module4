@@ -48,8 +48,8 @@
             <thead>
             <tr>
                 <th class="text-center">#</th>
-                <th class="text-center">Full name</th>
                 <th class="text-center">Image</th>
+                <th class="text-center">Full name</th>
                 <th class="text-center">Email</th>
                 <th class="text-center">Phone</th>
                 <th class="text-center">Balance</th>
@@ -101,7 +101,8 @@
             getAllDistrictsByProvinceId: App.PROVINCE_URL + "district/",
             getAllWardsByDistrictId: App.PROVINCE_URL + "ward/",
             error_403: App.ERROR_URL + "403",
-            transfer_url: App.TRANSFER_URL
+            transfer_url: App.TRANSFER_URL,
+            getCustomerAvatarById: App.CUSTOMER_AVATAR_URL
         },
         elements: {},
         loadData: {},
@@ -182,14 +183,23 @@
 
     page.dialogs.elements.showTransfers = $("#showTransfers");
 
-    page.dialogs.elements.wrapper = $("#frmCreateCustomer section .wrapper");
-    page.dialogs.elements.imageFile = $("#imageFile");
-    page.dialogs.elements.wrapperContent = $("#frmCreateCustomer section .wrapper .content");
-    page.dialogs.elements.imagePreview = $("#frmCreateCustomer section .image-preview canvas");
-    page.dialogs.elements.canvas = $("#canvas");
-    page.dialogs.elements.context = page.dialogs.elements.canvas[0].getContext('2d');
-    page.dialogs.elements.imagePreview.css("display", "none");
-    page.dialogs.elements.divImagePreview = $("div.image-preview, div.file-name");
+    page.dialogs.elements.wrapperCre = $("#frmCreateCustomer section .wrapper");
+    page.dialogs.elements.imageFileCre = $("#imageFileCre");
+    page.dialogs.elements.wrapperContentCre = $("#frmCreateCustomer section .wrapper .content");
+    page.dialogs.elements.imagePreviewCre = $("#frmCreateCustomer section .image-preview canvas");
+    page.dialogs.elements.canvasCre = $("#canvasCre");
+    page.dialogs.elements.contextCre = page.dialogs.elements.canvasCre[0].getContext('2d');
+    page.dialogs.elements.imagePreviewCre.css("display", "none");
+    page.dialogs.elements.divImagePreviewCre = $("#frmCreateCustomer div.image-preview,#frmCreateCustomer div.file-name");
+
+    page.dialogs.elements.wrapperUp = $("#frmUpdateCustomer section .wrapper");
+    page.dialogs.elements.imageFileUp = $("#imageFileUp");
+    page.dialogs.elements.wrapperContentUp = $("#frmUpdateCustomer section .wrapper .content");
+    page.dialogs.elements.imagePreviewUp = $("#frmUpdateCustomer section .image-preview canvas");
+    page.dialogs.elements.canvasUp = $("#canvasUp");
+    page.dialogs.elements.contextUp = page.dialogs.elements.canvasUp[0].getContext('2d');
+    page.dialogs.elements.imagePreviewUp.css("display", "none");
+    page.dialogs.elements.divImagePreviewUp = $("#frmUpdateCustomer div.image-preview, #frmUpdateCustomer div.file-name");
 
     let customer = new Customer();
     let locationRegion = new LocationRegion();
@@ -226,7 +236,7 @@
             })
     }
 
-    page.commands.renderCustomer = (obj, customer ,locationRegion) => {
+    page.commands.renderCustomer = (obj, customer, locationRegion) => {
         let image_thumbnail = App.BASE_URL_CLOUD_IMAGE + "/" + App.BASE_SCALE_IMAGE + "/" + obj.fileFolder + "/" + obj.fileName;
         return `
                 <tr id="tr_${customer.id}">
@@ -238,7 +248,10 @@
                     <td>${customer.email}</td>
                     <td>${customer.phone}</td>
                     <td class="text-end">
-                            ${new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(customer.balance)}
+                            ${new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+        }).format(customer.balance)}
                     </td>
                      <td>${locationRegion.provinceName}</td>
                     <td>${locationRegion.districtName}</td>
@@ -301,26 +314,29 @@
     }
     // END SHOW //
 
-
-    //-Load image-//
-    page.dialogs.commands.loadImageToCanvas = (imageFile) => {
-        page.dialogs.elements.imagePreview.css("display", "");
-        page.dialogs.elements.wrapper.addClass("active");
-        page.dialogs.elements.wrapperContent.css("opacity", 0);
+    //-Load image Update-//
+    page.dialogs.commands.loadImageToCanvasUp = (imageFile, fileType, imageUrl) => {
+        console.log(imageFile);
+        page.dialogs.elements.imagePreviewUp.css("display", "");
+        page.dialogs.elements.wrapperUp.addClass("active");
+        page.dialogs.elements.wrapperContentUp.css("opacity", 0);
 
         let imageObj = new Image();
 
         imageObj.onload = function () {
-            page.dialogs.elements.context.canvas.width = imageObj.width;
-            page.dialogs.elements.context.canvas.height = imageObj.height;
-            page.dialogs.elements.context.drawImage(imageObj, 0, 0, imageObj.width, imageObj.height);
+            page.dialogs.elements.contextUp.canvas.width = imageObj.width;
+            page.dialogs.elements.contextUp.canvas.height = imageObj.height;
+            page.dialogs.elements.contextUp.drawImage(imageObj, 0, 0, imageObj.width, imageObj.height);
         };
-
-        imageObj.src = URL.createObjectURL(imageFile)
+        if (fileType === "BINARY") {
+            imageObj.src = URL.createObjectURL(imageFile);
+        } else {
+            imageObj.src = imageUrl;
+        }
     }
 
-    page.dialogs.commands.changeImagePreview = () => {
-        let imageFile = page.dialogs.elements.imageFile[0].files[0];
+    page.dialogs.commands.changeImagePreviewUp = () => {
+        let imageFile = page.dialogs.elements.imageFileUp[0].files[0];
 
         if (imageFile) {
             let reader = new FileReader();
@@ -329,19 +345,70 @@
 
             reader.onload = function (e) {
                 if (e.target.readyState === FileReader.DONE) {
-                    page.dialogs.commands.loadImageToCanvas(imageFile);
+                    page.dialogs.commands.loadImageToCanvasUp(imageFile, "BINARY", null);
                 }
             }
         } else {
-            page.dialogs.elements.clearImagePreview();
+            page.dialogs.elements.clearImagePreviewUp();
         }
     }
 
-    page.dialogs.elements.clearImagePreview = () => {
-        page.dialogs.elements.imageFile.val("");
-        page.dialogs.elements.imagePreview.css("display", "none");
-        page.dialogs.elements.wrapper.removeClass("active");
-        page.dialogs.elements.wrapperContent.css("opacity", 1);
+    page.dialogs.elements.clearImagePreviewUp = () => {
+        page.dialogs.elements.imageFileUp.val("");
+        page.dialogs.elements.imagePreviewUp.css("display", "none");
+        page.dialogs.elements.wrapperUp.removeClass("active");
+        page.dialogs.elements.wrapperContentUp.css("opacity", 1);
+    }
+    //--//
+
+
+    //-Load image Create-//
+    page.dialogs.commands.loadImageToCanvasCre = (imageFile) => {
+        page.dialogs.elements.imagePreviewCre.css("display", "");
+        page.dialogs.elements.wrapperCre.addClass("active");
+        page.dialogs.elements.wrapperContentCre.css("opacity", 0);
+
+        let imageObj = new Image();
+
+        imageObj.onload = function () {
+            page.dialogs.elements.contextCre.canvas.width = imageObj.width;
+            page.dialogs.elements.contextCre.canvas.height = imageObj.height;
+            page.dialogs.elements.contextCre.drawImage(imageObj, 0, 0, imageObj.width, imageObj.height);
+        };
+
+        imageObj.src = URL.createObjectURL(imageFile)
+    }
+
+    page.dialogs.commands.changeImagePreviewCre = () => {
+        let imageFile = page.dialogs.elements.imageFileCre[0].files[0];
+
+        if (imageFile) {
+            let reader = new FileReader();
+
+            reader.readAsDataURL(imageFile);
+
+            reader.onload = function (e) {
+                if (e.target.readyState === FileReader.DONE) {
+                    page.dialogs.commands.loadImageToCanvasCre(imageFile);
+                }
+            }
+        } else {
+            page.dialogs.elements.clearImagePreviewCre();
+        }
+    }
+
+    page.dialogs.elements.clearImagePreviewCre = () => {
+        page.dialogs.elements.imageFileCre.val("");
+        page.dialogs.elements.imagePreviewCre.css("display", "none");
+        page.dialogs.elements.wrapperCre.removeClass("active");
+        page.dialogs.elements.wrapperContentCre.css("opacity", 1);
+    }
+
+    page.dialogs.elements.clearImagePreviewUp = () => {
+        page.dialogs.elements.imageFileUp.val("");
+        page.dialogs.elements.imagePreviewUp.css("display", "none");
+        page.dialogs.elements.wrapperUp.removeClass("active");
+        page.dialogs.elements.wrapperContentUp.css("opacity", 1);
     }
     //--//
 
@@ -442,7 +509,6 @@
 
         page.commands.getAllWardsByDistrictId(districtId);
     });
-
 
     page.dialogs.elements.provinceUp.on("change", function () {
         let provinceId = $(this).val();
@@ -546,7 +612,7 @@
             formData.append("wardId", locationRegion.wardId);
             formData.append("wardName", locationRegion.wardName);
             formData.append("address", locationRegion.address);
-            formData.append("file", page.dialogs.elements.imageFile[0].files[0]);
+            formData.append("file", page.dialogs.elements.imageFileCre[0].files[0]);
 
             page.commands.createCustomer(formData);
         }
@@ -571,7 +637,7 @@
                 page.commands.removeHandleShowModal();
                 page.commands.handleShowGroupModal();
                 page.dialogs.elements.modalCreateCustomer.modal("hide");
-                App.IziToast.showSuccessAlertLeft("Thêm mới khách hàng <b>'" + data.fullName + "'</b> thành công.");
+                App.IziToast.showSuccessAlertLeft("Thêm mới khách hàng <b>'" + customer.fullName + "'</b> thành công.");
             })
             .fail((jqXHR) => {
                 let errors = jqXHR.responseJSON;
@@ -616,6 +682,7 @@
         $(".update").on("click", function () {
             let id = $(this).data("id");
             page.commands.getCustomerById(id).done((data) => {
+                page.commands.showLoading();
                 customer = data;
                 locationRegion = customer.locationRegion;
                 page.dialogs.elements.customerIdUp.val(id);
@@ -633,6 +700,9 @@
                         page.dialogs.elements.modalUpdateCustomer.modal('show');
                     })
                 })
+                page.commands.getCustomerAvatarByCustomerId(id);
+                page.dialogs.commands.loadImageToCanvasUp(null, "", customerAvatar.fileUrl);
+                page.commands.closeLoading();
             })
         })
     }
@@ -1235,6 +1305,32 @@
     }
     //--- END UPDATE BALANCE ---//
 
+    //---GET CUSTOMER AVATAR BY CUSTOMER ID--//
+    page.commands.getCustomerAvatarByCustomerId = (customerId) => {
+        return $.ajax({
+            type: "GET",
+            url: page.urls.getCustomerAvatarById + "/" + customerId
+        }).done((data) => {
+            customerAvatar = data;
+            console.log(customerAvatar);
+        })
+            .fail((jqXHR) => {
+                let errors = jqXHR.responseJSON;
+                let strError = "";
+                if (errors) {
+                    $.each(errors, (k, v) => {
+                        strError += `${v}`;
+                    })
+                }
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: strError,
+                })
+            })
+    }
+    //--END--//
+
     //--- FIND BY ID ---//
     page.commands.getCustomerById = (customerId) => {
         return $.ajax({
@@ -1292,7 +1388,7 @@
         page.dialogs.elements.frmCreateCustomer.find("input.error").removeClass("error");
         page.dialogs.elements.frmCreateCustomer[0].reset();
         page.dialogs.elements.frmCreateCustomer.validate().resetForm();
-        page.dialogs.elements.clearImagePreview();
+        page.dialogs.elements.clearImagePreviewCre();
     }
 
     page.dialogs.commands.handleCloseUpdateModal = () => {
@@ -1300,6 +1396,7 @@
         page.dialogs.elements.frmUpdateCustomer.find("input.error").removeClass("error");
         page.dialogs.elements.frmUpdateCustomer[0].reset();
         page.dialogs.elements.frmUpdateCustomer.validate().resetForm();
+        page.dialogs.elements.clearImagePreviewUp();
     }
 
     page.dialogs.commands.handleCloseDepositModal = () => {
@@ -1368,12 +1465,20 @@
             page.dialogs.commands.handleCloseTransferModal();
         });
 
-        page.dialogs.elements.divImagePreview.on("click", function () {
-            page.dialogs.elements.imageFile.trigger("click");
+        page.dialogs.elements.divImagePreviewCre.on("click", function () {
+            page.dialogs.elements.imageFileCre.trigger("click");
         });
 
-        page.dialogs.elements.imageFile.on("change", function () {
-            page.dialogs.commands.changeImagePreview();
+        page.dialogs.elements.imageFileCre.on("change", function () {
+            page.dialogs.commands.changeImagePreviewCre();
+        });
+
+        page.dialogs.elements.divImagePreviewUp.on("click", function () {
+            page.dialogs.elements.imageFileUp.trigger("click");
+        });
+
+        page.dialogs.elements.imageFileUp.on("change", function () {
+            page.dialogs.commands.changeImagePreviewUp();
         });
     }
 

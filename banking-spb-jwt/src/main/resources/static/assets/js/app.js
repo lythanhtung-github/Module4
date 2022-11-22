@@ -9,6 +9,7 @@ class App {
     static PROVINCE_URL = "https://vapi.vnappmob.com/api/province/";
     static ERROR_URL = this.DOMAIN_SERVER + "/error/";
     static TRANSFER_URL = this.DOMAIN_SERVER + "/transfers";
+    static CUSTOMER_AVATAR_URL = this.DOMAIN_SERVER + "/api/customer-avatars";
 
     static BASE_URL_CLOUD_IMAGE = "https://res.cloudinary.com/dg4kw5uuy/image/upload";
     static BASE_SCALE_IMAGE = "c_limit,w_100,h_80,q_100";
