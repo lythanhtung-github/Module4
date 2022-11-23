@@ -212,6 +212,9 @@ public class CustomerServiceImpl implements ICustomerService {
         Customer customer = customerUpdateDTO.toCustomer(locationRegion);
         customer = customerRepository.save(customer);
 
+        CustomerAvatar oldCustomerAvatar = customerAvatarService.getCustomerAvatarById(customer.getId()).toCustomerAvatar();
+        customerAvatarService.delete(oldCustomerAvatar.getId());
+
         String fileType = file.getContentType();
         assert fileType != null;
         fileType = fileType.substring(0, 5);

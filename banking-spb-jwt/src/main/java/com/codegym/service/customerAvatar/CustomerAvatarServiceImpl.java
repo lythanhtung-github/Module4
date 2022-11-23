@@ -37,6 +37,12 @@ public class CustomerAvatarServiceImpl implements ICustomerAvatarService {
 
     @Override
     public void remove(Long id) {
+
+    }
+
+    @Override
+    public void delete(String id) {
+        customerAvatarRepository.deleteById(id);
     }
 
     @Override
